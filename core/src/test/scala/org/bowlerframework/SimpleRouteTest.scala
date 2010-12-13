@@ -1,5 +1,6 @@
 package org.bowlerframework
 
+import http.BowlerFilter
 import org.scalatra.test.scalatest.ScalatraFunSuite
 import scala.reflect.Manifest
 import java.lang.reflect.{Field, Method}
