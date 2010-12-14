@@ -17,6 +17,8 @@ class BowlerHttpResponse(response: HttpServletResponse) extends Response{
 
   def sendError(status: Int) = response.sendError(status)
 
+  def addHeader(name: String, value: String) = response.addHeader(name, value)
+
   def setStatus(status: Int) = response.setStatus(status)
 
   def setHeader(name: String, value: String) = response.setHeader(name, value)

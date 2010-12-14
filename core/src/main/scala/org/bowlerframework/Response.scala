@@ -18,6 +18,7 @@ trait Response{
   def getContentType: String
 
   def setHeader(name: String, value: String)
+  def addHeader(name: String, value: String)
   def setStatus(status: Int)
   def sendError(status: Int)
 

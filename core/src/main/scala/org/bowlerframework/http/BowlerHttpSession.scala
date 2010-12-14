@@ -31,7 +31,12 @@ class BowlerHttpSession(session: HttpSession) extends Session{
 
   def setAttribute(name: String, value: Any) = session.setAttribute(name, value)
 
-  def getAttribute(name: String) = session.getAttribute(name)
+  def getAttribute(name: String): Option[Any] = {
+    if(session.getAttribute(name) != null)
+      return Some(session.getAttribute(name))
+    else
+      return None
+  }
 
   def getUnderlyingSession = session
 }

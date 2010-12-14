@@ -9,7 +9,7 @@ package org.bowlerframework
  */
 
 trait Session{
-  def getAttribute(name: String): Any
+  def getAttribute(name: String): Option[Any]
   def setAttribute(name: String, value: Any)
   def removeAttribute(name: String)
   def invalidate
