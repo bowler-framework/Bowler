@@ -1,6 +1,7 @@
 package org.bowlerframework.jvm
 
-import org.bowlerframework.Request
+import org.bowlerframework.{Session, Request}
+import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, JavaBooleanTransformer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,23 +11,40 @@ import org.bowlerframework.Request
  * To change this template use File | Settings | File Templates.
  */
 
-class DummyRequest extends Request{
+class DummyRequest(path: String, params: Map[String, Any], headers: Map[String, String], body: String, session: Session = new DummySession) extends Request{
+  private val intTransformer = new JavaIntegerTransformer
+  private val longTransformer = new LongTransformer
+  private val booleanTransformer = new JavaBooleanTransformer
 
-  def getRequestBodyAsString = null
+  def getRequestBodyAsString = body
 
-  def getBooleanParameter(name: String) = false
+  def getBooleanParameter(name: String) = booleanTransformer.toValue(params(name).toString).asInstanceOf[Boolean]
 
-  def getLongParameter(name: String) = 1l
+  def getLongParameter(name: String) = longTransformer.toValue(params(name).toString).asInstanceOf[Long]
 
-  def getIntParameter(name: String) = 1
+  def getIntParameter(name: String) = intTransformer.toValue(params(name).toString).asInstanceOf[Int]
 
-  def getStringParameter(name: String) = null
+  def getParameter(name: String) = params(name)
 
-  def getParameter(name: String) = null
+  def getParameterValues(name: String) = params(name).asInstanceOf[List[Any]]
 
-  def getParameterValues(name: String) = List(1,2)
+  def getParameterNames = params.keys
 
-  def getParameterNames = List("hello")
+  def getStringParameter(name: String) = params(name).toString
+
+  def getSession = session
+
+  def isSecure = false
+
+  def getServerName = "localhost"
+
+  def getPath = path
+
+  def getHeaders(name: String) = List(headers(name))
+
+  def getHeader(name: String) = headers(name)
+
+
 
   def getLocales = List("en_US")
 
@@ -34,15 +52,5 @@ class DummyRequest extends Request{
 
   def getHeaderNames = List("accept")
 
-  def getHeaders(name: String) = List("val")
 
-  def getHeader(name: String) = null
-
-  def getSession = null
-
-  def isSecure = false
-
-  def getServerName = "localhost"
-
-  def getPath = null
 }
