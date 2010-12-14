@@ -1,10 +1,5 @@
 package org.bowlerframework
 
-import javax.servlet.http.{HttpServletRequest, HttpServletResponse, HttpSession}
-import org.scalatra.util.{MultiMapHeadView, MapWithIndifferentAccess}
-import org.apache.commons.fileupload.FileItem
-import collection.mutable.HashMap
-
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
@@ -13,6 +8,4 @@ import collection.mutable.HashMap
  * To change this template use File | Settings | File Templates.
  */
 
-case class RequestScope(request: HttpServletRequest, response: HttpServletResponse, session: Session, params: Map[String, Any]){
-  
-}
+case class RequestScope(request: Request, response: Response)

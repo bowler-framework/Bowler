@@ -1,9 +1,6 @@
 package org.bowlerframework
 
-import org.scalatra.{PathPatternParser, RouteMatcher, ScalatraKernel}
-import collection.mutable.{HashMap, ListBuffer, MutableList}
-import org.scalatra.RouteMatcher._
-import ScalatraKernel.MultiParams
+
 import util.matching.Regex
 
 /**

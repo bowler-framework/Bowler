@@ -36,10 +36,8 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
   }
 
   private def mapExecutor(routeExecutor: RouteExecutor): Any = {
-    val scope = RequestScope(this.request, this.response, new BowlerHttpSession(this.request.getSession(true)),
-      this.flattenParameters(this.request, this.params, this.multiParams, this.fileParams, this.fileMultiParams))
-
-    println("THIS PATH: " + this.requestPath)
+    val bowlerRequest = new BowlerHttpRequest(this.requestPath, this.request, this.flattenParameters(this.request, this.params, this.multiParams, this.fileParams, this.fileMultiParams))
+    val scope = RequestScope(bowlerRequest, new BowlerHttpResponse(this.response))
 
     routeExecutor.executeRoute(scope)
   }
