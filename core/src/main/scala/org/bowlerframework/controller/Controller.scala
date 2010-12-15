@@ -32,7 +32,7 @@ trait Controller {
 
 }
 
-class DefaultRouteExecutor(controller: => Unit) extends RouteExecutor {
+class DefaultRouteExecutor(routeMatcher: String, controller: => Unit) extends RouteExecutor {
   def executeRoute(requestScope: RequestScope){
     RequestScope.executeRoute(null, requestScope, controller)
   }
