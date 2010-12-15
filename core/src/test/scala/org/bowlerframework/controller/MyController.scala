@@ -11,6 +11,7 @@ class MyController extends Controller with Validations{
   // testing composition with function for mapping request params to Int
   get("/myController")(mapRequest[Int](a => {
     i = i + a
+    // RequestScope allows access to Request/Response via dynamic variable
     response = RequestScope.request.getStringParameter("name") + i
     println(response)
   }))
@@ -22,6 +23,7 @@ class MyController extends Controller with Validations{
       if(RequestScope.request.getParameterNames.exists(p => p.equals("name")))
         None
       else{
+        // errors defined as list of key/message pairs
         val error = ("name", "Name is a required parameter!")
         Some(List(error))  // execution of the post() should stop after this and go to onValidationErrors
       }
