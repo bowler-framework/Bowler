@@ -1,7 +1,6 @@
 package org.bowlerframework.controller
 
 import util.matching.Regex
-import util.DynamicVariable
 import org.bowlerframework._
 
 /**
