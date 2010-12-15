@@ -9,5 +9,5 @@ package org.bowlerframework
  */
 
 trait RouteExecutor{
-  def executeRoute(requestScope: RequestScope): Any
+  def executeRoute(requestScope: RequestScope): Unit
 }

@@ -17,7 +17,8 @@ class DummyResponse extends Response{
   private val headers = new HashMap[String, String]
 
   private var contentType = "text/html"
-  private val writer = new PrintWriter(new StringWriter)
+  private val string = new StringWriter
+  private val writer = new PrintWriter(string)
 
   private var outputSteam: OutputStream = null
 
@@ -39,7 +40,8 @@ class DummyResponse extends Response{
 
   def addHeader(name: String, value: String) = headers.put(name, value)
 
-
   // TODO implement
   def sendRedirect(location: String) = null
+
+  override def toString = string.toString
 }

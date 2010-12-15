@@ -21,55 +21,58 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
   holder.setInitParameter("applicationClass", "org.bowlerframework.stub.SimpleApp")
 
   test("getPath"){
+    var body: String = null
     BowlerConfigurator.get("/getPath", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
-        scope.request.getPath
+        body = scope.request.getPath
       }
     })
 
     get("/getPath") {
       println(this.body)
-      assert("/getPath".equals(this.body))
+      assert("/getPath".equals(body))
     }
 
   }
 
   test("getSession"){
+    var body: String = null
     BowlerConfigurator.get("/getSession", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
-        scope.request.getSession.getId
+        body = scope.request.getSession.getId
       }
     })
 
     get("/getSession") {
-      println(this.body)
-      assert(this.body != null)
+      assert(body != null)
     }
 
   }
 
   test("isSecure"){
+    var body: String = null
     BowlerConfigurator.get("/isSecure", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
-        scope.request.isSecure + ""
+        body = scope.request.isSecure + ""
       }
     })
 
     get("/isSecure") {
-      assert(this.body.equals("false"))
+      assert(body.equals("false"))
     }
 
   }
 
   test("getServerName"){
+    var body: String = null
     BowlerConfigurator.get("/getServerName", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
-        scope.request.getServerName
+        body = scope.request.getServerName
       }
     })
 
     get("/getServerName") {
-      assert(this.body.equals(InetAddress.getLocalHost.getHostAddress))
+      assert(body.equals(InetAddress.getLocalHost.getHostAddress))
     }
   }
 

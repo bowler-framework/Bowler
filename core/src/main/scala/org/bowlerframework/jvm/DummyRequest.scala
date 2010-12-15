@@ -1,7 +1,8 @@
 package org.bowlerframework.jvm
 
-import org.bowlerframework.{Session, Request}
 import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, JavaBooleanTransformer}
+import collection.mutable.MutableList
+import org.bowlerframework.{ContentTypeResolver, Session, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +12,7 @@ import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, Ja
  * To change this template use File | Settings | File Templates.
  */
 
-class DummyRequest(path: String, params: Map[String, Any], headers: Map[String, String], body: String, session: Session = new DummySession) extends Request{
+class DummyRequest(path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html"), session: Session = new DummySession) extends Request{
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
@@ -44,13 +45,17 @@ class DummyRequest(path: String, params: Map[String, Any], headers: Map[String, 
 
   def getHeader(name: String) = headers(name)
 
-
+  def getHeaderNames: List[String] = {
+    val list = new MutableList[String]
+    headers.keys.foreach(f => list += f)
+    list.toList
+  }
 
   def getLocales = List("en_US")
 
-  def getAcceptsContentType = null
+  def getAcceptsContentType = ContentTypeResolver.contentType(headers("accept"))
 
-  def getHeaderNames = List("accept")
+
 
 
 }

@@ -7,12 +7,12 @@ import util.matching.Regex
 import org.bowlerframework._
 
 class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter{
-  private var application: BowlerApplication = null
 
   override def initialize(config: FilterConfig): Unit = {
     super.initialize(config)
     BowlerConfigurator.setApplicationRouter(this)
-    application = Class.forName(config.getInitParameter("applicationClass")).newInstance.asInstanceOf[BowlerApplication]
+    //BowlerConfigurator.loadControllers(config.getInitParameter("controllerPackage"))
+
 
   }
 

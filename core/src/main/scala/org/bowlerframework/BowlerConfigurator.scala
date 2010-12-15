@@ -2,6 +2,8 @@ package org.bowlerframework
 
 
 import util.matching.Regex
+import java.util.Enumeration
+import java.net.URL
 
 /**
  * Created by IntelliJ IDEA.

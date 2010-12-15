@@ -30,4 +30,5 @@ class BowlerHttpResponse(response: HttpServletResponse) extends Response{
   def getOutputStream = response.getOutputStream
 
   def getWriter = response.getWriter
+
 }

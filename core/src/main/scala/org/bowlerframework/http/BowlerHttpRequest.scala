@@ -85,7 +85,6 @@ class BowlerHttpRequest(path: String, request: HttpServletRequest, params: Map[S
   }
 
   def getAcceptsContentType: ContentTypeResolver.ContentType = {
-    println("Content-Type: " + request.getHeader("accept"))
     ContentTypeResolver.contentType(request.getHeader("accept"))
   }
 
