@@ -10,8 +10,9 @@ import org.bowlerframework.RequestScope
  * To change this template use File | Settings | File Templates.
  */
 
-object ParameterMapper{
-  def map[T](scope: RequestScope, manifest: Manifest[T]): T = {
+trait RequestMapper{
+  def mapRequest[T](func: T => Any)(implicit m: Manifest[T]): Any ={
+    val request = RequestScope.request
     return None.asInstanceOf[T]
   }
 }

@@ -9,8 +9,8 @@ package org.bowlerframework
  */
 
 trait Session{
-  def getAttribute(name: String): Option[Any]
-  def setAttribute(name: String, value: Any)
+  def getAttribute[T](name: String): Option[T]
+  def setAttribute[T](name: String, value: T)
   def removeAttribute(name: String)
   def invalidate
   def getCreationTime: Long

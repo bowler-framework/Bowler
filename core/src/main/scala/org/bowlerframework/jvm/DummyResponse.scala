@@ -12,13 +12,12 @@ import java.io.{OutputStream, PrintWriter, StringWriter}
  * To change this template use File | Settings | File Templates.
  */
 
-class DummyResponse extends Response{
+class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends Response{
   private var status = 200
   private val headers = new HashMap[String, String]
 
   private var contentType = "text/html"
-  private val string = new StringWriter
-  private val writer = new PrintWriter(string)
+  private val writer = new PrintWriter(stringWriter)
 
   private var outputSteam: OutputStream = null
 
@@ -43,5 +42,5 @@ class DummyResponse extends Response{
   // TODO implement
   def sendRedirect(location: String) = null
 
-  override def toString = string.toString
+  override def toString = stringWriter.toString
 }

@@ -22,18 +22,18 @@ trait Controller {
 
   def delete(routeMatchers: String)(controller: => Unit) = BowlerConfigurator.delete(routeMatchers, new DefaultRouteExecutor(routeMatchers, controller))
 
-  def get(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.get(routeMatchers, new DefaultRouteExecutor(null, controller))
+  def get(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.get(routeMatchers, new DefaultRouteExecutor(routeMatchers.toString, controller, true))
 
-  def put(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.put(routeMatchers, new DefaultRouteExecutor(null, controller))
+  def put(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.put(routeMatchers, new DefaultRouteExecutor(routeMatchers.toString, controller, true))
 
-  def post(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.post(routeMatchers, new DefaultRouteExecutor(null, controller))
+  def post(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.post(routeMatchers, new DefaultRouteExecutor(routeMatchers.toString, controller, true))
 
-  def delete(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.delete(routeMatchers, new DefaultRouteExecutor(null, controller))
+  def delete(routeMatchers: Regex)(controller: => Unit) = BowlerConfigurator.delete(routeMatchers, new DefaultRouteExecutor(routeMatchers.toString, controller, true))
 
 }
 
-class DefaultRouteExecutor(routeMatcher: String, controller: => Unit) extends RouteExecutor {
+class DefaultRouteExecutor(routeMatcher: String, controller: => Unit, isRegex: Boolean = false) extends RouteExecutor {
   def executeRoute(requestScope: RequestScope){
-    RequestScope.executeRoute(null, requestScope, controller)
+    RequestScope.executeRoute(MappedPath(routeMatcher, isRegex), requestScope, controller)
   }
 }

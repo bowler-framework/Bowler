@@ -36,11 +36,11 @@ class DummySession extends Session{
 
   def removeAttribute(name: String) = attributeMap.remove(name)
 
-  def setAttribute(name: String, value: Any) = attributeMap += name -> value
+  def setAttribute[T](name: String, value: T) = attributeMap += name -> value
 
-  def getAttribute(name: String): Option[Any] = {
+  def getAttribute[T](name: String): Option[T] = {
     try{
-      return Some(attributeMap(name))
+      return Some(attributeMap(name).asInstanceOf[T])
     }catch{
       case e: NoSuchElementException => return None
     }

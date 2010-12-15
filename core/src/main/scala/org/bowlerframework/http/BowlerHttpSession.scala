@@ -29,11 +29,11 @@ class BowlerHttpSession(session: HttpSession) extends Session{
 
   def removeAttribute(name: String) = session.removeAttribute(name)
 
-  def setAttribute(name: String, value: Any) = session.setAttribute(name, value)
+  def setAttribute[T](name: String, value: T) = session.setAttribute(name, value)
 
-  def getAttribute(name: String): Option[Any] = {
+  def getAttribute[T](name: String): Option[T] = {
     if(session.getAttribute(name) != null)
-      return Some(session.getAttribute(name))
+      return Some(session.getAttribute(name).asInstanceOf[T])
     else
       return None
   }
