@@ -8,6 +8,6 @@ package org.bowlerframework.controller
  * To change this template use File | Settings | File Templates.
  */
 
-class RequestValidationException(errors: List[Tuple2[String, String]]) extends Exception{
+class ValidationException(errors: List[Tuple2[String, String]]) extends Exception{
 
 }

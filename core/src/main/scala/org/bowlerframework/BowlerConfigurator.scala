@@ -13,12 +13,17 @@ import java.net.URL
  * To change this template use File | Settings | File Templates.
  */
 
-object BowlerConfigurator{
+object BowlerConfigurator extends ApplicationRouter{
   private var router: ApplicationRouter = null
 
   def setApplicationRouter(router: ApplicationRouter) = {
     this.router = router
   }
+
+
+  def addApplicationRoute(protocol: String, routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
+
+  def addApplicationRoute(protocol: String, routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
 
   def get(routeMatchers: String,routeExecutor: RouteExecutor) = router.addApplicationRoute("GET", routeMatchers,routeExecutor)
   def put(routeMatchers: String,routeExecutor: RouteExecutor) = router.addApplicationRoute("PUT", routeMatchers,routeExecutor)
