@@ -31,6 +31,7 @@ trait Request{
   def getIntParameter(name: String): Int
   def getLongParameter(name: String): Long
   def getBooleanParameter(name: String): Boolean
+  def getParameterMap: Map[String, Any]
 
   def getRequestBodyAsString: String
 

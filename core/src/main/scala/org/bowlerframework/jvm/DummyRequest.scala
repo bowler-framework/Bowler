@@ -33,6 +33,9 @@ class DummyRequest(path: String, params: Map[String, Any], body: String, headers
 
   def getStringParameter(name: String) = params(name).toString
 
+
+  def getParameterMap = params
+
   def getSession = session
 
   def isSecure = false

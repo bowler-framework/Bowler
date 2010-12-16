@@ -39,6 +39,8 @@ class BowlerHttpRequest(path: String, request: HttpServletRequest, params: Map[S
   def getParameterNames = params.keys
 
 
+  def getParameterMap = params
+
   def getStringParameter(name: String) = params(name).toString
 
   def getHeaderNames: List[String] = {
