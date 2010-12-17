@@ -21,7 +21,7 @@ class BasicControllerTest extends ScalatraFunSuite{
   test("Simple Controller Route"){
     val controller = new MyController
     get("/myController", ("name", "wille")){
-      assert(controller.response.equals("wille1"))
+      assert(controller.responseString.equals("wille1"))
     }
   }
 
@@ -32,19 +32,21 @@ class BasicControllerTest extends ScalatraFunSuite{
 
   test("Successful validation block"){
     val controller = new MyController
-    controller.response = "failure"
+    controller.responseString = "failure"
     post("/somePost", ("name", "wille")){
-      assert(controller.response.equals("success!"))
+      assert(controller.responseString.equals("success!"))
     }
   }
 
+
+
   test("Failed validation block"){
     val controller = new MyController
-    controller.response = "failure"
+    controller.responseString = "failure"
     post("/somePost"){
-      println(controller.response)
-      assert(!controller.response.equals("success!"))
-      assert(controller.response.equals("name:Name is a required parameter!"))
+      println(controller.responseString)
+      assert(!controller.responseString.equals("success!"))
+      assert(controller.responseString.equals("name:Name is a required parameter!"))
     }
   }
 

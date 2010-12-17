@@ -133,6 +133,50 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
 
   }
 
+  test("HTTP Method"){
+    var method: HTTP.Method = null
+    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
+      def executeRoute(scope: RequestScope) = {
+        method = scope.request.getMethod
+      }
+    })
+
+    get("/getParameterNames/foo/bar", ("param", "baz")) {
+
+      assert(HTTP.GET.equals(method))
+    }
+
+  }
+
+
+  test("GET ContentType"){
+    var contentType: Option[String] = null
+    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
+      def executeRoute(scope: RequestScope) = {
+        contentType = scope.request.getContentType
+      }
+    })
+
+    this.get("/getParameterNames/foo/bar", ("param", "baz")) {
+      println("CONTENT " + contentType)
+      assert(contentType.equals(None))
+    }
+
+  }
+
+  test("POST ContentType"){
+    var contentType: Option[String] = null
+    BowlerConfigurator.post("/getParameterNames/:name/:value", new RouteExecutor{
+      def executeRoute(scope: RequestScope) = {
+        contentType = scope.request.getContentType
+      }
+    })
+
+    post("/getParameterNames/foo/bar", ("param", "baz")) {
+      assert(contentType.get.equals("application/x-www-form-urlencoded"))  //multipart/form-data
+    }
+  }
+
 
   test("getLocales"){
     var locales: List[String] = null
@@ -157,7 +201,7 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
     BowlerConfigurator.post("/getRequestBodyAsString", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
         requestBody = scope.request.getRequestBodyAsString
-        content = scope.request.getAcceptsContentType
+        content = scope.request.getAccepts
       }
     })
     val headers = Map("accept" -> "application/json")

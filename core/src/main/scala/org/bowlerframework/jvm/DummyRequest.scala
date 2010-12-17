@@ -2,7 +2,7 @@ package org.bowlerframework.jvm
 
 import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, JavaBooleanTransformer}
 import collection.mutable.MutableList
-import org.bowlerframework.{ContentTypeResolver, Session, Request}
+import org.bowlerframework.{HTTP, ContentTypeResolver, Session, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +12,7 @@ import org.bowlerframework.{ContentTypeResolver, Session, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-class DummyRequest(path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html"), session: Session = new DummySession) extends Request{
+class DummyRequest(method: HTTP.Method, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
@@ -56,9 +56,16 @@ class DummyRequest(path: String, params: Map[String, Any], body: String, headers
 
   def getLocales = List("en_US")
 
-  def getAcceptsContentType = ContentTypeResolver.contentType(headers("accept"))
+  def getAccepts = ContentTypeResolver.contentType(headers("accept"))
 
+  def getMethod = method
 
+  def getContentType: Option[String] = {
+    try{
+      return Some(headers("Content-Type"))
+    }catch{
+      case e: NoSuchElementException => return None
+    }
 
-
+  }
 }

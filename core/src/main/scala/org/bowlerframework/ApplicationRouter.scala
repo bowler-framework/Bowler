@@ -11,7 +11,7 @@ import util.matching.Regex
  */
 
 trait ApplicationRouter{
-  def addApplicationRoute(protocol: String, routeMatchers: String, routeExecutor: RouteExecutor)
-  def addApplicationRoute(protocol: String, routeMatchers: Regex, routeExecutor: RouteExecutor)
+  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor)
+  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: Regex, routeExecutor: RouteExecutor)
 
 }

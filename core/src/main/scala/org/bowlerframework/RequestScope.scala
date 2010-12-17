@@ -22,12 +22,12 @@ object RequestScope {
   def request = _request value
   def mappedPath = _mappedPath value
 
-  def executeRoute(mappedPath: MappedPath, requestScope: RequestScope, function: => Unit) = {
+  def executeRoute(mappedPath: MappedPath, requestScope: RequestScope, function: (Request, Response) => Unit) = {
     _request.withValue(requestScope.request) {
       _response.withValue(requestScope.response) {
         _mappedPath.withValue(mappedPath) {
           try {
-            function
+            function(request, response)
             // add last completed path here
           } catch {
             case validationException => {

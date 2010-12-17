@@ -13,6 +13,7 @@ import org.apache.commons.fileupload.FileItem
 
 trait Request{
   def getPath: String
+  def getMethod: HTTP.Method
   def getServerName: String
   def isSecure: Boolean
 
@@ -21,7 +22,8 @@ trait Request{
   def getHeader(name: String): String
   def getHeaders(name: String): List[String]
   def getHeaderNames: List[String]
-  def getAcceptsContentType: ContentTypeResolver.ContentType
+  def getAccepts: ContentTypeResolver.ContentType
+  def getContentType: Option[String]
   def getLocales: List[String]
 
   def getParameterNames: Iterable[String]
