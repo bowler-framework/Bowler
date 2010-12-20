@@ -21,6 +21,19 @@ class RequestMapperTest extends FunSuite with RequestMapper{
     this.mapRequest[Int](request)(i => assert((i == 17) || (i == 23)))
   }
 
+  test("mapper with null"){
+    val request = makeRequest(Map("string" -> "hello"))
+    this.mapRequest[Option[String]](request)(i => println("String is " + i))
+
+    try{
+      this.mapRequest[String](request)(i => println("String is " + i))
+      fail("this should have thrown a RequestMapperException")
+    }catch{
+      case e: RequestMapperException => println("expected for not using Option")
+    }
+
+  }
+
   //test("type safety")
 
 

@@ -22,8 +22,15 @@ trait RequestMapper {
     val param = getValue[T](map, nameHint, m)
     if (param != None)
       func(param)
-    else
-      return func(None.asInstanceOf[T])
+    else{
+      try{
+        func(None.asInstanceOf[T])
+      }catch{
+        case e: ClassCastException => throw new RequestMapperException("Could not map parameter to a value! If a " +
+          "parameter cannot be mapped, you should consider using Option[T] for any values that are not mandatory!")
+      }
+    }
+
   }
 
 
@@ -49,13 +56,11 @@ trait RequestMapper {
     val cls = getClassForPrimitive(m)
     if (cls != null) {
       if (nameHint != null) {
-        println("has name hint")
         val response = TransformerRegistry.resolveTransformer(cls).toValue(request(nameHint).toString).asInstanceOf[T]
         request.remove(nameHint)
         return response
       }
       else {
-        println("no name hint")
         var response: T = None.asInstanceOf[T]
         val transformer = TransformerRegistry.resolveTransformer(cls)
         request.iterator.find(f => {
