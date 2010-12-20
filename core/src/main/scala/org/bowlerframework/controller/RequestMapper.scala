@@ -33,7 +33,7 @@ trait RequestMapper {
 
   }
 
-
+  // TODO: change this to use the typeDef instead of manifest and extract manifest check to higher level
   private def getValue[T](request: HashMap[String, Any], nameHint: String, m: Manifest[T]): T = {
     val primitive = getValueForPrimitive(request, nameHint, m)
     if (primitive != None)
@@ -56,17 +56,17 @@ trait RequestMapper {
     val cls = getClassForPrimitive(m)
     if (cls != null) {
       if (nameHint != null) {
-        val response = TransformerRegistry.resolveTransformer(cls).toValue(request(nameHint).toString).asInstanceOf[T]
+        val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return getValueForPrimitive[T](request, null, m)).toValue(request(nameHint).toString).asInstanceOf[T]
         request.remove(nameHint)
         return response
       }
       else {
         var response: T = None.asInstanceOf[T]
-        val transformer = TransformerRegistry.resolveTransformer(cls)
+        val transformer = TransformerRegistry.resolveTransformer(cls).getOrElse(throw new RequestMapperException("Cannot map parameter of type " + cls.getName))
         request.iterator.find(f => {
           try {
             response = transformer.toValue(f._2.toString).asInstanceOf[T]
-            println(response)
+            request.remove(f._1)
             return response
           } catch {
             case e: Exception => {
