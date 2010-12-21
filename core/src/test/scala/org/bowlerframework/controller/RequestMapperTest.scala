@@ -26,7 +26,7 @@ class RequestMapperTest extends FunSuite with RequestMapper{
     this.mapRequest[Option[String]](request)(i => println("String is " + i))
 
     try{
-      this.mapRequest[String](request)(i => println("String is " + i))
+      this.mapRequest[Int](makeRequest(Map()))(i => {println(i + " IS NONE: " + (None == i))})
       fail("this should have thrown a RequestMapperException")
     }catch{
       case e: RequestMapperException => println("expected for not using Option")

@@ -1,9 +1,8 @@
 package org.bowlerframework.controller
 
-import org.bowlerframework.{Request, RequestScope}
+import org.bowlerframework.{Request}
 import collection.mutable.HashMap
-import com.recursivity.commons.bean.{GenericsParser, TransformerRegistry}
-
+import com.recursivity.commons.bean.{BeanUtils, GenericTypeDefinition, GenericsParser, TransformerRegistry}
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,67 +21,81 @@ trait RequestMapper {
     val param = getValue[T](map, nameHint, m)
     if (param != None)
       func(param)
-    else{
-      try{
+    else {
+      try {
         func(None.asInstanceOf[T])
-      }catch{
+      } catch {
         case e: ClassCastException => throw new RequestMapperException("Could not map parameter to a value! If a " +
-          "parameter cannot be mapped, you should consider using Option[T] for any values that are not mandatory!")
+          "parameter is not mandatory, you should consider using Option[" + m.toString + "]!")
       }
     }
 
   }
 
-  // TODO: change this to use the typeDef instead of manifest and extract manifest check to higher level
   private def getValue[T](request: HashMap[String, Any], nameHint: String, m: Manifest[T]): T = {
-    val primitive = getValueForPrimitive(request, nameHint, m)
-    if (primitive != None)
-      return primitive
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
     val typeDef = GenericsParser.parseDefinition(typeString)
+    return getValue[T](request, nameHint, typeDef)
+  }
 
-    if(typeDef.genericTypes == None){
-
-    }else{
+  private def getValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
+    val primitive = getValueForPrimitive[T](request, nameHint, typeDef.clazz)
+    if (primitive != None)
+      return primitive
+    val cls = Class.forName(typeDef.clazz)
+    if (typeDef.genericTypes == None) {
+      val response = getValueForTransformer[T](request, nameHint, cls)
+      if(response != None)
+        return response
+      return BeanUtils.instantiate[T](cls, request.toMap)
+    } else {
       // deal with generified type
     }
     return None.asInstanceOf[T]
-
   }
 
 
-  private def getValueForPrimitive[T](request: HashMap[String, Any], nameHint: String, m: Manifest[T]): T = {
+  private def getValueForTransformer[T](request: HashMap[String, Any], nameHint: String, cls: Class[_]): T = {
+    if (nameHint != null) {
+      val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).asInstanceOf[T]
+      request.remove(nameHint)
+      return response
+    }
+    else {
+      var response: T = None.asInstanceOf[T]
+      val transformer = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T])
+      request.iterator.find(f => {
+        try {
+          response = transformer.toValue(f._2.toString).asInstanceOf[T]
+          request.remove(f._1)
+          return response
+        } catch {
+          case e: Exception => {
+            false
+          }
+        }
+      })
+      return response
+    }
+  }
+
+
+  private def getValueForPrimitive[T](request: HashMap[String, Any], nameHint: String, m: String): T = {
     val cls = getClassForPrimitive(m)
     if (cls != null) {
-      if (nameHint != null) {
-        val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return getValueForPrimitive[T](request, null, m)).toValue(request(nameHint).toString).asInstanceOf[T]
-        request.remove(nameHint)
-        return response
-      }
-      else {
-        var response: T = None.asInstanceOf[T]
-        val transformer = TransformerRegistry.resolveTransformer(cls).getOrElse(throw new RequestMapperException("Cannot map parameter of type " + cls.getName))
-        request.iterator.find(f => {
-          try {
-            response = transformer.toValue(f._2.toString).asInstanceOf[T]
-            request.remove(f._1)
-            return response
-          } catch {
-            case e: Exception => {
-              false
-            }
-          }
-        })
-        return response
-      }
-    }else return None.asInstanceOf[T]
-
+      var result = getValueForTransformer[T](request, nameHint, cls)
+      if(result == None && nameHint != null){
+        return getValueForPrimitive[T](request, null, m)
+      }else if(result == None)
+        throw new RequestMapperException("Cannot map parameter of type " + m)
+      else return result
+    } else return None.asInstanceOf[T]
   }
 
-  private def getClassForPrimitive(m: Manifest[_]): Class[_] = {
+  private def getClassForPrimitive(m: String): Class[_] = {
     var fieldCls: Class[_] = null
-    m.toString match {
+    m match {
       case "Long" => fieldCls = classOf[Long]
       case "Int" => fieldCls = classOf[java.lang.Integer]
       case "Float" => fieldCls = classOf[java.lang.Float]
