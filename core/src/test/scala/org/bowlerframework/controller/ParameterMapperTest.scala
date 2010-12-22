@@ -2,7 +2,7 @@ package org.bowlerframework.controller
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.HTTP
+import org.bowlerframework.{RequestMapperException, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +12,7 @@ import org.bowlerframework.HTTP
  * To change this template use File | Settings | File Templates.
  */
 
-class RequestMapperTest extends FunSuite with RequestMapper{
+class ParameterMapperTest extends FunSuite with ParameterMapper{
 
   test("1 param function signatures of java primitives"){
     val request = makeRequest(Map("string" -> "hello", "int" -> "23", "int2" -> "17"))

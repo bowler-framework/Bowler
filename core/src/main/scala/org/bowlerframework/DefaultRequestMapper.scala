@@ -1,36 +1,26 @@
-package org.bowlerframework.controller
+package org.bowlerframework
 
-import org.bowlerframework.{Request}
 import collection.mutable.HashMap
-import com.recursivity.commons.bean.{BeanUtils, GenericTypeDefinition, GenericsParser, TransformerRegistry}
+import com.recursivity.commons.bean.{BeanUtils, GenericsParser, GenericTypeDefinition, TransformerRegistry}
+import org.apache.commons.fileupload.FileItem
 
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
- * Date: 12/12/2010
- * Time: 23:42
+ * Date: 21/12/2010
+ * Time: 21:57
  * To change this template use File | Settings | File Templates.
  */
 
-trait RequestMapper {
-  def mapRequest[T](request: Request, nameHint: String = null)(func: T => Any)(implicit m: Manifest[T]): Any = {
+class DefaultRequestMapper extends RequestMapper{
+
+  def getValue[T](request: Request, nameHint: String = null)(implicit m: Manifest[T]): T = {
     val map = new HashMap[String, Any]
-    // check for JSON OR XML - use BowlerConfigurator to check alternative mappers?
     request.getParameterMap.foreach(f => map.put(f._1, f._2))
 
-    val param = getValue[T](map, nameHint, m)
-    if (param != None)
-      func(param)
-    else {
-      try {
-        func(None.asInstanceOf[T])
-      } catch {
-        case e: ClassCastException => throw new RequestMapperException("Could not map parameter to a value! If a " +
-          "parameter is not mandatory, you should consider using Option[" + m.toString + "]!")
-      }
-    }
-
+    return getValue[T](map, nameHint, m)
   }
+
 
   private def getValue[T](request: HashMap[String, Any], nameHint: String, m: Manifest[T]): T = {
     var typeString = m.toString.replace("[", "<")
@@ -39,20 +29,66 @@ trait RequestMapper {
     return getValue[T](request, nameHint, typeDef)
   }
 
+
   private def getValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
     val primitive = getValueForPrimitive[T](request, nameHint, typeDef.clazz)
     if (primitive != None)
       return primitive
+
     val cls = Class.forName(typeDef.clazz)
-    if (typeDef.genericTypes == None) {
+
+    if(classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])))
+      return getFileValues[T](request, nameHint, typeDef)
+
+    if (typeDef.genericTypes == None) {   // deal with non-generics, non-files, non-primitives
       val response = getValueForTransformer[T](request, nameHint, cls)
-      if(response != None)
+      if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None))
         return response
       return BeanUtils.instantiate[T](cls, request.toMap)
-    } else {
+    } else { // deal with generified type
       // deal with generified type
     }
     return None.asInstanceOf[T]
+  }
+
+
+  private def getFileValues[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
+    val cls = Class.forName(typeDef.clazz)
+    if(classOf[FileItem].isAssignableFrom(cls)){
+      if(nameHint != null)
+        return request(nameHint).asInstanceOf[T]
+      var response: T = None.asInstanceOf[T]
+      request.iterator.find(f => {
+        try {
+          response = f._2.asInstanceOf[T]
+          request.remove(f._1)
+          return response
+        } catch {
+          case e: Exception => {
+            false
+          }
+        }
+      })
+      return response
+
+    }else if(classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])){
+      if(nameHint != null)
+        return request(nameHint).asInstanceOf[T]
+      var response: T = None.asInstanceOf[T]
+      request.iterator.find(f => {
+        try {
+          response = f._2.asInstanceOf[T]
+          request.remove(f._1)
+          return response
+        } catch {
+          case e: Exception => {
+            false
+          }
+        }
+      })
+      return response
+    }else return None.asInstanceOf[T]
+
   }
 
 

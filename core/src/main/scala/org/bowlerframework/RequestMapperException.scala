@@ -1,4 +1,4 @@
-package org.bowlerframework.controller
+package org.bowlerframework
 
 /**
  * Created by IntelliJ IDEA.

@@ -4,6 +4,7 @@ package org.bowlerframework
 import util.matching.Regex
 import java.util.Enumeration
 import java.net.URL
+import collection.mutable.HashMap
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,10 +15,30 @@ import java.net.URL
  */
 
 object BowlerConfigurator extends ApplicationRouter{
+
+  private val requestMappers = new HashMap[String, RequestMapper]
+
+
   private var router: ApplicationRouter = null
 
   def setApplicationRouter(router: ApplicationRouter) = {
     this.router = router
+  }
+
+  def addRequestMapper(contentType: String, mapper: RequestMapper) = requestMappers.put(contentType, mapper)
+
+  def getRequestMapper(request: Request): RequestMapper = {
+    if(request.getContentType.equals(None))
+      return new DefaultRequestMapper
+    else if(request.getContentType.get.toLowerCase.contains("application/json"))
+      return new JsonRequestMapper
+    else{
+      try{
+        return requestMappers(request.getContentType.get)
+      }catch{
+        case e: NoSuchElementException => return new DefaultRequestMapper
+      }
+    }
   }
 
 
