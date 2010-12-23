@@ -1,4 +1,6 @@
-package org.bowlerframework
+package org.bowlerframework.model
+
+import org.bowlerframework.Request
 
 /**
  * Created by IntelliJ IDEA.

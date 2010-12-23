@@ -1,4 +1,4 @@
-package org.bowlerframework
+package org.bowlerframework.model
 
 /**
  * Created by IntelliJ IDEA.

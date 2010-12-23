@@ -1,6 +1,7 @@
 package org.bowlerframework
 
 
+import model.{JsonRequestMapper, DefaultRequestMapper, RequestMapper}
 import util.matching.Regex
 import java.util.Enumeration
 import java.net.URL
@@ -27,6 +28,7 @@ object BowlerConfigurator extends ApplicationRouter{
 
   def addRequestMapper(contentType: String, mapper: RequestMapper) = requestMappers.put(contentType, mapper)
 
+  // TODO check the selection here, should it really be content type? Probably, but double check
   def getRequestMapper(request: Request): RequestMapper = {
     if(request.getContentType.equals(None))
       return new DefaultRequestMapper

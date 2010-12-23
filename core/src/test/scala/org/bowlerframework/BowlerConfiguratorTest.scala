@@ -1,6 +1,7 @@
 package org.bowlerframework
 
 import jvm.DummyRequest
+import model.{DefaultRequestMapper, JsonRequestMapper}
 import org.scalatest.FunSuite
 
 /**

@@ -1,8 +1,8 @@
-package org.bowlerframework.controller
+package org.bowlerframework.model
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{RequestMapperException, HTTP}
+import org.bowlerframework.{ HTTP}
 
 /**
  * Created by IntelliJ IDEA.

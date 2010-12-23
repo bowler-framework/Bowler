@@ -1,6 +1,7 @@
 package org.bowlerframework.controller
 
 import org.bowlerframework.{Request, Response, RequestScope}
+import org.bowlerframework.model.Validations
 
 class MyController extends Controller with Validations{
   var i = 0

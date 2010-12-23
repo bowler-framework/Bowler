@@ -1,8 +1,9 @@
-package org.bowlerframework
+package org.bowlerframework.model
 
 import collection.mutable.HashMap
 import com.recursivity.commons.bean.{BeanUtils, GenericsParser, GenericTypeDefinition, TransformerRegistry}
 import org.apache.commons.fileupload.FileItem
+import org.bowlerframework.Request
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,13 +42,37 @@ class DefaultRequestMapper extends RequestMapper{
       return getFileValues[T](request, nameHint, typeDef)
 
     if (typeDef.genericTypes == None) {   // deal with non-generics, non-files, non-primitives
-      val response = getValueForTransformer[T](request, nameHint, cls)
-      if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None))
-        return response
-      return BeanUtils.instantiate[T](cls, request.toMap)
-    } else { // deal with generified type
-      // deal with generified type
+      val alias = AliasRegistry.getAlias(cls)
+      var dealiasedRequest = new HashMap[String, Any]
+      var hintOfName: String = nameHint
+      request.iterator.foreach(f => {
+        if(f._1.startsWith(alias + ".")){
+          val key = f._1.substring(alias.length + 1)
+          dealiasedRequest.put(key, f._2)
+        }
+      })
+
+      if(dealiasedRequest.keys.size == 0) dealiasedRequest = request
+      else{
+        if(hintOfName != null && hintOfName.startsWith(alias + "."))
+          hintOfName.substring(alias.length + 1)
+      }
+
+      val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
+      if(response == null && !TransformerRegistry.resolveTransformer(cls).equals(None))
+        return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
+      else if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)){
+        return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
+      }else
+        return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
+    }else{
+      return getGenerifiedValue[T](request, nameHint, typeDef)
     }
+    return None.asInstanceOf[T]
+  }
+
+
+  private def getGenerifiedValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
     return None.asInstanceOf[T]
   }
 
@@ -95,8 +120,11 @@ class DefaultRequestMapper extends RequestMapper{
   private def getValueForTransformer[T](request: HashMap[String, Any], nameHint: String, cls: Class[_]): T = {
     if (nameHint != null) {
       val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).asInstanceOf[T]
-      request.remove(nameHint)
-      return response
+      if(response != null && response != None){
+        request.remove(nameHint)
+        return response
+      }else
+        return None.asInstanceOf[T]
     }
     else {
       var response: T = None.asInstanceOf[T]
@@ -104,8 +132,11 @@ class DefaultRequestMapper extends RequestMapper{
       request.iterator.find(f => {
         try {
           response = transformer.toValue(f._2.toString).asInstanceOf[T]
-          request.remove(f._1)
-          return response
+          if(response != null && response != None){
+            request.remove(f._1)
+            return response
+          }
+          false
         } catch {
           case e: Exception => {
             false
