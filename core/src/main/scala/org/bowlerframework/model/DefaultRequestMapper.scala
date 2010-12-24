@@ -3,7 +3,8 @@ package org.bowlerframework.model
 import collection.mutable.HashMap
 import com.recursivity.commons.bean.{BeanUtils, GenericsParser, GenericTypeDefinition, TransformerRegistry}
 import org.apache.commons.fileupload.FileItem
-import org.bowlerframework.Request
+import util.DynamicVariable
+import org.bowlerframework.{HTTP, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,11 +16,17 @@ import org.bowlerframework.Request
 
 class DefaultRequestMapper extends RequestMapper{
 
+  private val _requestToMap = new DynamicVariable[Request](null)
+
+  def httpRequest = _requestToMap value
+
   def getValue[T](request: Request, nameHint: String = null)(implicit m: Manifest[T]): T = {
     val map = new HashMap[String, Any]
     request.getParameterMap.foreach(f => map.put(f._1, f._2))
 
-    return getValue[T](map, nameHint, m)
+    _requestToMap.withValue(request) {
+      return getValue[T](map, nameHint, m)
+    }
   }
 
 
@@ -42,7 +49,7 @@ class DefaultRequestMapper extends RequestMapper{
       return getFileValues[T](request, nameHint, typeDef)
 
     if (typeDef.genericTypes == None) {   // deal with non-generics, non-files, non-primitives
-      val alias = AliasRegistry.getAlias(cls)
+      val alias = AliasRegistry.getAlias(typeDef)
       var dealiasedRequest = new HashMap[String, Any]
       var hintOfName: String = nameHint
       request.iterator.foreach(f => {
@@ -59,12 +66,20 @@ class DefaultRequestMapper extends RequestMapper{
       }
 
       val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
-      if(response == null && !TransformerRegistry.resolveTransformer(cls).equals(None))
+      if(response == null && !TransformerRegistry.resolveTransformer(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))){
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
-      else if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)){
-        return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
-      }else
+      }else if(response == null && (!httpRequest.getMethod.equals(HTTP.POST) || !httpRequest.getMethod.equals(HTTP.PUT))){
+        return None.asInstanceOf[T]
+      }else if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)){
+        if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))
+          return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
+        else
+          return response
+      }else if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT)){
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
+      }else{
+        return None.asInstanceOf[T]
+      }
     }else{
       return getGenerifiedValue[T](request, nameHint, typeDef)
     }

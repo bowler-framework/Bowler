@@ -107,13 +107,54 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
+  test("alias parameters with GET (should not create new beans)"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
+      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+
+    val request = new DummyRequest(HTTP.GET, "/", map, null)
+
+    try{
+      val bean =  mapper.getValue[OtherMapperBean](request)
+    }catch{
+      case e: ClassCastException => {}// expected
+    }
+  }
+
+  test("alias parameters with transformer GET (should not create new beans)"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
+      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+
+    val request = new DummyRequest(HTTP.GET, "/", map, null)
+
+    try{
+      val myBean = mapper.getValue[MyBean](request)
+    }catch{
+      case e: ClassCastException => {}// expected
+    }
+  }
+
+  test("alias parameters with transformer hit GET (should not edit any values)"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val myBean =  mapper.getValue[MyBean](makeRequest(HTTP.GET, Map("id" -> "1", "name" -> "otherBean")))
+    assert(myBean != null)
+    assert(myBean.id == 1l)
+    println("Decimal is: " + myBean.name)
+    assert(myBean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+    assert(myBean.name == "someBean")
+  }
+
   // test Option[]
   // test List[]
   // test Seq[]
   // test Set[]
   // test java.util.Collection
 
-  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.GET, "/", params, null)
+  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.POST, "/", params, null)
+  def makeRequest(method: HTTP.Method, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
+
+  //def make
 
 }
 

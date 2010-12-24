@@ -1,6 +1,7 @@
 package org.bowlerframework.model
 
 import collection.mutable.HashMap
+import com.recursivity.commons.bean.GenericTypeDefinition
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,16 +12,18 @@ import collection.mutable.HashMap
  */
 
 object AliasRegistry{
-  val map = new HashMap[Class[_], String]
-  def getAlias(cls: Class[_]): String = {
+  val map = new HashMap[GenericTypeDefinition, String]
+
+  // TODO: Maybe use TypeDef instead?
+  def getAlias(cls: GenericTypeDefinition): String = {
     try{
       return map(cls)
     }catch{
       case e: NoSuchElementException => {
-        return cls.getSimpleName
+        return cls.toSimpleString
       }
     }
   }
 
-  def registerAlias(cls: Class[_], alias: String) = map.put(cls, alias)
+  def registerAlias(cls: GenericTypeDefinition, alias: String) = map.put(cls, alias)
 }
