@@ -1,6 +1,6 @@
 package org.bowlerframework.model
 
-import org.bowlerframework.Request
+import org.bowlerframework.{HTTP, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,5 +11,11 @@ import org.bowlerframework.Request
  */
 
 class JsonRequestMapper extends RequestMapper{
-  def getValue[T](request: Request, nameHint: String)(implicit m: Manifest[T]) = None.asInstanceOf[T]
+  def getValue[T](request: Request, nameHint: String)(implicit m: Manifest[T]): T = {
+    if(request.getMethod == HTTP.GET || request.getMethod == HTTP.DELETE){
+      val mapper = new DefaultRequestMapper
+      return mapper.getValue[T](request, nameHint)(m)
+    }else
+      return None.asInstanceOf[T]
+  }
 }

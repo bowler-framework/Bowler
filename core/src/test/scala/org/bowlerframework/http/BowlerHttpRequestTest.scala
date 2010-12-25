@@ -35,6 +35,20 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
 
   }
 
+  test("test path variable with punctuation"){
+    var body: String = null
+    BowlerConfigurator.get("/punctuation/:id", new RouteExecutor{
+      def executeRoute(scope: RequestScope) = {
+        body = scope.request.getStringParameter("id")
+      }
+    })
+
+    get("/punctuation/hello.world") {
+      assert("hello.world".equals(body))
+    }
+
+  }
+
   test("getSession"){
     var body: String = null
     BowlerConfigurator.get("/getSession", new RouteExecutor{
