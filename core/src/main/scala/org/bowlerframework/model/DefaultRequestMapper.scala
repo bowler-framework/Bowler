@@ -75,12 +75,12 @@ class DefaultRequestMapper extends RequestMapper{
           return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
         else
           return response
-      }else if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT)){
+      }else if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT) || classOf[Transient].isAssignableFrom(cls)){
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
       }else{
         return None.asInstanceOf[T]
       }
-    }else{
+    }else{   // deal with Generics
       return getGenerifiedValue[T](request, nameHint, typeDef)
     }
     return None.asInstanceOf[T]
@@ -88,6 +88,14 @@ class DefaultRequestMapper extends RequestMapper{
 
 
   private def getGenerifiedValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
+    val clazz = Class.forName(typeDef.clazz)
+    if(clazz.equals(classOf[Option[_]])){
+      val newTypeDef = typeDef.genericTypes.get(0)
+      val value = getValue[Any](request, nameHint, newTypeDef)
+      if(value != None){
+        return Some(value).asInstanceOf[T]
+      }
+    }
     return None.asInstanceOf[T]
   }
 

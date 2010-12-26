@@ -145,7 +145,48 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(myBean.name == "someBean")
   }
 
-  // test Option[]
+  test("alias parameters with int and String"){
+    val value = mapper.getValue[java.lang.Integer](makeRequest(Map("String.id" -> "43", "Integer.id" -> "34")))
+    println(value)
+    assert(value == 34)
+
+    assert("43" == mapper.getValue[String](makeRequest(Map("String.id" -> "43", "Int.id" -> "34"))))
+
+  }
+
+  test("test Transient marker trait"){
+    val bean = mapper.getValue[TransientBean](makeRequest(HTTP.GET, Map("id" -> "43", "name" -> "transientBean")))
+    assert(bean != null)
+    assert(bean.isInstanceOf[TransientBean])
+    assert(bean.id == 43l)
+    assert(bean.name == "transientBean")
+
+  }
+
+
+  test("Option with value"){
+    val holder = mapper.getValue[Option[TransientBean]](makeRequest(HTTP.GET, Map("id" -> "43", "name" -> "transientBean")))
+    assert(holder.isInstanceOf[Some[TransientBean]])
+    val bean = holder.get
+    assert(bean != null)
+    assert(bean.isInstanceOf[TransientBean])
+    assert(bean.id == 43l)
+    assert(bean.name == "transientBean")
+  }
+
+  test("Option Without Value"){
+    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
+      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+
+    val request = new DummyRequest(HTTP.GET, "/", map, null)
+    assert(None.equals(mapper.getValue[Option[MyBean]](request)))
+  }
+
+  test("Option with Nested List"){
+
+  }
+
+
   // test List[]
   // test Seq[]
   // test Set[]
@@ -158,6 +199,7 @@ class DefaultRequestMapperTest extends FunSuite {
 
 }
 
+case class TransientBean(id: Long, name: String) extends Transient
 case class MyBean(id: Long, name: String, decimal: BigDecimal)
 case class OtherMapperBean(id: Long, name: String, decimal: BigDecimal, beans: List[MyBean])
 
