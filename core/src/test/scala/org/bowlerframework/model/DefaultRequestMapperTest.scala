@@ -183,14 +183,122 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
   test("Option with Nested List"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beansOption = mapper.getValue[Option[List[MyBean]]](request, "beans")
+    assert(beansOption.isInstanceOf[Option[List[MyBean]]])
+    val beans = beansOption.get
+    assert(beans.size == 1)
+    assert(beans(0).isInstanceOf[MyBean])
+
+    val bean = beans(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+  test("Test List with nameHint"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[List[MyBean]](request, "beans")
+    assert(beans.isInstanceOf[List[MyBean]])
+    assert(beans.size == 1)
+    assert(beans(0).isInstanceOf[MyBean])
+
+    val bean = beans(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+  test("List without namehint - get first list"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[List[MyBean]](request)
+    assert(beans.isInstanceOf[List[MyBean]])
+    assert(beans.size == 1)
+    assert(beans(0).isInstanceOf[MyBean])
+
+    val bean = beans(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
 
   }
 
+  test("empty Option[List] should return None"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("2"))
+    val request = makeRequest(HTTP.GET, map)
+    val beans = mapper.getValue[Option[List[MyBean]]](request)
+    println(beans)
+    assert(beans == None)
+  }
 
-  // test List[]
-  // test Seq[]
-  // test Set[]
-  // test java.util.Collection
+  test("test Seq"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[Seq[MyBean]](request)
+    assert(beans.isInstanceOf[Seq[MyBean]])
+    assert(beans.size == 1)
+    assert(beans(0).isInstanceOf[MyBean])
+
+    val bean = beans(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+
+  test("test Set"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[Set[MyBean]](request)
+    assert(beans.isInstanceOf[Set[MyBean]])
+    assert(beans.size == 1)
+    assert(beans.head.isInstanceOf[MyBean])
+
+    val bean = beans.head
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+  test("java.util.List"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[java.util.List[MyBean]](request)
+    assert(beans.isInstanceOf[java.util.List[MyBean]])
+    assert(beans.size == 1)
+    assert(beans.get(0).isInstanceOf[MyBean])
+
+    val bean = beans.get(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+  test("java.util.TreeSet"){
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValue[java.util.TreeSet[MyBean]](request)
+    assert(beans.isInstanceOf[java.util.TreeSet[MyBean]])
+    assert(beans.size == 1)
+    val bean = beans.iterator.next
+    assert(bean.isInstanceOf[MyBean])
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+
 
   def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.POST, "/", params, null)
   def makeRequest(method: HTTP.Method, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
@@ -212,10 +320,6 @@ class MyBeanTransformer extends StringValueTransformer{
       null
   }
 }
-
-
-
-
 
  class A
  class B extends A

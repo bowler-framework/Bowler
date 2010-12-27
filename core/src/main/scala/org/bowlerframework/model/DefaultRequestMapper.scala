@@ -1,10 +1,11 @@
 package org.bowlerframework.model
 
-import collection.mutable.HashMap
 import com.recursivity.commons.bean.{BeanUtils, GenericsParser, GenericTypeDefinition, TransformerRegistry}
 import org.apache.commons.fileupload.FileItem
 import util.DynamicVariable
 import org.bowlerframework.{HTTP, Request}
+import collection.TraversableLike
+import collection.mutable.{MutableList, HashMap}
 
 /**
  * Created by IntelliJ IDEA.
@@ -88,15 +89,49 @@ class DefaultRequestMapper extends RequestMapper{
 
 
   private def getGenerifiedValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
+    val newTypeDef = typeDef.genericTypes.get(0)
     val clazz = Class.forName(typeDef.clazz)
     if(clazz.equals(classOf[Option[_]])){
-      val newTypeDef = typeDef.genericTypes.get(0)
       val value = getValue[Any](request, nameHint, newTypeDef)
       if(value != None){
         return Some(value).asInstanceOf[T]
       }
+    }else if (classOf[TraversableLike[_ <: Any, _ <: Any]].isAssignableFrom(clazz)) {
+      val values = valueList(newTypeDef, request, nameHint)
+      if(values.isEmpty)
+        return None.asInstanceOf[T]
+      else
+        return BeanUtils.resolveTraversableOrArray(clazz, values).asInstanceOf[T]
+    } else if (classOf[java.util.Collection[_ <: Any]].isAssignableFrom(clazz)) {
+      val values = valueList(newTypeDef, request, nameHint)
+      if(values.isEmpty)
+        return None.asInstanceOf[T]
+      else
+        return BeanUtils.resolveJavaCollectionType(clazz, values).asInstanceOf[T]
     }
     return None.asInstanceOf[T]
+  }
+
+
+  private def valueList(typeDef: GenericTypeDefinition, request: HashMap[String, Any], nameHint: String): MutableList[Any] = {
+    val values = new MutableList[Any]
+    var list: List[Any] = null
+    if(nameHint != null)
+      list = request(nameHint).asInstanceOf[List[_]]
+    else{
+      request.iterator.foreach(f => {
+        if(list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass))
+          list = f._2.asInstanceOf[List[_]]
+      })
+    }
+    list.foreach(entry => {
+      val map = new HashMap[String, Any]
+      map.put("value", entry)
+      val value = getValue[Any](map, "value", typeDef)
+      if(value != None)
+        values += value
+    })
+    return values
   }
 
 
