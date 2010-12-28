@@ -2,7 +2,6 @@ package org.bowlerframework.model
 
 
 import org.scalatest.FunSuite
-import collection.mutable.HashMap
 import com.recursivity.commons.bean.{StringValueTransformer, TransformerRegistry}
 import org.bowlerframework.HTTP
 import org.bowlerframework.jvm.DummyRequest
@@ -16,8 +15,6 @@ import org.bowlerframework.jvm.DummyRequest
  */
 
 class DefaultRequestMapperTest extends FunSuite {
-
-
 
   val mapper = new DefaultRequestMapper
 

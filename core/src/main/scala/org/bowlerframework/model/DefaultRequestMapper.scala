@@ -15,7 +15,7 @@ import collection.mutable.{MutableList, HashMap}
  * To change this template use File | Settings | File Templates.
  */
 
-class DefaultRequestMapper extends RequestMapper{
+class DefaultRequestMapper extends RequestMapper {
 
   private val _requestToMap = new DynamicVariable[Request](null)
 
@@ -46,65 +46,73 @@ class DefaultRequestMapper extends RequestMapper{
 
     val cls = Class.forName(typeDef.clazz)
 
-    if(classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])))
+    if (classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])))
       return getFileValues[T](request, nameHint, typeDef)
 
-    if (typeDef.genericTypes == None) {   // deal with non-generics, non-files, non-primitives
+    if (typeDef.genericTypes == None) {
+      // deal with non-generics, non-files, non-primitives
       val alias = AliasRegistry.getAlias(typeDef)
-      var dealiasedRequest = new HashMap[String, Any]
       var hintOfName: String = nameHint
-      request.iterator.foreach(f => {
-        if(f._1.startsWith(alias + ".")){
-          val key = f._1.substring(alias.length + 1)
-          dealiasedRequest.put(key, f._2)
-        }
-      })
+      var dealiasedRequest = getDealiasedRequest(alias, request)
 
-      if(dealiasedRequest.keys.size == 0) dealiasedRequest = request
-      else{
-        if(hintOfName != null && hintOfName.startsWith(alias + "."))
+      if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
+      else {
+        if (hintOfName != null && hintOfName.startsWith(alias + "."))
           hintOfName.substring(alias.length + 1)
       }
 
       val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
-      if(response == null && !TransformerRegistry.resolveTransformer(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))){
+      if (response == null && !TransformerRegistry.resolveTransformer(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
-      }else if(response == null && (!httpRequest.getMethod.equals(HTTP.POST) || !httpRequest.getMethod.equals(HTTP.PUT))){
+      } else if (response == null && (!httpRequest.getMethod.equals(HTTP.POST) || !httpRequest.getMethod.equals(HTTP.PUT))) {
         return None.asInstanceOf[T]
-      }else if(response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)){
-        if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))
+      } else if (response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)) {
+        if (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))
           return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
         else
           return response
-      }else if(httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT) || classOf[Transient].isAssignableFrom(cls)){
+      } else if (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT) || classOf[Transient].isAssignableFrom(cls)) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
-      }else{
+      } else {
         return None.asInstanceOf[T]
       }
-    }else{   // deal with Generics
+    } else {
+      // deal with Generics
       return getGenerifiedValue[T](request, nameHint, typeDef)
     }
     return None.asInstanceOf[T]
+  }
+
+  private def getDealiasedRequest(alias: String, request: HashMap[String, Any]): HashMap[String, Any] = {
+    var dealiasedRequest = new HashMap[String, Any]
+    request.iterator.foreach(f => {
+      if (f._1.startsWith(alias + ".")) {
+        val key = f._1.substring(alias.length + 1)
+        dealiasedRequest.put(key, f._2)
+      }
+    })
+    if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
+    return dealiasedRequest
   }
 
 
   private def getGenerifiedValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
     val newTypeDef = typeDef.genericTypes.get(0)
     val clazz = Class.forName(typeDef.clazz)
-    if(clazz.equals(classOf[Option[_]])){
+    if (clazz.equals(classOf[Option[_]])) {
       val value = getValue[Any](request, nameHint, newTypeDef)
-      if(value != None){
+      if (value != None) {
         return Some(value).asInstanceOf[T]
       }
-    }else if (classOf[TraversableLike[_ <: Any, _ <: Any]].isAssignableFrom(clazz)) {
-      val values = valueList(newTypeDef, request, nameHint)
-      if(values.isEmpty)
+    } else if (classOf[TraversableLike[_ <: Any, _ <: Any]].isAssignableFrom(clazz)) {
+      val values = valueList(typeDef, newTypeDef, request, nameHint)
+      if (values.isEmpty)
         return None.asInstanceOf[T]
       else
         return BeanUtils.resolveTraversableOrArray(clazz, values).asInstanceOf[T]
     } else if (classOf[java.util.Collection[_ <: Any]].isAssignableFrom(clazz)) {
-      val values = valueList(newTypeDef, request, nameHint)
-      if(values.isEmpty)
+      val values = valueList(typeDef, newTypeDef, request, nameHint)
+      if (values.isEmpty)
         return None.asInstanceOf[T]
       else
         return BeanUtils.resolveJavaCollectionType(clazz, values).asInstanceOf[T]
@@ -113,22 +121,30 @@ class DefaultRequestMapper extends RequestMapper{
   }
 
 
-  private def valueList(typeDef: GenericTypeDefinition, request: HashMap[String, Any], nameHint: String): MutableList[Any] = {
+  private def valueList(parent: GenericTypeDefinition, typeDef: GenericTypeDefinition, request: HashMap[String, Any], nameHint: String): MutableList[Any] = {
     val values = new MutableList[Any]
     var list: List[Any] = null
-    if(nameHint != null)
+    if (nameHint != null)
       list = request(nameHint).asInstanceOf[List[_]]
-    else{
+    else {
+      val alias = AliasRegistry.getAlias(parent)
+
       request.iterator.foreach(f => {
-        if(list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass))
+        if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias))
           list = f._2.asInstanceOf[List[_]]
       })
+      if(list == null){
+        request.iterator.foreach(f => {
+          if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass))
+            list = f._2.asInstanceOf[List[_]]
+        })
+      }
     }
     list.foreach(entry => {
       val map = new HashMap[String, Any]
       map.put("value", entry)
       val value = getValue[Any](map, "value", typeDef)
-      if(value != None)
+      if (value != None)
         values += value
     })
     return values
@@ -137,8 +153,8 @@ class DefaultRequestMapper extends RequestMapper{
 
   private def getFileValues[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
     val cls = Class.forName(typeDef.clazz)
-    if(classOf[FileItem].isAssignableFrom(cls)){
-      if(nameHint != null)
+    if (classOf[FileItem].isAssignableFrom(cls)) {
+      if (nameHint != null)
         return request(nameHint).asInstanceOf[T]
       var response: T = None.asInstanceOf[T]
       request.iterator.find(f => {
@@ -154,8 +170,8 @@ class DefaultRequestMapper extends RequestMapper{
       })
       return response
 
-    }else if(classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])){
-      if(nameHint != null)
+    } else if (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])) {
+      if (nameHint != null)
         return request(nameHint).asInstanceOf[T]
       var response: T = None.asInstanceOf[T]
       request.iterator.find(f => {
@@ -170,7 +186,7 @@ class DefaultRequestMapper extends RequestMapper{
         }
       })
       return response
-    }else return None.asInstanceOf[T]
+    } else return None.asInstanceOf[T]
 
   }
 
@@ -178,10 +194,10 @@ class DefaultRequestMapper extends RequestMapper{
   private def getValueForTransformer[T](request: HashMap[String, Any], nameHint: String, cls: Class[_]): T = {
     if (nameHint != null) {
       val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).asInstanceOf[T]
-      if(response != null && response != None){
+      if (response != null && response != None) {
         request.remove(nameHint)
         return response
-      }else
+      } else
         return None.asInstanceOf[T]
     }
     else {
@@ -190,7 +206,7 @@ class DefaultRequestMapper extends RequestMapper{
       request.iterator.find(f => {
         try {
           response = transformer.toValue(f._2.toString).asInstanceOf[T]
-          if(response != null && response != None){
+          if (response != null && response != None) {
             request.remove(f._1)
             return response
           }
@@ -210,9 +226,9 @@ class DefaultRequestMapper extends RequestMapper{
     val cls = getClassForPrimitive(m)
     if (cls != null) {
       var result = getValueForTransformer[T](request, nameHint, cls)
-      if(result == None && nameHint != null){
+      if (result == None && nameHint != null) {
         return getValueForPrimitive[T](request, null, m)
-      }else if(result == None)
+      } else if (result == None)
         throw new RequestMapperException("Cannot map parameter of type " + m)
       else return result
     } else return None.asInstanceOf[T]

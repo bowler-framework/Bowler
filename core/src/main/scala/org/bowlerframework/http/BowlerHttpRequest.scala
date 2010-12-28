@@ -22,6 +22,8 @@ class BowlerHttpRequest(path: String, request: HttpServletRequest, params: Map[S
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
 
+  private var body: String = null
+
   def isSecure = request.isSecure
 
   def getServerName = request.getServerName
@@ -68,12 +70,15 @@ class BowlerHttpRequest(path: String, request: HttpServletRequest, params: Map[S
   def getHttpServletRequest = request
 
   def getRequestBodyAsString: String = {
-    val is = this.getInputStream
-    try{
-      return load(is)
-    }finally{
-      is.close
+    if(body == null){
+      val is = this.getInputStream
+      try{
+        body = load(is)
+      }finally{
+        is.close
+      }
     }
+    return body
   }
 
   def getInputStream = request.getInputStream
