@@ -78,8 +78,8 @@ class DefaultRequestMapperTest extends FunSuite {
 
   test("alias parameters"){
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val request = makeRequest(Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
-      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12"))
+    val request = makeRequest(Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
+      "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12"))
     val bean =  mapper.getValue[OtherMapperBean](request)
     val myBean = mapper.getValue[MyBean](request)
 
@@ -87,7 +87,7 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean != null)
     assert(bean.id == 1l)
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("3.14")))
-    assert(bean.name == "OtherBean")
+    assert(bean.name == "otherBean")
     assert(bean.beans.size == 1)
     val child = bean.beans(0)
 
@@ -106,8 +106,8 @@ class DefaultRequestMapperTest extends FunSuite {
 
   test("alias parameters with GET (should not create new beans)"){
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
-      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+    val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
+      "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
     val request = new DummyRequest(HTTP.GET, "/", map, null)
 
@@ -120,8 +120,8 @@ class DefaultRequestMapperTest extends FunSuite {
 
   test("alias parameters with transformer GET (should not create new beans)"){
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
-      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+    val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
+      "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
     val request = new DummyRequest(HTTP.GET, "/", map, null)
 
@@ -143,7 +143,7 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
   test("alias parameters with int and String"){
-    val value = mapper.getValue[java.lang.Integer](makeRequest(Map("String.id" -> "43", "Integer.id" -> "34")))
+    val value = mapper.getValue[java.lang.Integer](makeRequest(Map("string.id" -> "43", "integer.id" -> "34")))
     println(value)
     assert(value == 34)
 
@@ -172,8 +172,8 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
   test("Option Without Value"){
-    val map = Map("OtherMapperBean.id" -> "1", "OtherMapperBean.name" -> "OtherBean", "OtherMapperBean.decimal" -> "3.14",
-      "OtherMapperBean.beans" -> List("1"), "MyBean.id" -> "2", "MyBean.name" -> "some beany", "MyBean.decimal" -> "57.12")
+    val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
+      "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
     val request = new DummyRequest(HTTP.GET, "/", map, null)
     assert(None.equals(mapper.getValue[Option[MyBean]](request)))

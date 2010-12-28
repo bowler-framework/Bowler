@@ -51,7 +51,7 @@ class DefaultRequestMapper extends RequestMapper {
 
     if (typeDef.genericTypes == None) {
       // deal with non-generics, non-files, non-primitives
-      val alias = AliasRegistry.getAlias(typeDef)
+      val alias = AliasRegistry.getRequestAlias(typeDef)
       var hintOfName: String = nameHint
       var dealiasedRequest = getDealiasedRequest(alias, request)
 
@@ -127,7 +127,7 @@ class DefaultRequestMapper extends RequestMapper {
     if (nameHint != null)
       list = request(nameHint).asInstanceOf[List[_]]
     else {
-      val alias = AliasRegistry.getAlias(parent)
+      val alias = AliasRegistry.getRequestAlias(parent)
 
       request.iterator.foreach(f => {
         if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias))
@@ -223,7 +223,7 @@ class DefaultRequestMapper extends RequestMapper {
 
 
   private def getValueForPrimitive[T](request: HashMap[String, Any], nameHint: String, m: String): T = {
-    val cls = getClassForPrimitive(m)
+    val cls = PrimitiveMapper.getClassForPrimitive(m)
     if (cls != null) {
       var result = getValueForTransformer[T](request, nameHint, cls)
       if (result == None && nameHint != null) {
@@ -234,17 +234,5 @@ class DefaultRequestMapper extends RequestMapper {
     } else return None.asInstanceOf[T]
   }
 
-  private def getClassForPrimitive(m: String): Class[_] = {
-    var fieldCls: Class[_] = null
-    m match {
-      case "Long" => fieldCls = classOf[Long]
-      case "Int" => fieldCls = classOf[java.lang.Integer]
-      case "Float" => fieldCls = classOf[java.lang.Float]
-      case "Double" => fieldCls = classOf[java.lang.Double]
-      case "Boolean" => fieldCls = classOf[Boolean]
-      case "Short" => fieldCls = classOf[java.lang.Short]
-      case _ => fieldCls = null
-    }
-    return fieldCls
-  }
+
 }

@@ -27,7 +27,7 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
 
     try {
       mapRequest[Int](makeRequest(Map()), null)(i => {
-        println(i + " IS NONE: " + (None == i))
+
       })
       fail("this should have thrown a RequestMapperException")
     } catch {
@@ -39,7 +39,6 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   test("test 2 params") {
     val request = makeRequest(Map("string" -> "hello", "int" -> "2"))
     mapRequest[Int, String](request, List())((a, b) => {
-      println(a + b)
       assert(a == 2)
       assert(b == "hello")
     })
@@ -49,7 +48,6 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
     val request = makeRequest(Map("string" -> "hello", "int" -> "2"))
     try {
       mapRequest[Int, String](request, List("int"))((a, b) => {
-        println(a + b)
         assert(a == 2)
         assert(b == "hello")
       })
@@ -61,9 +59,8 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 3 params") {
-    val request = makeRequest(Map("String.string" -> "hello", "int" -> "2", "BigDecimal.decimal" -> "3.14"))
+    val request = makeRequest(Map("string.string" -> "hello", "int" -> "2", "bigDecimal.decimal" -> "3.14"))
     mapRequest[Int, String, BigDecimal](request, List())((a, b, c) => {
-      println(a + " : " + b + " : " + c)
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -71,9 +68,8 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 4 params") {
-    val request = makeRequest(Map("String.string" -> "hello", "int" -> "2", "BigDecimal.decimal" -> "3.14", "bool" -> "true"))
+    val request = makeRequest(Map("string.string" -> "hello", "int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true"))
     mapRequest[Int, String, BigDecimal, Boolean](request, List())((a, b, c, d) => {
-      println(a + " : " + b + " : " + c)
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -82,9 +78,8 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 5 params") {
-    val request = makeRequest(Map("String.string" -> "hello", "Integer.int" -> "2", "BigDecimal.decimal" -> "3.14", "bool" -> "true", "Long.long" ->5))
+    val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true", "long.long" ->5))
     mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long](request, List())((a, b, c, d,e) => {
-      println(a + " : " + b + " : " + c)
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -94,10 +89,9 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 6 params") {
-    val request = makeRequest(Map("String.string" -> "hello", "Integer.int" -> "2", "BigDecimal.decimal" -> "3.14", "bool" -> "true",
-      "Long.long" ->5, "List[String].list" -> List("hello", "world")))
+    val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true",
+      "long.long" ->5, "list[string].list" -> List("hello", "world")))
     mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long, List[String]](request, List())((a, b, c, d,e, f) => {
-      println(a + " : " + b + " : " + c)
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -110,10 +104,9 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 7 params") {
-    val request = makeRequest(Map("String.string" -> "hello", "Integer.int" -> "2", "BigDecimal.decimal" -> "3.14", "bool" -> "true",
-      "Long.long" ->5, "List[String].list" -> List("hello", "world"), "Set[String].set" -> List("hello")))
+    val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true",
+      "long.long" ->5, "list[string].list" -> List("hello", "world"), "set[string].set" -> List("hello")))
     mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long, List[String], Set[String]](request, List())((a, b, c, d, e, f, g) => {
-      println(a + " : " + b + " : " + c)
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -122,7 +115,6 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
       assert(f.size == 2)
       assert(f(0) == "hello")
       assert(f(1) == "world")
-      println("SET: " + g)
       assert(g.size == 1)
     })
   }
