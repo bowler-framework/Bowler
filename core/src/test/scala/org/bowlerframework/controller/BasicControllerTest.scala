@@ -2,9 +2,11 @@ package org.bowlerframework.controller
 
 
 import org.scalatra.test.scalatest.ScalatraFunSuite
-import org.bowlerframework.RequestScope
 import org.bowlerframework.http.BowlerFilter
 import util.matching.Regex
+import org.bowlerframework.view.{ViewRenderer, RenderStrategy}
+import org.bowlerframework.{Response, Request, BowlerConfigurator, RequestScope}
+import org.bowlerframework.model.ValidationException
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,11 +44,23 @@ class BasicControllerTest extends ScalatraFunSuite{
 
   test("Failed validation block"){
     val controller = new MyController
+    BowlerConfigurator.setRenderStrategy(new RenderStrategy{
+      def resolveViewRenderer(request: Request) = new ViewRenderer{
+        def onError(request: Request, response: Response, exception: Exception) = {
+          if(exception.isInstanceOf[ValidationException]){
+            exception.asInstanceOf[ValidationException].errors.foreach(e =>{
+              response.getWriter.write(e._1 + ":" + e._2)
+            })
+          }
+        }
+        def render(request: Request, response: Response, models: Any*) = null
+      }
+    })
     controller.responseString = "failure"
     post("/somePost"){
       println(controller.responseString)
       assert(!controller.responseString.equals("success!"))
-      assert(controller.responseString.equals("name:Name is a required parameter!"))
+      assert(this.response.getContent.equals("name:Name is a required parameter!"))
     }
   }
 

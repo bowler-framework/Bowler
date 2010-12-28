@@ -8,6 +8,6 @@ package org.bowlerframework.model
  * To change this template use File | Settings | File Templates.
  */
 
-class ValidationException(errors: List[Tuple2[String, String]]) extends Exception{
+class ValidationException(val errors: List[Tuple2[String, String]]) extends Exception{
 
 }

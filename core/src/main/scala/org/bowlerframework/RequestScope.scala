@@ -28,14 +28,9 @@ object RequestScope {
         _mappedPath.withValue(mappedPath) {
           try {
             function(request, response)
-            // add last completed path here
           } catch {
-            case validationException => {
-              //do nothing, this should be handled by the Validations trait onValidationErrors implementation
-            }
             case e: Exception => {
-              e.printStackTrace
-              throw (e)
+              BowlerConfigurator.resolveViewRenderer(request).onError(request, response, e)
             }
           }
         }

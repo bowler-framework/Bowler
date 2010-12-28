@@ -1,11 +1,8 @@
 package org.bowlerframework
 
 
-import model.{JsonRequestMapper, DefaultRequestMapper, RequestMapper}
 import util.matching.Regex
-import java.util.Enumeration
-import java.net.URL
-import collection.mutable.HashMap
+import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,13 +16,17 @@ object BowlerConfigurator extends ApplicationRouter {
 
   private var requestMappingStrategy: RequestMappingStrategy = new DefaultRequestMappingStrategy
 
+  private var renderStrategy: RenderStrategy = new DefaultRenderStrategy
+
   private var router: ApplicationRouter = null
 
   def getRequestMapper(request: Request) = requestMappingStrategy.getRequestMapper(request)
 
-  def setApplicationRouter(router: ApplicationRouter) = {
-    this.router = router
-  }
+  def setApplicationRouter(router: ApplicationRouter) = {this.router = router}
+
+  def resolveViewRenderer(request: Request): ViewRenderer = renderStrategy.resolveViewRenderer(request)
+
+  def setRenderStrategy(renderStrategy: RenderStrategy) = {this.renderStrategy = renderStrategy}
 
   def setRequestMappingStrategy(mappingStrategy: RequestMappingStrategy) = {this.requestMappingStrategy = mappingStrategy}
 

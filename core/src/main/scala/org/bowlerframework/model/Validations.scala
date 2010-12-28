@@ -20,13 +20,7 @@ trait Validations{
   def validate(function: => Option[List[Tuple2[String, String]]]){
     val errors = function
     if(!None.equals(errors) && errors.get.size > 0){
-      onValidationErrors(errors.get)
       throw new ValidationException(errors.get)
     }
   }
-
-  /**
-   * If validations fail, this function is called
-   */
-  def onValidationErrors(errors: List[Tuple2[String, String]])
 }
