@@ -1,5 +1,6 @@
 import sbt._
 
+
 class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info){
 	
 	//override def scanDirectories = Nil
@@ -19,10 +20,11 @@ class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info){
 	val scalatra = "org.scalatra" %% "scalatra" % "2.0.0.M2"
   
   val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M2"
+  //val scalatraScalate = "org.scalatra" %% "scalatra-scalate" % "2.0.0.M2"
   	//val scalatraScalate = "org.scalatra" %% "scalatra-scalate" % "2.0.0.M1"
 
 	val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.2"
-  	val scalate = "org.fusesource.scalate" % "scalate-core" % "1.3"
+  	val scalate = "org.fusesource.scalate" % "scalate-core" % "1.3.2"
 
   	val sfl4japi = "org.slf4j" % "slf4j-api" % slf4jVersion
   	val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"
