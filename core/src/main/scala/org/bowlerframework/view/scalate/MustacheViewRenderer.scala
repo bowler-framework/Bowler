@@ -14,5 +14,7 @@ import org.bowlerframework.{Response, Request}
 class MustacheViewRenderer extends ViewRenderer{
   def onError(request: Request, response: Response, exception: Exception) = null
 
-  def render(request: Request, response: Response, models: Any*) = null
+  def renderView(request: Request, response: Response, models: Any*) = null
+
+  def renderView(request: Request, response: Response) = null
 }

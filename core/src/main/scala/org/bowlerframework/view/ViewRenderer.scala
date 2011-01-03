@@ -11,7 +11,9 @@ import org.bowlerframework.{Request, Response}
  */
 
 trait ViewRenderer{
-  def render(request: Request, response: Response, models: Any*)
+  def renderView(request: Request, response: Response, models: Any*)
+
+  def renderView(request: Request, response: Response)
 
   def onError(request: Request, response: Response, exception: Exception)
 }

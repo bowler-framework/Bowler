@@ -21,6 +21,7 @@ trait Response{
   def addHeader(name: String, value: String)
   def setStatus(status: Int)
   def sendError(status: Int)
+  def getStatus: Int
 
   /**
    * should encode a redirect url if needed

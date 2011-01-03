@@ -53,7 +53,9 @@ class BasicControllerTest extends ScalatraFunSuite{
             })
           }
         }
-        def render(request: Request, response: Response, models: Any*) = null
+        def renderView(request: Request, response: Response, models: Any*) = null
+
+        def renderView(request: Request, response: Response) = null
       }
     })
     controller.responseString = "failure"

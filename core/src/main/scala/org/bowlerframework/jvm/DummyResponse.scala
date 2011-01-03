@@ -43,4 +43,6 @@ class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends R
   def sendRedirect(location: String) = null
 
   override def toString = stringWriter.toString
+
+  def getStatus = status
 }
