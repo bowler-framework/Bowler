@@ -1,4 +1,4 @@
-package org.bowlerframework.model
+package org.bowlerframework.exception
 
 /**
  * Created by IntelliJ IDEA.
@@ -8,6 +8,6 @@ package org.bowlerframework.model
  * To change this template use File | Settings | File Templates.
  */
 
-class ValidationException(val errors: List[Tuple2[String, String]]) extends Exception{
+class ValidationException(val errors: List[Tuple2[String, String]]) extends HttpException(400){
 
 }

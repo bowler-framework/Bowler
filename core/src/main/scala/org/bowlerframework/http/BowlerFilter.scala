@@ -13,6 +13,7 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     super.initialize(config)
     BowlerConfigurator.setApplicationRouter(this)
     BowlerConfigurator.isServletApp = false
+    println(config.getServletContext.getRealPath("WEB-INF"))
   }
 
   def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = {
