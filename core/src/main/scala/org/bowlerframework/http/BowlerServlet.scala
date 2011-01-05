@@ -5,6 +5,7 @@ import org.scalatra.fileupload.FileUploadSupport
 import org.bowlerframework.{HTTP, BowlerConfigurator, RequestScope, RouteExecutor}
 import util.matching.Regex
 import javax.servlet.ServletConfig
+import org.bowlerframework.controller.Controller
 
 /**
  * Created by IntelliJ IDEA.
