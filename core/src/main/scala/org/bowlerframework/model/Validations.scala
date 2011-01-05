@@ -1,5 +1,7 @@
 package org.bowlerframework.model
 
+import org.bowlerframework.exception.ValidationException
+
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler

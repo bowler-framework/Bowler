@@ -6,7 +6,8 @@ import org.bowlerframework.http.BowlerFilter
 import util.matching.Regex
 import org.bowlerframework.view.{ViewRenderer, RenderStrategy}
 import org.bowlerframework.{Response, Request, BowlerConfigurator, RequestScope}
-import org.bowlerframework.model.ValidationException
+
+import org.bowlerframework.exception.ValidationException
 
 /**
  * Created by IntelliJ IDEA.

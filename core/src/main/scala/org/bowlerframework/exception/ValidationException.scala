@@ -8,6 +8,4 @@ package org.bowlerframework.exception
  * To change this template use File | Settings | File Templates.
  */
 
-class ValidationException(val errors: List[Tuple2[String, String]]) extends HttpException(400){
-
-}
+class ValidationException(val errors: List[Tuple2[String, String]]) extends HttpException(400)
