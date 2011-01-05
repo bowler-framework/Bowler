@@ -7,7 +7,7 @@ import model.RequestMapper
  * User: wfaler
  * Date: 25/12/2010
  * Time: 00:01
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait RequestMappingStrategy{

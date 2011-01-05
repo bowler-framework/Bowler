@@ -12,7 +12,7 @@ import org.bowlerframework.{HTTP, ContentTypeResolver, Request}
  * User: wfaler
  * Date: 13/12/2010
  * Time: 21:57
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader{

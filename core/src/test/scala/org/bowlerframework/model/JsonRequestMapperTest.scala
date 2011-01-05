@@ -10,7 +10,7 @@ import java.util.Date
  * User: wfaler
  * Date: 27/12/2010
  * Time: 17:38
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class JsonRequestMapperTest extends FunSuite{

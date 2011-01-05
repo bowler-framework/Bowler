@@ -9,7 +9,7 @@ import com.recursivity.commons.bean.{GenericsParser, GenericTypeDefinition}
  * User: wfaler
  * Date: 22/12/2010
  * Time: 23:11
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 object AliasRegistry{

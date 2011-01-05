@@ -7,7 +7,7 @@ import util.matching.Regex
  * User: wfaler
  * Date: Dec 10, 2010
  * Time: 2:49:20 AM
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait ApplicationRouter{

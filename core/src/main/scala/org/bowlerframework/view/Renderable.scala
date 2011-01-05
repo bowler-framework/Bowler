@@ -7,7 +7,7 @@ import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
  * User: wfaler
  * Date: 28/12/2010
  * Time: 20:49
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait Renderable{

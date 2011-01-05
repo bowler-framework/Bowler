@@ -9,7 +9,7 @@ import org.bowlerframework.{HTTP, ContentTypeResolver, Session, Request}
  * User: wfaler
  * Date: 14/12/2010
  * Time: 00:14
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class DummyRequest(method: HTTP.Method, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{

@@ -1,31 +1,24 @@
 package org.bowlerframework.view.scalate
 
+import selectors.LayoutSelector
 import util.matching.Regex
 import org.bowlerframework.{Request, HTTP}
+import collection.mutable.{MutableList, HashMap}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 03/01/2011
- * Time: 22:27
- * To change this template use File | Settings | File Templates.
+ * Retrieves a Template based on a request and it's contents, headers and/or path.
+ * the order of layouts and templates added matters, as the selectors are held in order and the first match will return a result.
  */
 
 object TemplateRegistry{
 
-  def registerTemplateSuffix(userAgent: String, suffix: String){registerTemplateSuffix(Map("User-Agent" -> userAgent), suffix)}
-  def registerLayout(userAgent: String, layout: Layout){registerLayout(Map("User-Agent" -> userAgent), layout)}
-  def registerLayout(method: HTTP.Method, path: Regex, layout: Layout){registerLayout(method, path.toString + ":regex", layout)}
-  def registerLayout(method: HTTP.Method, path: String, userAgent: String, layout: Layout){registerLayout(method, path, Map("User-Agent" -> userAgent), layout)}
-  def registerLayout(method: HTTP.Method, path: Regex, userAgent: String, layout: Layout){registerLayout(method, path.toString + ":regex", Map("User-Agent" -> userAgent), layout)}
-  def registerLayout(method: HTTP.Method, path: Regex, headerSelectors: Map[String, String], layout: Layout){registerLayout(method, path.toString + ":regex", headerSelectors, layout)}
+  private var layoutSelectors = new MutableList[LayoutSelector]()
 
-  def registerLayout(method: HTTP.Method, path: String, layout: Layout){registerLayout(method, path, Map[String, String](), layout)}
+  def appendSelectors(selectors: List[LayoutSelector]) = selectors.foreach(f => {layoutSelectors += f})
 
-  // TODO implement these
-  def registerTemplateSuffix(headerSelectors: Map[String, String], suffix: String){}
-  def registerBaseLayout(layout: Layout){}
-  def registerLayout(headerSelectors: Map[String, String], layout: Layout){}
-  def registerLayout(method: HTTP.Method, path: String, headerSelectors: Map[String, String], layout: Layout){}
-  def resolveLayout(request: Request) = None
+  def appendSelector(selector: LayoutSelector) = {layoutSelectors += selector}
+
+  def emptyLayoutSelectors = {layoutSelectors = new MutableList[LayoutSelector]()}
+
+  def getLayout(request: Request) = layoutSelectors.find(p => {p.layout(request) != None}).get.layout(request).get
 }

@@ -7,7 +7,7 @@ import org.bowlerframework.Request
  * User: wfaler
  * Date: 21/12/2010
  * Time: 21:55
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait RequestMapper{

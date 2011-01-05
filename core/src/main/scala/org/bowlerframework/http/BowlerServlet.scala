@@ -12,7 +12,7 @@ import org.bowlerframework.controller.Controller
  * User: wfaler
  * Date: 04/01/2011
  * Time: 23:51
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{

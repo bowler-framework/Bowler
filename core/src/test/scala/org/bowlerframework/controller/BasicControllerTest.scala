@@ -14,7 +14,7 @@ import org.bowlerframework.exception.ValidationException
  * User: wfaler
  * Date: 15/12/2010
  * Time: 20:19
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class BasicControllerTest extends ScalatraFunSuite{

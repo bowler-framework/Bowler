@@ -9,7 +9,7 @@ import com.recursivity.commons.bean.GenericsParser
  * User: wfaler
  * Date: 21/12/2010
  * Time: 22:13
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class JsonRequestMapper extends RequestMapper {

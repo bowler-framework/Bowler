@@ -9,7 +9,7 @@ import org.scalatest.FunSuite
  * User: wfaler
  * Date: 21/12/2010
  * Time: 22:14
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class BowlerConfiguratorTest extends FunSuite{

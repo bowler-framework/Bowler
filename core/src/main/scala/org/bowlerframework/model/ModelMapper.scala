@@ -5,7 +5,7 @@ package org.bowlerframework.model
  * User: wfaler
  * Date: 28/12/2010
  * Time: 16:01
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 object ModelMapper{

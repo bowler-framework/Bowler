@@ -9,7 +9,7 @@ import java.io.{OutputStream, PrintWriter, StringWriter}
  * User: wfaler
  * Date: 14/12/2010
  * Time: 00:15
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends Response{

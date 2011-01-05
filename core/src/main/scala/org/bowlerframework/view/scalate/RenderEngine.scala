@@ -7,7 +7,7 @@ import org.fusesource.scalate.TemplateEngine
  * User: wfaler
  * Date: 03/01/2011
  * Time: 20:51
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 object RenderEngine{

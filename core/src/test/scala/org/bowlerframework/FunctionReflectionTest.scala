@@ -8,7 +8,7 @@ import java.lang.reflect.{TypeVariable, ParameterizedType}
  * User: wfaler
  * Date: 13/12/2010
  * Time: 02:02
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class FunctionReflectionTest extends FunSuite{

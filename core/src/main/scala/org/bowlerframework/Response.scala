@@ -7,7 +7,7 @@ import java.io.{PrintWriter, OutputStream}
  * User: wfaler
  * Date: 13/12/2010
  * Time: 23:57
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait Response{

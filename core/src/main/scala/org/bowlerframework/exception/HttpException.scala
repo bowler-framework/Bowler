@@ -5,7 +5,7 @@ package org.bowlerframework.exception
  * User: wfaler
  * Date: 05/01/2011
  * Time: 21:16
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class HttpException(val code: Int = 500) extends Exception

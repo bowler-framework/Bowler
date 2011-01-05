@@ -11,7 +11,7 @@ import collection.mutable.HashMap
  * User: wfaler
  * Date: 13/12/2010
  * Time: 01:28
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait BowlerHttpApplicationRouter extends ApplicationRouter{

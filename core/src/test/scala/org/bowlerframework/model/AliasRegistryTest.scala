@@ -9,7 +9,7 @@ import collection.TraversableLike
  * User: wfaler
  * Date: 28/12/2010
  * Time: 02:10
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class AliasRegistryTest extends FunSuite{

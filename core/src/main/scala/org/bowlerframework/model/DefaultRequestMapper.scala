@@ -12,7 +12,7 @@ import collection.mutable.{MutableList, HashMap}
  * User: wfaler
  * Date: 21/12/2010
  * Time: 21:57
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class DefaultRequestMapper extends RequestMapper {

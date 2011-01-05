@@ -8,7 +8,7 @@ import org.bowlerframework.{BowlerConfigurator, Request, Response}
  * User: wfaler
  * Date: 19/12/2010
  * Time: 21:20
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait InterceptingController extends Controller{

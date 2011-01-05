@@ -5,7 +5,7 @@ package org.bowlerframework.stub.controller
  * User: wfaler
  * Date: 15/12/2010
  * Time: 00:41
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class ApplicationController

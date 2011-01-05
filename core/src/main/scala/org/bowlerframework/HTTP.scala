@@ -7,7 +7,7 @@ import http.BowlerHttpRequest
  * User: wfaler
  * Date: 16/12/2010
  * Time: 22:28
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 object HTTP extends Enumeration{

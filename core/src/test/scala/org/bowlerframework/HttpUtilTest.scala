@@ -9,7 +9,7 @@ import org.scalatra.test.scalatest.ScalatraFunSuite
  * User: wfaler
  * Date: 04/01/2011
  * Time: 23:39
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class HttpUtilTest extends ScalatraFunSuite{

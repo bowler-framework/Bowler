@@ -10,7 +10,7 @@ import reflect.BeanProperty
  * User: wfaler
  * Date: Dec 9, 2010
  * Time: 11:30:58 PM
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 object BowlerConfigurator extends ApplicationRouter {

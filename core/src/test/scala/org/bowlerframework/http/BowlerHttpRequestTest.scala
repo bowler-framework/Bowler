@@ -12,7 +12,7 @@ import org.bowlerframework._
  * User: wfaler
  * Date: 13/12/2010
  * Time: 22:29
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class BowlerHttpRequestTest extends ScalatraFunSuite{

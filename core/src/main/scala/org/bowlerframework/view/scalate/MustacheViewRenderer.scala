@@ -8,13 +8,17 @@ import org.bowlerframework.{Response, Request}
  * User: wfaler
  * Date: 28/12/2010
  * Time: 23:13
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class MustacheViewRenderer extends ViewRenderer{
   def onError(request: Request, response: Response, exception: Exception) = null
 
-  def renderView(request: Request, response: Response, models: Any*) = null
+  def renderView(request: Request, response: Response, models: Any*) = {
+    TemplateRegistry.getLayout(request)
+  }
 
-  def renderView(request: Request, response: Response) = null
+  def renderView(request: Request, response: Response) = {
+    val layout = TemplateRegistry.getLayout(request)
+  }
 }

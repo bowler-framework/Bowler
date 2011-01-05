@@ -8,7 +8,7 @@ import org.bowlerframework._
  * User: wfaler
  * Date: 15/12/2010
  * Time: 19:17
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait Controller {

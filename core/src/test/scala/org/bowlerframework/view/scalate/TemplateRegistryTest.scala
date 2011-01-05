@@ -1,0 +1,33 @@
+package org.bowlerframework.view.scalate
+
+import org.scalatest.FunSuite
+import org.bowlerframework.HTTP
+import selectors.{DefaultLayoutSelector, UriLayoutSelector, UriAndMethodLayoutSelector}
+import util.matching.Regex
+import org.bowlerframework.jvm.DummyRequest
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: wfaler
+ * Date: 05/01/2011
+ * Time: 22:12
+ * To change this layout use File | Settings | File Templates.
+ */
+
+class TemplateRegistryTest extends FunSuite{
+
+  TemplateRegistry.appendSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), HTTP.POST, new Regex("^.*/hello/.*$")),
+    new UriLayoutSelector(Layout("uri"), new Regex("^.*/hello/.*$")), new DefaultLayoutSelector(Layout("default"))))
+
+  test("get default layout"){
+    assert("default" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).name)
+  }
+
+  test("get URI specific layout"){
+    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/hello/", Map(), null)).name)
+  }
+
+  test("get URI AND Method specific layout"){
+    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(HTTP.POST, "/hello/", Map(), null)).name)
+  }
+}

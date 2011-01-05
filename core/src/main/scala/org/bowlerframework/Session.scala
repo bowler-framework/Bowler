@@ -5,7 +5,7 @@ package org.bowlerframework
  * User: wfaler
  * Date: 13/12/2010
  * Time: 00:06
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 trait Session{

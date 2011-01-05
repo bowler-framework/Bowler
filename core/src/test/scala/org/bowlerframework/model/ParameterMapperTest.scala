@@ -9,7 +9,7 @@ import org.bowlerframework.{HTTP}
  * User: wfaler
  * Date: 19/12/2010
  * Time: 22:59
- * To change this template use File | Settings | File Templates.
+ * To change this layout use File | Settings | File Templates.
  */
 
 class ParameterMapperTest extends FunSuite with ParameterMapper {
