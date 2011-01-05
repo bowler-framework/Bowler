@@ -1,5 +1,6 @@
 package org.bowlerframework
 
+import controller.Controller
 import http.BowlerFilter
 import org.scalatra.test.scalatest.ScalatraFunSuite
 import scala.reflect.Manifest
@@ -10,6 +11,16 @@ class SimpleRouteTest extends ScalatraFunSuite{
 
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
   holder.setInitParameter("controllerPackage", "org.bowlerframework.stub.controller")
+
+
+
+  test("HTTP basePath"){
+    val c = new SimplePathController
+    get("/PathController") {
+      println(c.path)
+      assert("/".equals(c.path))
+    }
+  }
 
 	test("simple named param"){
     var body: String = null
@@ -122,4 +133,12 @@ class SimpleRouteTest extends ScalatraFunSuite{
 
   def intAdd(v: Int) = v + 4
 
+}
+
+class SimplePathController extends Controller{
+  var path: String = null
+
+  this.get("/PathController")((req, resp) =>{
+    path = HTTP.basePath
+  })
 }

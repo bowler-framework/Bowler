@@ -1,18 +1,25 @@
 package org.bowlerframework.http
 
-import org.scalatra.ScalatraFilter
-import javax.servlet.FilterConfig
+import org.scalatra.ScalatraServlet
 import org.scalatra.fileupload.FileUploadSupport
+import org.bowlerframework.{HTTP, BowlerConfigurator, RequestScope, RouteExecutor}
 import util.matching.Regex
-import org.bowlerframework._
+import javax.servlet.ServletConfig
 
-class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter{
+/**
+ * Created by IntelliJ IDEA.
+ * User: wfaler
+ * Date: 04/01/2011
+ * Time: 23:51
+ * To change this template use File | Settings | File Templates.
+ */
 
-  override def initialize(config: FilterConfig): Unit = {
-    super.initialize(config)
+class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{
+
+  override def init(config: ServletConfig): Unit = {
+    super.init(config)
     BowlerConfigurator.setApplicationRouter(this)
-    BowlerConfigurator.isServletApp = false
-
+    BowlerConfigurator.isServletApp = true
   }
 
   def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = {
@@ -39,5 +46,4 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     val scope = RequestScope(bowlerRequest, new BowlerHttpResponse(this.response))
     routeExecutor.executeRoute(scope)
   }
-
 }

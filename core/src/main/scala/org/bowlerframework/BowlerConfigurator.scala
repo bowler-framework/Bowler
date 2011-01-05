@@ -3,6 +3,7 @@ package org.bowlerframework
 
 import util.matching.Regex
 import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
+import reflect.BeanProperty
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,6 +14,9 @@ import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
  */
 
 object BowlerConfigurator extends ApplicationRouter {
+
+  @BeanProperty
+  var isServletApp = true
 
   private var requestMappingStrategy: RequestMappingStrategy = new DefaultRequestMappingStrategy
 

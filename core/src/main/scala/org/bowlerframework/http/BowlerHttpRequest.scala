@@ -15,7 +15,7 @@ import org.bowlerframework.{HTTP, ContentTypeResolver, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-class BowlerHttpRequest(path: String, request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader{
+class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader{
   val session = new BowlerHttpSession(request.getSession(true))
 
   private val intTransformer = new JavaIntegerTransformer
