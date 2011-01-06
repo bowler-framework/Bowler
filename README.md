@@ -1,5 +1,6 @@
 # Bowler - A Scala based RESTful, Multi-Channel Web Framework with a functional flavor/style
-A RESTful, multi-channel ready web framework in Scala with a functional flavour, built on top of Scalatra and Scalate, with Lift-JSON doing the heavy JSON lifting.
+A RESTful, multi-channel ready web framework in Scala with a functional flavour, built on top of [Scalatra](http://www.scalatra.org/) and [Scalate](http://scalate.fusesource.org/), with Lift-JSON doing the heavy JSON lifting.
+The project is built with [Simple Build Tool ("sbt")](https://code.google.com/p/simple-build-tool/) - we intend to further add custom sbt processors in the future to automate boilerplate tasks.
 
 ## Design Goals (some of them)
 * RESTfulness - being true to RESTful principles and the intent of the HTTP protocol.
