@@ -11,6 +11,4 @@ import org.bowlerframework.view.scalate.Layout
  * To change this layout use File | Settings | File Templates.
  */
 
-trait LayoutSelector{
-  def layout(request: Request): Option[Layout]
-}
+trait LayoutSelector extends RequestSelector[Layout]

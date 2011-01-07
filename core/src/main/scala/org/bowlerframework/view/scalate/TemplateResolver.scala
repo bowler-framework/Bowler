@@ -9,5 +9,6 @@ package org.bowlerframework.view.scalate
  */
 
 trait TemplateResolver{
+  // order of preference is: locale, type
   def resolveLayout(layout: Layout)
 }

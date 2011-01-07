@@ -1,9 +1,10 @@
 package org.bowlerframework.view.scalate
 
-import selectors.LayoutSelector
+import selectors.{TemplateSuffixSelector, LayoutSelector}
 import util.matching.Regex
 import org.bowlerframework.{Request, HTTP}
 import collection.mutable.{MutableList, HashMap}
+import reflect.BeanProperty
 
 /**
  * Retrieves a Template based on a request and it's contents, headers and/or path.
@@ -12,13 +13,34 @@ import collection.mutable.{MutableList, HashMap}
 
 object TemplateRegistry{
 
+  @BeanProperty
+  var templateTypePreference = List(".mustache", ".ssp", ".jade", ".scaml")
+
+  private var suffixSelectors = new MutableList[TemplateSuffixSelector]()
+
   private var layoutSelectors = new MutableList[LayoutSelector]()
 
-  def appendSelectors(selectors: List[LayoutSelector]) = selectors.foreach(f => {layoutSelectors += f})
+  def appendTemplateSelectors(selectors: List[LayoutSelector]) = selectors.foreach(f => {layoutSelectors += f})
 
-  def appendSelector(selector: LayoutSelector) = {layoutSelectors += selector}
+  def appendTemplateSelector(selector: LayoutSelector) = {layoutSelectors += selector}
 
-  def emptyLayoutSelectors = {layoutSelectors = new MutableList[LayoutSelector]()}
+  def appendSuffixSelectors(selectors: List[TemplateSuffixSelector]) = selectors.foreach(f => {suffixSelectors += f})
 
-  def getLayout(request: Request) = layoutSelectors.find(p => {p.layout(request) != None}).get.layout(request).get
+  def appendSuffixSelector(selector: TemplateSuffixSelector) = {suffixSelectors += selector}
+
+  def reset = {
+    layoutSelectors = new MutableList[LayoutSelector]()
+    suffixSelectors = new MutableList[TemplateSuffixSelector]()
+  }
+
+  def getLayout(request: Request) = layoutSelectors.find(p => {p.find(request) != None}).get.find(request).get
+
+  def getSuffixes(request: Request): List[String] = suffixSelectors.filter(p => {p.find(request) != None}).map(f => {f.find(request).get}).toList
+
+
+  // order of preference is:
+  // suffix, locale, type
+
+  // order of preference is: locale, type
+
 }

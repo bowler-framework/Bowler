@@ -10,6 +10,4 @@ import org.bowlerframework.Request
  * To change this layout use File | Settings | File Templates.
  */
 
-trait TemplateSuffixSelector{
-  def suffix(request: Request): Option[String]
-}
+trait TemplateSuffixSelector extends RequestSelector[String]

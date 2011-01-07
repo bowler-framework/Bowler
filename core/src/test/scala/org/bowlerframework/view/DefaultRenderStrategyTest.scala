@@ -3,7 +3,7 @@ package org.bowlerframework.view
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import org.bowlerframework.{HTTP, BowlerConfigurator}
-import scalate.MustacheViewRenderer
+import scalate.ScalateViewRenderer
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,7 +27,7 @@ class DefaultRenderStrategyTest extends FunSuite{
     val request = new DummyRequest(HTTP.GET,"/", Map(), null)
     val viewRenderer = BowlerConfigurator.resolveViewRenderer(request)
     assert(viewRenderer != null)
-    assert(viewRenderer.isInstanceOf[MustacheViewRenderer])
+    assert(viewRenderer.isInstanceOf[ScalateViewRenderer])
 
   }
 }

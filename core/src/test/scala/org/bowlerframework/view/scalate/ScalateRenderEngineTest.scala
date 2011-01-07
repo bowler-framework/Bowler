@@ -51,8 +51,33 @@ class ScalateRenderEngineTest extends FunSuite{
     val context = new DefaultRenderContext(uri, engine, pw)
 
     context.render(uri, model)
-    println(writer.toString)
+   // println(writer.toString)
     assert(writer.toString.equals("<a href='http://www.google.com'>Google</a>"))
   }
 
+  test("test ssp"){
+    val bean: Any = ScalateBean("wille")
+    val model = Map("bean" -> bean)
+
+    val engine = RenderEngine.getEngine
+    val template = "<% import org.bowlerframework.view.scalate.ScalateBean %>" +
+      "<%@ val bean: ScalateBean %>" +
+      "Hello ${bean.name}"
+    val uri =  "typeSafety.ssp"
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = {
+          Some(Resource.fromText(uri, template))
+      }
+    }
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new DefaultRenderContext(uri, engine, pw)
+
+    context.render(uri, model)
+    //println(writer.toString)
+    assert("Hello wille" == writer.toString)
+  }
+
 }
+
+case class ScalateBean(name: String)

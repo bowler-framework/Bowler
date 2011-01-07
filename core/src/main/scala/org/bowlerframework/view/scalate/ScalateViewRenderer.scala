@@ -11,7 +11,7 @@ import org.bowlerframework.{Response, Request}
  * To change this layout use File | Settings | File Templates.
  */
 
-class MustacheViewRenderer extends ViewRenderer{
+class ScalateViewRenderer extends ViewRenderer{
   def onError(request: Request, response: Response, exception: Exception) = null
 
   def renderView(request: Request, response: Response, models: Any*) = {

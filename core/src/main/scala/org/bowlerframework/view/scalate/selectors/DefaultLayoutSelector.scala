@@ -8,6 +8,4 @@ import org.bowlerframework.view.scalate.Layout
  * NOTE! This should be added/put last of all selectors, or other selectors will never be invoked!
  */
 
-class DefaultLayoutSelector(layout: Layout) extends LayoutSelector{
-  def layout(request: Request) = Some(layout)
-}
+class DefaultLayoutSelector(layout: Layout) extends DefaultSelector[Layout](layout) with LayoutSelector

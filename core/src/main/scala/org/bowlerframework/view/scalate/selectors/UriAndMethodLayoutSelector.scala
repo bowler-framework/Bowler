@@ -12,10 +12,4 @@ import org.bowlerframework.{Request, HTTP}
  * To change this layout use File | Settings | File Templates.
  */
 
-class UriAndMethodLayoutSelector(layout: Layout, method: HTTP.Method, uri: Regex) extends UriLayoutSelector(layout, uri){
-  override def layout(request: Request): Option[Layout] ={
-    if(request.getMethod == method)
-      return super.layout(request)
-    else return None
-  }
-}
+class UriAndMethodLayoutSelector(layout: Layout, method: HTTP.Method, uri: Regex) extends UriAndMethodSelector[Layout](layout, method, uri) with LayoutSelector

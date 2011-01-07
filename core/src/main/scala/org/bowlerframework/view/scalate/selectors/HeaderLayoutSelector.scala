@@ -12,15 +12,4 @@ import util.matching.Regex
  * To change this layout use File | Settings | File Templates.
  */
 
-class HeaderLayoutSelector(layout: Layout, headerSelectors: Map[String, Regex]) extends LayoutSelector{
-
-  def layout(request: Request): Option[Layout] ={
-    var conditionsMet = true
-    headerSelectors.iterator.foreach(tup =>{
-      if(!tup._2.pattern.matcher(request.getHeader(tup._1)).matches)
-        conditionsMet = false
-    })
-    if(!conditionsMet) return None
-    else return Some(layout)
-  }
-}
+class HeaderLayoutSelector(layout: Layout, headerSelectors: Map[String, Regex]) extends HeaderSelector[Layout](layout, headerSelectors) with LayoutSelector

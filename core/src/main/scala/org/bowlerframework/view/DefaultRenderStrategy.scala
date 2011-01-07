@@ -1,7 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{ContentTypeResolver, Response, Request}
-import scalate.MustacheViewRenderer
+import scalate.ScalateViewRenderer
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,6 +17,6 @@ class DefaultRenderStrategy extends RenderStrategy{
     if(contentType.equals(ContentTypeResolver.JSON))
       return new JsonViewRenderer
     else
-      return new MustacheViewRenderer
+      return new ScalateViewRenderer
   }
 }

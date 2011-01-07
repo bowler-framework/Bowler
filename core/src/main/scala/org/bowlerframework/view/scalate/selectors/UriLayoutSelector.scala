@@ -12,10 +12,4 @@ import org.bowlerframework.view.scalate.Layout
  * To change this layout use File | Settings | File Templates.
  */
 
-class UriLayoutSelector(layout: Layout, uri: Regex) extends LayoutSelector{
-  def layout(request: Request): Option[Layout] = {
-    if(uri.pattern.matcher(request.getPath).matches)
-      return Some(layout)
-    else return None
-  }
-}
+class UriLayoutSelector(layout: Layout, uri: Regex) extends UriSelector[Layout](layout, uri) with LayoutSelector
