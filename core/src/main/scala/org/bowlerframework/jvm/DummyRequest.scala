@@ -2,7 +2,7 @@ package org.bowlerframework.jvm
 
 import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, JavaBooleanTransformer}
 import collection.mutable.MutableList
-import org.bowlerframework.{HTTP, ContentTypeResolver, Session, Request}
+import org.bowlerframework._
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,6 +16,13 @@ class DummyRequest(method: HTTP.Method, path: String, params: Map[String, Any], 
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
+  private var mappedPath: MappedPath = null
+
+  private var locales = List("en_US")
+
+  def setMappedPath(mappedPath: MappedPath) = {this.mappedPath = mappedPath}
+
+  def getMappedPath = mappedPath
 
   def getRequestBodyAsString = body
 
@@ -54,7 +61,9 @@ class DummyRequest(method: HTTP.Method, path: String, params: Map[String, Any], 
     list.toList
   }
 
-  def getLocales = List("en_US")
+  def getLocales = locales
+
+  def setLocales(locales: List[String]) = {this.locales = locales}
 
   def getAccepts = ContentTypeResolver.contentType(headers("accept"))
 

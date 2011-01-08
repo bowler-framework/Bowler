@@ -1,5 +1,7 @@
 package org.bowlerframework.view.scalate
 
+import org.bowlerframework.{MappedPath, Request}
+
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
@@ -10,5 +12,9 @@ package org.bowlerframework.view.scalate
 
 trait TemplateResolver{
   // order of preference is: locale, type
-  def resolveLayout(layout: Layout)
+  def resolveLayout(request: Request, layout: Layout): Template
+
+  def resolveViewTemplate(request: Request): Template
+
+  def resolveTemplate(request: Request, path: String): Template
 }

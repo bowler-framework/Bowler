@@ -16,6 +16,8 @@ import org.bowlerframework.jvm.DummyRequest
 
 class TemplateRegistryTest extends FunSuite{
 
+  TemplateRegistry.reset
+
   TemplateRegistry.appendTemplateSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), HTTP.POST, new Regex("^.*/hello/.*$")),
     new UriLayoutSelector(Layout("uri"), new Regex("^.*/hello/.*$")), new DefaultLayoutSelector(Layout("default"))))
 
@@ -47,5 +49,9 @@ class TemplateRegistryTest extends FunSuite{
 
   test("get no suffixes"){
     assert(0 == TemplateRegistry.getSuffixes(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).size)
+  }
+
+  test("regex string"){
+    println(new Regex("^.*/hello/.*$").toString)
   }
 }

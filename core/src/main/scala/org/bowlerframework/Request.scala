@@ -17,6 +17,9 @@ trait Request{
   def getServerName: String
   def isSecure: Boolean
 
+  def getMappedPath: MappedPath
+  def setMappedPath(path: MappedPath)
+
   def getSession: Session
 
   def getHeader(name: String): String

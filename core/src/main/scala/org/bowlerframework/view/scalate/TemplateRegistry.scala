@@ -16,6 +16,15 @@ object TemplateRegistry{
   @BeanProperty
   var templateTypePreference = List(".mustache", ".ssp", ".jade", ".scaml")
 
+  @BeanProperty
+  var templateResolver: TemplateResolver = new ClasspathTemplateResolver
+
+  @BeanProperty
+  var rootViewPackageOrFolder = "/views"
+
+  @BeanProperty
+  var rootLayoutPackageOrFolder = "/layouts"
+
   private var suffixSelectors = new MutableList[TemplateSuffixSelector]()
 
   private var layoutSelectors = new MutableList[LayoutSelector]()

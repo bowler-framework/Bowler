@@ -23,6 +23,7 @@ object RequestScope {
   def mappedPath = _mappedPath value
 
   def executeRoute(mappedPath: MappedPath, requestScope: RequestScope, function: (Request, Response) => Unit) = {
+    requestScope.request.setMappedPath(mappedPath)
     _request.withValue(requestScope.request) {
       _response.withValue(requestScope.response) {
         _mappedPath.withValue(mappedPath) {

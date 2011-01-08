@@ -5,7 +5,7 @@ import collection.mutable.MutableList
 import com.recursivity.commons.bean._
 import com.recursivity.commons.StringInputStreamReader
 import org.apache.commons.fileupload.FileItem
-import org.bowlerframework.{HTTP, ContentTypeResolver, Request}
+import org.bowlerframework.{MappedPath, HTTP, ContentTypeResolver, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,6 +23,12 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   private val booleanTransformer = new JavaBooleanTransformer
 
   private var body: String = null
+
+  private var mappedPath: MappedPath = null
+
+  def setMappedPath(mappedPath: MappedPath) = {this.mappedPath = mappedPath}
+
+  def getMappedPath = mappedPath
 
   def isSecure = request.isSecure
 
