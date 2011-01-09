@@ -15,7 +15,32 @@ import java.io.{IOException, InputStream}
 class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamReader{
 
 
-  def resolveViewTemplate(request: Request) = null
+  def resolveViewTemplate(request: Request): Template = {
+    if(!TemplateRegistry.rootViewPackageOrFolder.endsWith("/"))
+      TemplateRegistry.rootViewPackageOrFolder = TemplateRegistry.rootViewPackageOrFolder + "/"
+    val requestPath = request.getMappedPath.path.replaceAll(":", "_")
+
+
+    var path = TemplateRegistry.rootViewPackageOrFolder + request.getMethod + requestPath
+    if(path.endsWith("/"))
+      path = path + "index"
+
+    try{
+      return resolveResource(path, TemplateRegistry.templateTypePreference, request.getLocales)
+    }catch{
+      case e: IOException =>{
+        if(!path.endsWith("/"))
+          return resolveResource(path + "/index", TemplateRegistry.templateTypePreference, request.getLocales)
+        else throw e
+      }
+    }
+
+
+    /*val suffixes = TemplateRegistry.getSuffixes(request)
+    if(suffixes == Nil){
+      request.getMethod
+    }  */
+  }
 
   def resolveLayout(request: Request, layout: Layout): Template ={
     if(!TemplateRegistry.rootLayoutPackageOrFolder.endsWith("/"))
@@ -38,6 +63,7 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
         realPath = path + fileType
       else
         realPath = path + "_" + locale + fileType
+      println(realPath)
       val obj = new ClasspathResourceResolver
       is = obj.getClass.getResourceAsStream(realPath)
       val templateString = this.load(is)

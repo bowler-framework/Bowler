@@ -10,5 +10,5 @@ import org.bowlerframework.Request
  * To change this layout use File | Settings | File Templates.
  */
 
-case class Layout(name: String, viewId: String = "doLayout", layoutModel: Option[Request => Map[String, Any]] = None,
+case class Layout(name: String, viewId: String = "doLayout", layoutModel: Option[LayoutModel] = None,
                   parentLayout: Option[Layout] = None, childLayouts: Option[List[Tuple2[String, Layout]]] = None)

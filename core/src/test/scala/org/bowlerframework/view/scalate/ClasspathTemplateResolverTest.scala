@@ -1,10 +1,10 @@
 package org.bowlerframework.view.scalate
 
 import org.scalatest.FunSuite
-import selectors.{HeaderContainsLayoutSelector, DefaultLayoutSelector}
-import org.bowlerframework.HTTP
 import org.bowlerframework.jvm.DummyRequest
 import java.io.IOException
+import org.bowlerframework.{MappedPath, HTTP}
+import selectors.{HeaderContainsSuffixSelector, HeaderContainsLayoutSelector, DefaultLayoutSelector}
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,17 +19,17 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
   val resolver = TemplateRegistry.templateResolver
 
- // TemplateRegistry.appendSuffixSelectors(List(new UriAndMethodSuffixSelector("uriAndMethod", HTTP.POST, new Regex("^.*/hello/.*$")),
- //   new UriSuffixSelector("uri", new Regex("^.*/hello/.*$"))))
+ TemplateRegistry.appendSuffixSelectors(List(new HeaderContainsSuffixSelector("ipad", Map("User-Agent" -> "ipad")),
+    new HeaderContainsSuffixSelector("iphone", Map("User-Agent" -> "iphone"))))
 
   test("get a template: root with no locale"){
-    val template = resolver.resolveTemplate(makeRequest, "/layouts/default")
+    val template = resolver.resolveTemplate(makeRequest("/"), "/layouts/default")
     assert(template.template == "mustache")
 
   }
 
   test("get a template: root with locale"){
-    val request = makeRequest
+    val request = makeRequest("/")
     request.setLocales(List("es", "se"))
     val template = resolver.resolveTemplate(request, "/layouts/default")
     println(template)
@@ -38,7 +38,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
 
   test("previous stackoverflowexception bug"){
-    val request = makeRequest
+    val request = makeRequest("/")
     try{
       val template = resolver.resolveLayout(request, Layout("overflow-baby"))
     }catch{
@@ -51,40 +51,105 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
   test("layout without localisation"){
-    val request = makeRequest
+    val request = makeRequest("/")
     val template = resolver.resolveLayout(request, Layout("default"))
     println(template)
     assert(template.template == "mustache")
   }
 
   test("layout with localisation"){
-    val request = makeRequest
+    val request = makeRequest("/")
     request.setLocales(List("es", "se"))
     val template = resolver.resolveLayout(request, Layout("default"))
     println(template)
     assert(template.template == "Svenska!")
   }
 
+  test("view: / "){
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/index.mustache")
+    assert(template.template == "index.mustache")
+  }
 
-
-  /*test("sub folder index"){
+  test("/view: with localisation"){
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/", false))
+    request.setLocales(List("es", "se"))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/index_se.ssp")
+    assert(template.template == "svenska!")
 
   }
 
-  test("wild cards"){
+
+  test("sub folder index with ending /"){
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/widgets/", false))
+    request.setLocales(List("es", "se"))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/index.ssp")
+    assert(template.template == "widgets index")
 
   }
+
+  test("sub folder index without / ending"){
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/widgets", false))
+    request.setLocales(List("es", "se"))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/index.ssp")
+    assert(template.template == "widgets index")
+
+  }
+
+
 
   test("named parameter"){
-
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/widgets/:id", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/_id.ssp")
+    assert(template.template == "this is the :id ssp")
   }
 
   test("nexted named parameter"){
+    val request = makeRequest("/")
+    request.setMappedPath(MappedPath("/widgets/:id", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/_id.ssp")
+    assert(template.template == "this is the :id ssp")
+  }
 
-  } */
+  /*test("view: / with suffix & localisation"){
+
+  }
 
 
-  def makeRequest = new DummyRequest(HTTP.GET, "/hello/", Map(), null)
-  def makeRequest(headers: Map[String, String]) = new DummyRequest(HTTP.GET, "/hello/", Map(), null, headers)
+  test("view: / with non-existent suffix"){
+
+  }
+
+  test("view: / with suffix but no localisation (conflicting lower level suffix with correct localisation)"){
+
+  }  */
+
+
+  /*
+    test("wild cards"){
+
+  }
+
+  test("regex"){
+
+}
+   */
+
+
+
+
+  def makeRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null)
+  def makeRequest(path: String, headers: Map[String, String]) = new DummyRequest(HTTP.GET, path, Map(), null, headers)
   //Accept-Language:
 }

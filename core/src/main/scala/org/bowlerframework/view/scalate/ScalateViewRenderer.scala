@@ -15,7 +15,7 @@ class ScalateViewRenderer extends ViewRenderer{
   def onError(request: Request, response: Response, exception: Exception) = null
 
   def renderView(request: Request, response: Response, models: Any*) = {
-    TemplateRegistry.getLayout(request)
+    val layout = TemplateRegistry.getLayout(request)
   }
 
   def renderView(request: Request, response: Response) = {

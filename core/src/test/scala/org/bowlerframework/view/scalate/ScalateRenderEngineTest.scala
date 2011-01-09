@@ -78,6 +78,27 @@ class ScalateRenderEngineTest extends FunSuite{
     assert("Hello wille" == writer.toString)
   }
 
+  test("mustache bean"){
+    val bean: Any = ScalateBean("wille")
+    val model = Map("bean" -> bean)
+
+    val engine = RenderEngine.getEngine
+    val template = "{{#bean}}hello {{name}}{{/bean}}"
+    val uri =  "typeSafety.mustache"
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = {
+          Some(Resource.fromText(uri, template))
+      }
+    }
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new DefaultRenderContext(uri, engine, pw)
+
+    context.render(uri, model)
+    println(writer.toString)
+    assert("hello wille" == writer.toString)
+  }
+
 }
 
 case class ScalateBean(name: String)
