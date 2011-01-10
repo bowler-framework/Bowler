@@ -7,11 +7,7 @@ import net.liftweb.json.Printer._
 import org.bowlerframework.model.AliasRegistry
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 28/12/2010
- * Time: 22:40
- * To change this layout use File | Settings | File Templates.
+ * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
  */
 
 class JsonViewRenderer extends ViewRenderer{
@@ -38,6 +34,9 @@ class JsonViewRenderer extends ViewRenderer{
     }
   }
 
+  /**
+   * renders a no model view, in the case of JSON, this simply returns a HTTP 204 - No Content response.
+   */
   def renderView(request: Request, response: Response) = response.setStatus(204)
 
   private def getAlias(any: Any): String = {

@@ -11,9 +11,10 @@ import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
  */
 
 trait Renderable{
-  def render(models: Any*):Unit = render(RequestScope.request,RequestScope.response, models)
 
   def render: Unit = render(RequestScope.request,RequestScope.response)
+
+  def render(models: Any*):Unit = render(RequestScope.request,RequestScope.response, models)
 
   def render(request: Request, response: Response, models: Any*): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)

@@ -133,10 +133,10 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
   test("view: / with suffix but no localisation (conflicting lower level suffix with correct localisation)"){
 
-  }  */
+  }
 
 
-  /*
+
     test("wild cards"){
 
   }

@@ -4,11 +4,8 @@ import org.bowlerframework.{ContentTypeResolver, Response, Request}
 import scalate.ScalateViewRenderer
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 28/12/2010
- * Time: 22:26
- * To change this layout use File | Settings | File Templates.
+ * A Default RenderStrategy - returns a JsonViewRenderer if the client has set the "accept" header to "application/json",<br/>
+ * Otherwise returns a ScalateViewRenderer for rendering Scalate Web views
  */
 
 class DefaultRenderStrategy extends RenderStrategy{

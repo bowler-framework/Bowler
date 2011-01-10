@@ -1,11 +1,8 @@
 package org.bowlerframework.exception
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 05/01/2011
- * Time: 21:18
- * To change this layout use File | Settings | File Templates.
+ * AccessDeniedException should be thrown if a user does not have access to a Resource or needs to login.<br/>
+ * Analogous to a HTTP 403 code.
  */
 
 class AccessDeniedException extends HttpException(403)
