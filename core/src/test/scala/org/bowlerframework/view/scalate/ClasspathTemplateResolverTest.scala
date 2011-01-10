@@ -122,22 +122,48 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "this is the :id ssp")
   }
 
-  /*test("view: / with suffix & localisation"){
+  test("view: / with suffix & localisation"){
 
+    val request = makeRequest("/", Map("User-Agent" -> "ipad"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("/", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/index_ipad_se.ssp")
+    assert(template.template == "svenskt ipad index")
+
+  }
+
+  test("view: / subfolder with suffix"){
+    val request = makeRequest("/widgets/", Map("User-Agent" -> "ipad"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("/widgets", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/index_ipad.ssp")
+    assert(template.template == "ipad widgets")
   }
 
 
   test("view: / with non-existent suffix"){
-
+    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("/widgets", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/index.ssp")
+    assert(template.template == "widgets index")
   }
 
   test("view: / with suffix but no localisation (conflicting lower level suffix with correct localisation)"){
-
+    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("/widgets", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/widgets/index_ipad.ssp")
+    assert(template.template == "ipad widgets")
   }
 
+  /*
 
-
-    test("wild cards"){
+  test("wild cards"){
 
   }
 

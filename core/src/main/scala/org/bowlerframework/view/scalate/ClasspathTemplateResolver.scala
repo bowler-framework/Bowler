@@ -20,26 +20,8 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
       TemplateRegistry.rootViewPackageOrFolder = TemplateRegistry.rootViewPackageOrFolder + "/"
     val requestPath = request.getMappedPath.path.replaceAll(":", "_")
 
-
     var path = TemplateRegistry.rootViewPackageOrFolder + request.getMethod + requestPath
-    if(path.endsWith("/"))
-      path = path + "index"
-
-    try{
-      return resolveResource(path, TemplateRegistry.templateTypePreference, request.getLocales)
-    }catch{
-      case e: IOException =>{
-        if(!path.endsWith("/"))
-          return resolveResource(path + "/index", TemplateRegistry.templateTypePreference, request.getLocales)
-        else throw e
-      }
-    }
-
-
-    /*val suffixes = TemplateRegistry.getSuffixes(request)
-    if(suffixes == Nil){
-      request.getMethod
-    }  */
+    return resolveResourceWithSuffix(path, TemplateRegistry.templateTypePreference, TemplateRegistry.getSuffixes(request), request.getLocales)
   }
 
   def resolveLayout(request: Request, layout: Layout): Template ={
@@ -73,6 +55,42 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
     }
   }
 
+    /**
+  * get potentially localised file, fallback to default if not present
+  */
+  private def resolveResourceWithSuffix(path: String, fileTypes: List[String], suffixes: List[String], locale: List[String] = List()): Template = {
+    var realPath = path
+    if(realPath.endsWith("/")){
+      realPath = realPath + "index"
+      if(suffixes != Nil)
+        realPath = realPath + "_" + suffixes(0)
+    }
+
+    try{
+      return resolveResource(realPath, TemplateRegistry.templateTypePreference, locale)
+    }catch{
+      case e: IOException =>{
+        try{
+          if(!path.endsWith("/")){
+            if(suffixes != Nil)
+              return resolveResource(realPath + "/index_" +  suffixes(0), TemplateRegistry.templateTypePreference, locale)
+            else
+              return resolveResource(realPath + "/index", TemplateRegistry.templateTypePreference, locale)
+          }
+          else throw e
+        }catch{
+          case ex: IOException =>{
+            if(suffixes != Nil){
+              val newSuffix = suffixes.drop(1)
+              return resolveResourceWithSuffix(path, fileTypes, newSuffix, locale)
+            }else
+              throw ex
+          }
+        }
+      }
+    }
+  }
+
   /**
   * get potentially localised file, fallback to default if not present
   */
@@ -100,22 +118,4 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
     }
   }
 
-
-  /**
-   * get potentially localised file, fallback to default if not present
-   */
- /* private def resolveResourceByType(path: String, fileType: String, locale: List[String] = List())(op: InputStream => Any): Any = {
-    if (locale == Nil)
-      getAbsoluteResource(path, fileType, null) {is => op(is)}
-    else {
-      try {
-        getAbsoluteResource(path, fileType, locale.head) {is => op(is)}
-      } catch {
-        case e: NullPointerException => {
-          val localeList = locale.drop(1)
-          resolveResourceByType(path, fileType, localeList) {is => op(is)}
-        }
-      }
-    }
-  } */
 }

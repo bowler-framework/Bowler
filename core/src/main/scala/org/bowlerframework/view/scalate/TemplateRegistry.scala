@@ -47,6 +47,9 @@ object TemplateRegistry{
 
   def getSuffixes(request: Request): List[String] = suffixSelectors.filter(p => {p.find(request) != None}).map(f => {f.find(request).get}).toList
 
+  //
+  def getOverrideTemplate(request: Request): Option[String] = null
+
 
   // order of preference is:
   // suffix, locale, type

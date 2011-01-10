@@ -3,11 +3,7 @@ package org.bowlerframework.view.scalate
 import org.fusesource.scalate.TemplateEngine
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 03/01/2011
- * Time: 20:51
- * To change this layout use File | Settings | File Templates.
+ * Singleton Object that holds reference to a Scalate TemplateEngine
  */
 
 object RenderEngine{
