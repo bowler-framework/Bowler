@@ -45,7 +45,6 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
         realPath = path + fileType
       else
         realPath = path + "_" + locale + fileType
-      println(realPath)
       val obj = new ClasspathResourceResolver
       is = obj.getClass.getResourceAsStream(realPath)
       val templateString = this.load(is)

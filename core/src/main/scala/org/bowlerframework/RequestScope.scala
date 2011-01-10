@@ -11,7 +11,6 @@ import util.DynamicVariable
  */
 
 case class RequestScope(request: Request, response: Response)
-case class MappedPath(path: String, isRegex: Boolean = false)
 
 object RequestScope {
   private val _response = new DynamicVariable[Response](null)
