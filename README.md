@@ -9,3 +9,11 @@ The project is built with [Simple Build Tool ("sbt")](http://code.google.com/p/s
 * Decomposition of the View into "Resource View" & Layout - A consequence and enabler of the above two points, a stricter separation between the Resource View representing the Model you want to display and the Layout you want to surround it with. The idea behind this is explained here: [Decomposing the View in MVC - What's In a View?](http://blog.recursivity.com/post/2615673341/decomposing-the-view-in-mvc-whats-in-a-view)
 * Sensible Defaults - Good to go out-of-the-box with sensible defaults and further extensions/plug-ins in the works for adding functionality.
 * Composability - if you don't like the defaults, pick, choose and combine what you want. Bowler uses a "Micro Architecture" approach with strict code adherence to the [Single Responsibility Principle](http://en.wikipedia.org/wiki/Single_responsibility_principle). Adding for instance a different validation framework or different templating mechanism or even entirely different rendering mechanism should be relatively pain free.
+
+##Building
+To build, you will need to do:
+* Have [sbt](http://code.google.com/p/simple-build-tool/) 0.7.5RC0 or later installed
+* Pull and build the [Recursivity Commons project](https://github.com/wfaler/recursivity-commons), then do a "publish-local" on that project, as Bowler depends on this (we will make everything available in a Maven repo soon enough!)
+* Go into the "core" folder, run sbt and the "update" command in sbt to download all dependencies
+* Place the scala-compiler.jar in the "lib"-folder, this is a dependency of Scalate, and doesn't get automatically downloaded due to a bug in sbt.
+* Now you're ready to build and go!
