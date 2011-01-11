@@ -1,10 +1,10 @@
 package org.bowlerframework.view.scalate
 
 import org.scalatest.FunSuite
-import org.bowlerframework.HTTP
 import selectors._
 import util.matching.Regex
 import org.bowlerframework.jvm.DummyRequest
+import org.bowlerframework.{MappedPath, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,6 +52,18 @@ class TemplateRegistryTest extends FunSuite{
   }
 
   test("regex string"){
-    println(new Regex("^.*/hello/.*$").toString)
+    assert("^.*/hello/.*$" == new Regex("^.*/hello/.*$").toString)
+  }
+
+  test("get/set View Template Override"){
+    TemplateRegistry.regexPath(new Regex("^.*/hello/.*$"), "/views/GET/index.ssp")
+    TemplateRegistry.overridePath("/say/*/hello/*", "/views/GET/index_se.ssp")
+
+    assert(None == TemplateRegistry.getOverrideTemplate(new MappedPath("hello", false)))
+    assert(None == TemplateRegistry.getOverrideTemplate(new MappedPath("hello", true)))
+
+    //
+    assert("/views/GET/index_se.ssp" == TemplateRegistry.getOverrideTemplate(new MappedPath("/say/*/hello/*", false)).get)
+    assert("/views/GET/index.ssp" == TemplateRegistry.getOverrideTemplate(new MappedPath("^.*/hello/.*$", true)).get)
   }
 }

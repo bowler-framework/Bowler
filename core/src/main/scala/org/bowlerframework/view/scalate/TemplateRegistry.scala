@@ -2,9 +2,9 @@ package org.bowlerframework.view.scalate
 
 import selectors.{TemplateSuffixSelector, LayoutSelector}
 import util.matching.Regex
-import org.bowlerframework.{Request, HTTP}
 import collection.mutable.{MutableList, HashMap}
 import reflect.BeanProperty
+import org.bowlerframework.{MappedPath, Request, HTTP}
 
 /**
  * Retrieves a Template based on a request and it's contents, headers and/or path.
@@ -19,6 +19,11 @@ object TemplateRegistry{
 
   @BeanProperty
   var templateResolver: TemplateResolver = new ClasspathTemplateResolver
+
+
+  private var pathTemplateOverrides = new HashMap[String, String]
+
+  private var regexPathTemplates = new HashMap[String, String]
 
   @BeanProperty
   var rootViewPackageOrFolder = "/views"
@@ -41,6 +46,8 @@ object TemplateRegistry{
   def reset = {
     layoutSelectors = new MutableList[LayoutSelector]()
     suffixSelectors = new MutableList[TemplateSuffixSelector]()
+    regexPathTemplates = new HashMap[String, String]
+    pathTemplateOverrides = new HashMap[String, String]
   }
 
   def getLayout(request: Request) = layoutSelectors.find(p => {p.find(request) != None}).get.find(request).get
@@ -48,12 +55,22 @@ object TemplateRegistry{
   def getSuffixes(request: Request): List[String] = suffixSelectors.filter(p => {p.find(request) != None}).map(f => {f.find(request).get}).toList
 
   //
-  def getOverrideTemplate(request: Request): Option[String] = null
+  def getOverrideTemplate(mappedPath: MappedPath): Option[String] = {
+    try{
+      if(mappedPath.isRegex){
+        val regex = new Regex(mappedPath.path)
+        return Some(regexPathTemplates(regex.toString))
+      }else{
+        return Some(pathTemplateOverrides(mappedPath.path))
+      }
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
 
+  def overridePath(path: String, templatePath: String) = { pathTemplateOverrides += path -> templatePath}
 
-  // order of preference is:
-  // suffix, locale, type
+  def regexPath(path: Regex, templatePath: String) = { regexPathTemplates += path.toString -> templatePath}
 
-  // order of preference is: locale, type
 
 }

@@ -16,6 +16,17 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
 
 
   def resolveViewTemplate(request: Request): Template = {
+    val overridePath = TemplateRegistry.getOverrideTemplate(request.getMappedPath)
+    if(None != overridePath){
+      try{
+        println(TemplateRegistry.getSuffixes(request))
+        return resolveResourceWithSuffix(overridePath.get, TemplateRegistry.templateTypePreference, TemplateRegistry.getSuffixes(request), request.getLocales)
+      }catch{
+        case e: IOException => {}// do nothing, continue to normal execution path
+      }
+
+    }
+
     if(!TemplateRegistry.rootViewPackageOrFolder.endsWith("/"))
       TemplateRegistry.rootViewPackageOrFolder = TemplateRegistry.rootViewPackageOrFolder + "/"
     val requestPath = request.getMappedPath.path.replaceAll(":", "_")
@@ -61,9 +72,9 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
     var realPath = path
     if(realPath.endsWith("/")){
       realPath = realPath + "index"
-      if(suffixes != Nil)
-        realPath = realPath + "_" + suffixes(0)
     }
+    if(suffixes != Nil)
+      realPath = realPath + "_" + suffixes(0)
 
     try{
       return resolveResource(realPath, TemplateRegistry.templateTypePreference, locale)
@@ -72,9 +83,9 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
         try{
           if(!path.endsWith("/")){
             if(suffixes != Nil)
-              return resolveResource(realPath + "/index_" +  suffixes(0), TemplateRegistry.templateTypePreference, locale)
+              return resolveResource(path + "/index_" +  suffixes(0), TemplateRegistry.templateTypePreference, locale)
             else
-              return resolveResource(realPath + "/index", TemplateRegistry.templateTypePreference, locale)
+              return resolveResource(path + "/index", TemplateRegistry.templateTypePreference, locale)
           }
           else throw e
         }catch{

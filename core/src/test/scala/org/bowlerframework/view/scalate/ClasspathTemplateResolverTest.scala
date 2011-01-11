@@ -5,6 +5,7 @@ import org.bowlerframework.jvm.DummyRequest
 import java.io.IOException
 import org.bowlerframework.{MappedPath, HTTP}
 import selectors.{HeaderContainsSuffixSelector, HeaderContainsLayoutSelector, DefaultLayoutSelector}
+import util.matching.Regex
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,6 +22,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
  TemplateRegistry.appendSuffixSelectors(List(new HeaderContainsSuffixSelector("ipad", Map("User-Agent" -> "ipad")),
     new HeaderContainsSuffixSelector("iphone", Map("User-Agent" -> "iphone"))))
+
 
   test("get a template: root with no locale"){
     val template = resolver.resolveTemplate(makeRequest("/"), "/layouts/default")
@@ -123,7 +125,6 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
   test("view: / with suffix & localisation"){
-
     val request = makeRequest("/", Map("User-Agent" -> "ipad"))
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/", false))
@@ -161,18 +162,25 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "ipad widgets")
   }
 
-  /*
-
-  test("wild cards"){
-
+  test("wild cards (override)"){
+    TemplateRegistry.overridePath("/say/*/to/*", "/views/GET/index")
+    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("/say/*/to/*", false))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/index_ipad_se.ssp")
+    assert(template.template == "svenskt ipad index")
   }
 
-  test("regex"){
-
-}
-   */
-
-
+  test("regex (using override)"){
+    TemplateRegistry.regexPath(new Regex("^.*/hello/.*$"), "/views/GET/index")
+    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
+    request.setLocales(List("es", "se"))
+    request.setMappedPath(MappedPath("^.*/hello/.*$", true))
+    val template = resolver.resolveViewTemplate(request)
+    assert(template.uri == "/views/GET/index_ipad_se.ssp")
+    assert(template.template == "svenskt ipad index")
+  }
 
 
   def makeRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null)

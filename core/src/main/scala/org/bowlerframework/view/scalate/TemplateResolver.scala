@@ -3,18 +3,35 @@ package org.bowlerframework.view.scalate
 import org.bowlerframework.{MappedPath, Request}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 05/01/2011
- * Time: 22:16
- * To change this layout use File | Settings | File Templates.
+ * Resolves Templates, View Templates and Layouts for a given request
  */
 
 trait TemplateResolver{
-  // order of preference is: locale, type
+  /**
+   * Order of preference for layout resolution should be:<br/>
+   * <ol>
+   *  <li>LayoutSelector choice</li>
+   *  <li>localisation</li>
+   *  <li>file-type (mustache, ssp, jade, scaml etc)</li>
+   * </ol>
+   *
+   */
   def resolveLayout(request: Request, layout: Layout): Template
 
+   /** Order of preference for view template resolution should be:<br/>
+   * <ol>
+   *  <li>TemplateSuffixSelector choice</li>
+   *  <li>localisation</li>
+   *  <li>file-type (mustache, ssp, jade, scaml etc)</li>
+   * </ol>
+   */
   def resolveViewTemplate(request: Request): Template
 
+   /** Order of preference for template resolution should be (this is with an "absolute path", except for selector and locale):<br/>
+   * <ol>
+   *  <li>localisation</li>
+   *  <li>file-type (mustache, ssp, jade, scaml etc)</li>
+   * </ol>
+   */
   def resolveTemplate(request: Request, path: String): Template
 }
