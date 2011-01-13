@@ -11,4 +11,4 @@ import org.bowlerframework.Request
  */
 
 case class Layout(name: String, viewId: String = "doLayout", layoutModel: Option[LayoutModel] = None,
-                  parentLayout: Option[Layout] = None, childLayouts: Option[List[Tuple2[String, Layout]]] = None)
+                  parentLayout: Option[Layout] = None)

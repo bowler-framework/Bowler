@@ -1,6 +1,7 @@
 package org.bowlerframework.view.scalate
 
 import org.bowlerframework.Request
+import collection.mutable.HashMap
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,5 +12,5 @@ import org.bowlerframework.Request
  */
 
 trait LayoutModel{
-  def model(request: Request, viewModel: Map[String, Any]): Map[String, Any]
+  def model(request: Request, viewModel: Option[Map[String, Any]]): HashMap[String, Any]
 }

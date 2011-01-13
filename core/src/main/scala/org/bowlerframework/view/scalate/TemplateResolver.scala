@@ -34,4 +34,6 @@ trait TemplateResolver{
    * </ol>
    */
   def resolveTemplate(request: Request, path: String): Template
+
+  def getAbsoluteResource(uri: String): String
 }
