@@ -8,13 +8,17 @@ import org.fusesource.scalate.util.{Resource, FileResourceLoader}
  */
 
 object RenderEngine{
-  val engine = new TemplateEngine
-  engine.allowCaching = true
-  engine.allowReload = false
-
-  engine.resourceLoader = new FileResourceLoader {
-   override def resource(uri: String): Option[Resource] = Some(Resource.fromText(uri, TemplateRegistry.templateResolver.getAbsoluteResource(uri)))
-  }
+  private var engine: TemplateEngine = null
+  reset
 
   def getEngine = engine
+
+  def reset = {
+    engine = new TemplateEngine
+    engine.allowCaching = true
+    engine.allowReload = false
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = Some(Resource.fromText(uri, TemplateRegistry.templateResolver.getAbsoluteResource(uri)))
+    }
+  }
 }

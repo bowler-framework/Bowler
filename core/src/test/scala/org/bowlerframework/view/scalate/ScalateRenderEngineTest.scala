@@ -32,6 +32,7 @@ class ScalateRenderEngineTest extends FunSuite{
     context.render(uri, model)
 
     assert(writer.toString.equals("hello someId, your name is someId"))
+    RenderEngine.reset
   }
 
   test("test link syntax"){
@@ -51,8 +52,8 @@ class ScalateRenderEngineTest extends FunSuite{
     val context = new DefaultRenderContext(uri, engine, pw)
 
     context.render(uri, model)
-   // println(writer.toString)
     assert(writer.toString.equals("<a href='http://www.google.com'>Google</a>"))
+    RenderEngine.reset
   }
 
   test("test ssp"){
@@ -74,8 +75,8 @@ class ScalateRenderEngineTest extends FunSuite{
     val context = new DefaultRenderContext(uri, engine, pw)
 
     context.render(uri, model)
-    //println(writer.toString)
     assert("Hello wille" == writer.toString)
+    RenderEngine.reset
   }
 
   test("mustache bean"){
@@ -95,8 +96,8 @@ class ScalateRenderEngineTest extends FunSuite{
     val context = new DefaultRenderContext(uri, engine, pw)
 
     context.render(uri, model)
-    println(writer.toString)
     assert("hello wille" == writer.toString)
+    RenderEngine.reset
   }
 
 }

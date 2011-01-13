@@ -51,7 +51,6 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
     if(layout.parentLayout == None)
       writer = response.getWriter
     else{
-      println("new PW")
       writer = new PrintWriter(stringWriter)
     }
 
