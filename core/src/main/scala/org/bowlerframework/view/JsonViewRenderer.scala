@@ -25,7 +25,7 @@ class JsonViewRenderer extends ViewRenderer{
     }else{
       var json: JValue = null
       models.foreach(f =>{
-        val alias = getAlias(f)
+        val alias = getModelAlias(f)
         val value = getValue(f)
         if(json == null) json = new JField(alias, value)
         else json = json ++ JField(alias, value)
@@ -39,21 +39,5 @@ class JsonViewRenderer extends ViewRenderer{
    */
   def renderView(request: Request, response: Response) = response.setStatus(204)
 
-  private def getAlias(any: Any): String = {
-    if(any.isInstanceOf[ViewModel])
-      return any.asInstanceOf[ViewModel].alias
-    else if(any.isInstanceOf[Tuple2[String, _]])
-      return any.asInstanceOf[Tuple2[String, _]]._1
-    else
-      return AliasRegistry.getModelAlias(any).get
-  }
-
-  private def getValue(any: Any): JValue = {
-    if(any.isInstanceOf[ViewModel])
-      return decompose(any.asInstanceOf[ViewModel].value)
-    else if(any.isInstanceOf[Tuple2[String, _]])
-      return decompose(any.asInstanceOf[Tuple2[String, Any]]._2)
-    else
-      return decompose(any)
-  }
+  private def getValue(any: Any): JValue = decompose(getModelValue(any))
 }

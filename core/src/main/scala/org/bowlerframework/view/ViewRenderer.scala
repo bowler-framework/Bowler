@@ -1,6 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{Request, Response}
+import org.bowlerframework.model.AliasRegistry
 
 /**
  * Renders a View and any related Layouts if applicable.
@@ -21,4 +22,22 @@ trait ViewRenderer{
     * if a org.bowlerframework.exception.ValidationException AccessDeniedException is thrown.
    */
   def onError(request: Request, response: Response, exception: Exception)
+
+  def getModelAlias(model: Any): String = {
+    if(model.isInstanceOf[ViewModel])
+      return model.asInstanceOf[ViewModel].alias
+    else if(model.isInstanceOf[Tuple2[String, _]])
+      return model.asInstanceOf[Tuple2[String, _]]._1
+    else
+      return AliasRegistry.getModelAlias(model).get
+  }
+
+  def getModelValue(model: Any): Any = {
+    if(model.isInstanceOf[ViewModel])
+      return model.asInstanceOf[ViewModel].value
+    else if(model.isInstanceOf[Tuple2[String, _]])
+      return model.asInstanceOf[Tuple2[String, Any]]._2
+    else
+      return model
+  }
 }
