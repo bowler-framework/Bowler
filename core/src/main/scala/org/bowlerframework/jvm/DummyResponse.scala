@@ -45,4 +45,6 @@ class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends R
   override def toString = stringWriter.toString
 
   def getStatus = status
+
+
 }

@@ -47,13 +47,15 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
     val parent = TemplateRegistry.templateResolver.resolveLayout(request, layout)
     val stringWriter = new StringWriter
+    var writer: PrintWriter = null
+    if(layout.parentLayout == None)
+      writer = response.getWriter
+    else{
+      println("new PW")
+      writer = new PrintWriter(stringWriter)
+    }
 
-    val writer = {
-      if(layout.parentLayout == None)
-        return response.getWriter
-      else{
-        new PrintWriter(stringWriter)
-    }}
+
     val responseContext = new DefaultRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
     responseContext.render(parent.uri, layoutModel.toMap)
     if(layout.parentLayout != None)

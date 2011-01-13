@@ -10,5 +10,4 @@ import org.bowlerframework.Request
  * To change this layout use File | Settings | File Templates.
  */
 
-case class Layout(name: String, layoutModel: LayoutModel = new NoopLayoutModel,
-                  parentLayout: Option[Layout] = None)
+case class Layout(name: String, parentLayout: Option[Layout] = None, layoutModel: LayoutModel = new NoopLayoutModel)
