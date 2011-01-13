@@ -66,9 +66,7 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
   }
 
 
-  /**
-   * get potentially localised file, fallback to default if not present
-   */
+
   def getAbsoluteResource(uri: String): String = {
     val obj = this
     var is: InputStream = null

@@ -51,10 +51,7 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
   private def renderLayout(layout: Layout, request: Request, response: Response, viewModel: Map[String, Any], view: String){
     val engine = RenderEngine.getEngine
-    var layoutModel: HashMap[String, Any] = new HashMap[String, Any]
-    if(layout.layoutModel != None)
-      layoutModel = layout.layoutModel.get.model(request, Some(viewModel))
-    layoutModel += layout.viewId -> view
+    var layoutModel = layout.layoutModel.model(request, viewModel, view)
 
     val parent = TemplateRegistry.templateResolver.resolveLayout(request, layout)
     val stringWriter = new StringWriter

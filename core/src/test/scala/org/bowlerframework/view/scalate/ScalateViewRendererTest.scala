@@ -12,7 +12,15 @@ import org.scalatest.FunSuite
 
 class ScalateViewRendererTest extends FunSuite{
 
-  test("render view"){
+  test("render view with simple layout"){
+
+  }
+
+  test("render view with nested layout"){
+
+  }
+
+  test("render view with nested layout, where parent renders other child layouts"){
 
   }
 }

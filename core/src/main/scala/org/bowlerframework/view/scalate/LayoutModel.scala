@@ -12,5 +12,5 @@ import collection.mutable.HashMap
  */
 
 trait LayoutModel{
-  def model(request: Request, viewModel: Option[Map[String, Any]]): HashMap[String, Any]
+  def model(request: Request, viewModel: Map[String, Any], childView: String): Map[String, Any]
 }
