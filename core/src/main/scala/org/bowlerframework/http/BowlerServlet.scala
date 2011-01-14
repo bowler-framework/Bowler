@@ -16,11 +16,16 @@ import org.bowlerframework.controller.Controller
  */
 
 class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{
+  var bootstrap: AnyRef = null
 
   override def init(config: ServletConfig): Unit = {
     super.init(config)
     BowlerConfigurator.setApplicationRouter(this)
     BowlerConfigurator.isServletApp = true
+
+    if(config.getInitParameter("bootstrapClass") != null) {
+      bootstrap = Class.forName(config.getInitParameter("bootstrapClass")).newInstance.asInstanceOf[AnyRef]
+    }
   }
 
   def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = {

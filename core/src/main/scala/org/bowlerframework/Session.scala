@@ -16,4 +16,11 @@ trait Session{
   def getCreationTime: Long
   def getAttributeNames: List[String]
   def getId: String
+
+  def setErrors(errors: List[Tuple2[String, String]])
+  def getErrors: Option[List[Tuple2[String, String]]]
+  def removeErrors
+
+  def getLastGetPath: Option[String]
+  def setLastGetPath(path: String)
 }

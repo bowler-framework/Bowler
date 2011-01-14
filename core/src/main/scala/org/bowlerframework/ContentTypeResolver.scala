@@ -14,6 +14,8 @@ object ContentTypeResolver extends Enumeration{
   val JSON, XML, HTML = Value
 
   def contentType(accept: String): ContentType = {
+    if(accept == null)
+      return HTML
     val lowerCase = accept.toLowerCase
     if(lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
       return HTML

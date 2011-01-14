@@ -15,6 +15,9 @@ import org.bowlerframework.Session
 class BowlerHttpSession(session: HttpSession) extends Session{
   def getId = session.getId
 
+  private val errors = "_bowlerValidationErrors"
+  private val lastGetName = "_bowlerLastGetUrl"
+
   def getAttributeNames: List[String] = {
     val list = new MutableList[String]
     val enum = session.getAttributeNames
@@ -39,4 +42,40 @@ class BowlerHttpSession(session: HttpSession) extends Session{
   }
 
   def getUnderlyingSession = session
+
+  def setLastGetPath(path: String) = {
+    session.setAttribute(lastGetName, path)
+  }
+
+  def getLastGetPath: Option[String] = {
+    try{
+      val lastGet = session.getAttribute(lastGetName).asInstanceOf[String]
+      if(lastGet == null || lastGet == None){
+        return None
+      }else
+        return Some(lastGet)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def removeErrors = {
+    session.removeAttribute(errors)
+  }
+
+  def getErrors: Option[List[Tuple2[String, String]]] = {
+    try{
+      val validationErrors = session.getAttribute(errors).asInstanceOf[List[Tuple2[String, String]]]
+      if(validationErrors == null || validationErrors == None){
+        return None
+      }else
+        return Some(validationErrors)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def setErrors(errors: List[(String, String)]) = {
+    session.setAttribute(this.errors, errors)
+  }
 }

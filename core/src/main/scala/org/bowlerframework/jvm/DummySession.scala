@@ -17,6 +17,9 @@ class DummySession extends Session{
   private var id = UUIDGenerator.generate
   private var attributeMap = new HashMap[String, Any]
 
+  private val errors = "_bowlerValidationErrors"
+  private val lastGetName = "_bowlerLastGetUrl"
+
 
   def getId = id
 
@@ -44,5 +47,41 @@ class DummySession extends Session{
     }catch{
       case e: NoSuchElementException => return None
     }
+  }
+
+  def setLastGetPath(path: String) = {
+    attributeMap.put(lastGetName, path)
+  }
+
+  def getLastGetPath: Option[String] = {
+    try{
+      val lastGet = attributeMap(lastGetName).asInstanceOf[String]
+      if(lastGet == null || lastGet == None){
+        return None
+      }else
+        return Some(lastGet)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def removeErrors = {
+    attributeMap.remove(errors)
+  }
+
+  def getErrors: Option[List[Tuple2[String, String]]] = {
+    try{
+      val validationErrors = attributeMap(errors).asInstanceOf[List[Tuple2[String, String]]]
+      if(validationErrors == null || validationErrors == None){
+        return None
+      }else
+        return Some(validationErrors)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def setErrors(errors: List[(String, String)]) = {
+    attributeMap.put(this.errors, errors)
   }
 }

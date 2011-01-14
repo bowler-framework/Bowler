@@ -4,6 +4,8 @@ import org.scalatest.FunSuite
 import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyRequest, DummyResponse}
 import org.bowlerframework.HTTP
+import collection.mutable.{MutableList}
+import org.bowlerframework.exception.ValidationException
 
 /**
  * Created by IntelliJ IDEA.
@@ -93,6 +95,19 @@ class JsonViewRendererTest extends FunSuite{
     assert(200 == resp.getStatus)
     val result = "{\"winner\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]},\"winners\":[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]}"
     assert(result == writer.toString)
+  }
+
+  test("render validationerrors"){
+    val list = new MutableList[Tuple2[String, String]]
+    list += Tuple2("name", "name is mandatory!")
+    list += Tuple2("age", "age must be over 18!")
+
+    val writer = new StringWriter
+    val resp = new DummyResponse(writer)
+    renderer.onError(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, new ValidationException(list.toList))
+
+    assert("[{\"key\":\"name\",\"message\":\"name is mandatory!\"},{\"key\":\"age\",\"message\":\"age must be over 18!\"}]" == resp.toString)
+
   }
 }
 case class Group(name: String, biggestWinner: Winner, winners: List[Winner])

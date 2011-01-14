@@ -9,11 +9,17 @@ import controller.Controller
 
 class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter{
 
+  var bootstrap: AnyRef = null
+
   override def initialize(config: FilterConfig): Unit = {
     super.initialize(config)
     BowlerConfigurator.setApplicationRouter(this)
     BowlerConfigurator.isServletApp = false
     println(config.getServletContext.getRealPath("WEB-INF"))
+
+    if(config.getInitParameter("bootstrapClass") != null) {
+      bootstrap = Class.forName(config.getInitParameter("bootstrapClass")).newInstance.asInstanceOf[AnyRef]
+    }
   }
 
   def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = {

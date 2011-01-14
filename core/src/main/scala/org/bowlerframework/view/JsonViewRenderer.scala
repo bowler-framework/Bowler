@@ -5,6 +5,8 @@ import net.liftweb.json.JsonAST._
 import net.liftweb.json.Extraction._
 import net.liftweb.json.Printer._
 import org.bowlerframework.model.AliasRegistry
+import org.bowlerframework.exception.{ValidationException, HttpException}
+import collection.mutable.MutableList
 
 /**
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
@@ -13,7 +15,20 @@ import org.bowlerframework.model.AliasRegistry
 class JsonViewRenderer extends ViewRenderer{
   implicit val formats = net.liftweb.json.DefaultFormats
 
-  def onError(request: Request, response: Response, exception: Exception) = null
+  def onError(request: Request, response: Response, exception: Exception) = {
+    if(classOf[HttpException].isAssignableFrom(exception.getClass)){
+      if(exception.isInstanceOf[ValidationException]){
+        val validations = exception.asInstanceOf[ValidationException]
+        val list = new MutableList[ValidationError]
+        validations.errors.foreach(f => list += ValidationError(f._1, f._2))
+        response.getWriter.write(compact(render(decompose(list.toList))))
+      }
+      val http = exception.asInstanceOf[HttpException]
+      response.sendError(http.code)
+    }else{
+      throw exception
+    }
+  }
 
   def renderView(request: Request, response: Response, models: Any*) = {
     if(models.size == 0){
@@ -41,3 +56,5 @@ class JsonViewRenderer extends ViewRenderer{
 
   private def getValue(any: Any): JValue = decompose(getModelValue(any))
 }
+
+case class ValidationError(key: String, message: String)
