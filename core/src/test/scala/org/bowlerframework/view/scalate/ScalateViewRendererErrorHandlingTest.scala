@@ -16,40 +16,37 @@ import org.bowlerframework.http.BowlerServlet
  * To change this template use File | Settings | File Templates.
  */
 
-class ScalateViewRendererErrorHandlingTest extends ScalatraFunSuite{
+class ScalateViewRendererErrorHandlingTest extends ScalatraFunSuite {
   TemplateRegistry.reset
   TemplateRegistry.appendTemplateSelectors(List(new DefaultLayoutSelector(Layout("simple"))))
 
 
-  test("send redirect errors"){
+  test("send redirect errors") {
     this.addServlet(new BowlerServlet, "/*")
     val controller = new ErrorHandlingController
-    //
-   // this.start
-   /*
-    //this.asInstanceOf
-    get("/form"){
-      assert("<div><form method=\"POST\" action=\"/post\"><input name=\"name\"/><input type=\"submit\"/></form></div>" == this.body)
+    session{
+      get("/form") {
 
-      post("/form"){
+        assert("<div><form method=\"POST\" action=\"/post\"><input name=\"name\"/><input type=\"submit\"/></form></div>" == this.body)
+      }
+      post("/form") {
         println("POST BODY: ")
-        println(body)
+        println(body) // this is empty when expecting above assert + UL/LI with error messages.
 
-        get("/form"){
-          println("ASSERT FORM: ")
-          assert("<div><form method=\"POST\" action=\"/post\"><input name=\"name\"/><input type=\"submit\"/></form></div>" == this.body)
-        }
+
+      }
+      get("/form") {
+
+        println("ASSERT FORM: ")
+        assert("<div><form method=\"POST\" action=\"/post\"><input name=\"name\"/><input type=\"submit\"/></form></div>" == this.body)
       }
     }
-    //this.stop
-
-  }    */
   }
 
 
 }
 
-class ErrorHandlingController extends Controller with Validations with Renderable{
+class ErrorHandlingController extends Controller with Validations with Renderable {
 
   get("/form")((req, resp) => {
 

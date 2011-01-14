@@ -54,6 +54,7 @@ class DefaultRequestMapper extends RequestMapper {
       val alias = AliasRegistry.getRequestAlias(typeDef)
       var hintOfName: String = nameHint
       var dealiasedRequest = getDealiasedRequest(alias, request)
+      println("DefaultRequestMapper " + alias + " " + dealiasedRequest)
 
       if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
       else {
