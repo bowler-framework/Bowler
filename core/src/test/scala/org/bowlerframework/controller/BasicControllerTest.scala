@@ -54,7 +54,7 @@ class BasicControllerTest extends ScalatraFunSuite{
             })
           }
         }
-        def renderView(request: Request, response: Response, models: Any*) = null
+        def renderView(request: Request, response: Response, models: Seq[Any]) = null
 
         def renderView(request: Request, response: Response) = null
       }

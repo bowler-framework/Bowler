@@ -14,9 +14,11 @@ trait Renderable{
 
   def render: Unit = render(RequestScope.request,RequestScope.response)
 
-  def render(models: Any*):Unit = render(RequestScope.request,RequestScope.response, models)
+  def render(models: Any*):Unit = renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
 
-  def render(request: Request, response: Response, models: Any*): Unit = {
+  def render(request: Request, response: Response, models: Any*): Unit = renderSeq(request,response, models.toSeq)
+
+  def renderSeq(request: Request, response: Response, models: Seq[Any]): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
     renderer.renderView(request, response, models)
   }

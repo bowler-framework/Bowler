@@ -20,18 +20,20 @@ class JsonViewRendererTest extends FunSuite{
   test("renderView single bean"){
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, new Winner(1, List(1,2,3,4,5,6)))
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(new Winner(1, List(1,2,3,4,5,6))))
     assert(200 == resp.getStatus)
     assert("{\"id\":1,\"numbers\":[1,2,3,4,5,6]}".equals(writer.toString))
 
   }
+
+  def toSeq(models: Any*): Seq[Any] = models.toSeq
 
   test("render view singlebean with nested"){
     val group = Group("myGroup", Winner(1, List(1,2,3,4,5,6)), List(Winner(1, List(1,2,3,4,5,6)), Winner(2, List(3,4,5,6,7,8))))
 
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, group)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(group))
     assert(200 == resp.getStatus)
     val result = "{\"name\":\"myGroup\",\"biggestWinner\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]},\"winners\":[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]}"
     assert(result == writer.toString)
@@ -42,7 +44,7 @@ class JsonViewRendererTest extends FunSuite{
     val list = List(Winner(1, List(1,2,3,4,5,6)), Winner(2, List(3,4,5,6,7,8)))
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, list)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(list))
     assert(200 == resp.getStatus)
     assert("[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]".equals(writer.toString))
   }
@@ -58,7 +60,7 @@ class JsonViewRendererTest extends FunSuite{
     val winner = ViewModel("loser", Winner(1, List(1,2,3,4,5,6)))
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, winner)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(winner))
     val result = "{\"alias\":\"loser\",\"value\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]}"
     assert(200 == resp.getStatus)
   }
@@ -68,7 +70,7 @@ class JsonViewRendererTest extends FunSuite{
     val winner = ViewModel("loser", Winner(1, List(1,2,3,4,5,6)))
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, winner, list)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(winner, list))
     assert(200 == resp.getStatus)
     val result = "{\"loser\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]},\"winners\":[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]}"
     assert(result == writer.toString)
@@ -80,7 +82,7 @@ class JsonViewRendererTest extends FunSuite{
     val winner = ViewModel("loser", Winner(1, List(1,2,3,4,5,6)))
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, winner, list)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(winner, list))
     assert(200 == resp.getStatus)
     val result = "{\"loser\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]},\"losers\":[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]}"
     assert(result == writer.toString)
@@ -91,7 +93,7 @@ class JsonViewRendererTest extends FunSuite{
     val winner = Winner(1, List(1,2,3,4,5,6))
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, winner, list)
+    renderer.renderView(new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(winner, list))
     assert(200 == resp.getStatus)
     val result = "{\"winner\":{\"id\":1,\"numbers\":[1,2,3,4,5,6]},\"winners\":[{\"id\":1,\"numbers\":[1,2,3,4,5,6]},{\"id\":2,\"numbers\":[3,4,5,6,7,8]}]}"
     assert(result == writer.toString)

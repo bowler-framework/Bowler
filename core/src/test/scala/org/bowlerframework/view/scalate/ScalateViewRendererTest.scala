@@ -18,6 +18,8 @@ class ScalateViewRendererTest extends FunSuite{
   val renderer = new ScalateViewRenderer
   //RenderEngine.reset
 
+  def toSeq(models: Any*): Seq[Any] = models.toSeq
+
 
   test("render view with simple layout"){
     TemplateRegistry.reset
@@ -28,7 +30,7 @@ class ScalateViewRendererTest extends FunSuite{
 
     val response = new DummyResponse
 
-    renderer.renderView(request, response, ViewModel("name", "Wille"))
+    renderer.renderView(request, response, toSeq(ViewModel("name", "Wille")))
     println("response: " + response.toString)
     assert("<div>Hello Wille</div>" == response.toString)
   }
@@ -42,7 +44,7 @@ class ScalateViewRendererTest extends FunSuite{
 
     val response = new DummyResponse
 
-    renderer.renderView(request, response, ViewModel("name", "Wille"))
+    renderer.renderView(request, response, toSeq(ViewModel("name", "Wille")))
     println("response: " + response.toString)
     assert("<html><head><title>Parent</title></head><body><div>Hello Wille</div></body></html>" == response.toString)
   }
@@ -56,7 +58,7 @@ class ScalateViewRendererTest extends FunSuite{
 
     val response = new DummyResponse
 
-    renderer.renderView(request, response, ViewModel("name", "Wille"))
+    renderer.renderView(request, response, toSeq(ViewModel("name", "Wille")))
     println("response: " + response.toString)
     assert("<html><head><title>/simple</title></head><body><div>Hello Wille</div></body></html>" == response.toString)
   }

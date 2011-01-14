@@ -30,7 +30,7 @@ class JsonViewRenderer extends ViewRenderer{
     }
   }
 
-  def renderView(request: Request, response: Response, models: Any*) = {
+  def renderView(request: Request, response: Response, models: Seq[Any]) = {
     if(models.size == 0){
       response.setStatus(204)
     }else if(models.size == 1){

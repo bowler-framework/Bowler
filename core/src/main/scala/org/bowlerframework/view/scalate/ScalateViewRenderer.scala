@@ -8,6 +8,7 @@ import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.{MutableList, HashMap}
 import org.bowlerframework.{HTTP, Response, Request}
 import org.bowlerframework.http.BowlerHttpSession
+import org.bowlerframework.model.ViewModelBuilder
 
 /**
  * A ViewRenderer that uses Scalate templates to render views
@@ -26,6 +27,7 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
       }else{
         val http = exception.asInstanceOf[HttpException]
         response.sendError(http.code)
+        // TODO
         // render error pages?
       }
 
@@ -34,13 +36,8 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
     }
   }
 
-  def renderView(request: Request, response: Response, models: Any*) = {
-    val model = new HashMap[String, Any]
-    models.foreach(f =>{
-      val alias = getModelAlias(f)
-      val value = getModelValue(f)
-      model.put(alias, value)
-    })
+  def renderView(request: Request, response: Response, models: Seq[Any]) = {
+    val model = ViewModelBuilder.buildModel(models)
     if(request.getSession.getErrors != None){
       val list = new MutableList[String]
       request.getSession.getErrors.get.foreach(f => list += f._2)
@@ -65,6 +62,7 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
   private def render(request: Request, response: Response, model: Map[String, Any]) ={
     response.setContentType("text/html")
+    println("viewModel: " + model)
 
     val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
     val engine = RenderEngine.getEngine

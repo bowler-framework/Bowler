@@ -11,7 +11,7 @@ trait ViewRenderer{
   /**
    * Renders a view and associated layout(s) given one or more view model objects.
    */
-  def renderView(request: Request, response: Response, models: Any*)
+  def renderView(request: Request, response: Response, models: Seq[Any])
    /**
    * Renders a view and associated layout(s) with no model objects.
    */
