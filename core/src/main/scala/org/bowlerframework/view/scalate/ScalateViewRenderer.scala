@@ -22,6 +22,7 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
       if(exception.isInstanceOf[ValidationException]){
         val validations = exception.asInstanceOf[ValidationException]
         request.getSession.setErrors(validations.errors)
+        println("Session: " + request.getSession.getId)
         if(request.getSession.getLastGetPath != None)
           response.sendRedirect(request.getSession.getLastGetPath.get)
       }else{
