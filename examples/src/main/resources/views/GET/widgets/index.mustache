@@ -1,0 +1,31 @@
+<a href="/widgets/new">Create New Widget</a>
+
+<table>
+<thead>
+<tr>
+    <th>Id</th>  <th>Name</th>   <th>Year Made</th> <th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+{{#widgets}}
+<tr>
+   <td><a href="/widgets/{{id}}">{{id}}</a></td> <td><a href="/widgets/{{id}}">{{name}}</a></td><td><a href="/widgets/{{id}}">{{yearMade}}</a></td><td><a href="/widgets/{{id}}/edit">EDIT</a></td>
+</tr>
+{{/widgets}}
+</tbody>
+</table>
+        {{alias}}
+
+ <!--           <script type="text/javascript">
+        alert("hello");
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+type:"GET",
+url: "/widgets",
+success: function(data){
+    alert("Data is string:" + data);
+}
+});
+ </script>     -->

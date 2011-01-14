@@ -1,0 +1,17 @@
+Create new Widget
+        <form method="POST" action="/widgets">
+            <ul>
+               {{#validationErrors}}
+                    <li>{{.}}</li>
+               {{/validationErrors}}
+            </ul>
+            Id<br/>
+            <input name="widget.id"/><br/>
+            Name<br/>
+            <input name="widget.name"/><br/>
+            Year Made<br/>
+            <input name="widget.yearMade"/><br/>
+            Description<br/>
+            <input name="widget.description"/><br/>
+             <input type="submit" value="Create!"/>
+        </form>
