@@ -23,7 +23,6 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
         request.getSession.setErrors(validations.errors)
         if(request.getSession.getLastGetPath != None)
           response.sendRedirect(request.getSession.getLastGetPath.get)
-        println("ERROR HTTP " + request.getMethod + " : " + request.getSession)
       }else{
         val http = exception.asInstanceOf[HttpException]
         response.sendError(http.code)
