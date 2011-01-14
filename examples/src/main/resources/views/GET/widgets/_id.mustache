@@ -1,5 +1,8 @@
 <h3>Widget</h3>
         {{#widget}}
+        <form>
+<input type="button" value="Show This View as JSON" onclick="asJson('/widgets/{{id}}')" />
+</form>
             <b>Id</b><br/>
             {{id}}<br/>
             <b>Name</b><br/>

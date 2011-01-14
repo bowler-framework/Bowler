@@ -1,20 +1,25 @@
+<form>
+<input type="button" value="Show This View as JSON" onclick="asJson('/widgets')" />
+</form>
 <a href="/widgets/new">Create New Widget</a>
 
 <table>
 <thead>
 <tr>
-    <th>Id</th>  <th>Name</th>   <th>Year Made</th> <th>&nbsp;</th>
+    <th>Id</th>  <th>Name</th>   <th>Year Made</th> <th>&nbsp;</th><th>&nbsp;</th>
 </tr>
 </thead>
 <tbody>
 {{#widgets}}
 <tr>
-   <td><a href="/widgets/{{id}}">{{id}}</a></td> <td><a href="/widgets/{{id}}">{{name}}</a></td><td><a href="/widgets/{{id}}">{{yearMade}}</a></td><td><a href="/widgets/{{id}}/edit">EDIT</a></td>
+   <td><a href="/widgets/{{id}}">{{id}}</a></td> <td><a href="/widgets/{{id}}">{{name}}</a></td><td><a href="/widgets/{{id}}">{{yearMade}}</a></td><td><a href="/widgets/{{id}}/edit">EDIT</a></td><td><form>
+<input type="button" value="Delete Widget" onclick="deleteWidget('{{id}}')" />
+</form></td>
 </tr>
 {{/widgets}}
 </tbody>
 </table>
-        {{alias}}
+
 
  <!--           <script type="text/javascript">
         alert("hello");

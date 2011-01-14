@@ -9,13 +9,12 @@ import collection.mutable.MutableList
  * Time: 18:07
  * To change this template use File | Settings | File Templates.
  */
-
-case class Widget(id: Int, var name: Option[String], var yearMade: Option[Int], var description: Option[String])
+case class Widget(id: Int, var name: String, var yearMade: Int, var description: String)
 
 object Widgets{
 
   var allWidgets = new MutableList[Widget]
-  allWidgets += Widget(1, Some("wille"), Some(1978), Some("hello world"))
+  allWidgets += Widget(1, "wille", 1978, "hello world")
 
   def findAll: List[Widget] = allWidgets.toList
 

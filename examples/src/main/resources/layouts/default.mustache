@@ -4,7 +4,35 @@
 <head>
     <title>Bowler Framework Sample Application</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+ <script type="text/javascript">
 
+     function asJson(url){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"GET",
+        url: url,
+        success: function(data){
+            alert("JSON View=" + data);
+        }
+        });
+     }
+
+     function deleteWidget(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/widgets/" + id,
+        success: function(data){
+            window.location.href = "/widgets";
+        }
+        });
+     }
+
+ </script>
 
 
 <style type="text/css" media="screen, projection">
@@ -284,7 +312,7 @@ body form textarea {
 
         <div id="footer">
 <p>
-<span wicket:id="copyrightNotice"><a href="http://www.recursivity.com" rel="nofollow">Recursivity limited</a>, Company number 5385433, England and Wales. VAT no: 872802807</span>  <br/> Copyright &copy; Recursivity limited, 2010-
+<span wicket:id="copyrightNotice">Copyright &copy; Recursivity limited, 2010-
 </p>
 </div>
 

@@ -20,21 +20,33 @@ class WidgetController extends Controller with ParameterMapper with Validations 
   // simple, no args render, just renders the root (or http 204 for JSON)
   get("/")((request, response) => render)
 
-
-  get("/widgets")((request, response) => {
+  def renderWidgets = {
     val widgets = Widgets.findAll
     if(widgets.size == 0)
       render
     else
       render(widgets)
-    println(AliasRegistry.getModelAlias(widgets))
-  })
+  }
+
+
+  get("/widgets")((request, response) => renderWidgets)
+  get("/widgets/")((request, response) => renderWidgets)
 
   get("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
       if(widget != None)
         render(widget.get)
       else render
+    })
+  }
+  )
+
+  delete("/widgets/:id")((request, response) => {
+    this.mapRequest[Option[Widget]](request)(widget => {
+      if(widget != None)
+        Widgets.delete(widget.get)
+      else
+        response.sendError(500)
     })
   }
   )
