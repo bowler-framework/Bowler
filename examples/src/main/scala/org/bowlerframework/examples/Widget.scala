@@ -14,7 +14,7 @@ case class Widget(id: Int, var name: String, var yearMade: Int, var description:
 object Widgets{
 
   var allWidgets = new MutableList[Widget]
-  allWidgets += Widget(1, "wille", 1978, "hello world")
+  allWidgets += Widget(1, "AWidget", 2011, "hello world")
 
   def findAll: List[Widget] = allWidgets.toList
 
