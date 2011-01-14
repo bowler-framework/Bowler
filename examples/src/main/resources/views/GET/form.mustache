@@ -1,0 +1,13 @@
+<form method="POST" action="/post">
+Failing form: this form always fails validation on purpose<hr/>
+<ul>
+{{#validationErrors}}
+  <li>{{.}}</li>
+{{/validationErrors}}
+</ul>
+Name<br/>
+<input name="name"/>
+<input type="submit"/>
+
+
+</form>
