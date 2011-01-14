@@ -16,7 +16,7 @@ import org.bowlerframework.http.BowlerHttpSession
 class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
   def onError(request: Request, response: Response, exception: Exception) = {
-    response.setContentType("application/xhtml+xml")
+    response.setContentType("text/html")
     if(classOf[HttpException].isAssignableFrom(exception.getClass)){
       if(exception.isInstanceOf[ValidationException]){
         val validations = exception.asInstanceOf[ValidationException]
@@ -65,7 +65,7 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
 
   private def render(request: Request, response: Response, model: Map[String, Any]) ={
-    response.setContentType("application/xhtml+xml")
+    response.setContentType("text/html")
 
     val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
     val engine = RenderEngine.getEngine
