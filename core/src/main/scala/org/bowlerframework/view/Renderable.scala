@@ -25,6 +25,6 @@ trait Renderable{
 
   def render(request: Request, response: Response): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
-    renderer.renderView(request, response)
+    renderer.renderView(request, response, List[Any]())
   }
 }

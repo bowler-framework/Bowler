@@ -2,12 +2,10 @@ package org.bowlerframework.view.scalate
 
 import org.bowlerframework.view.{ViewRenderer}
 import org.fusesource.scalate.DefaultRenderContext
-import com.recursivity.commons.StringInputStreamReader
 import java.io.{StringWriter, PrintWriter}
 import org.bowlerframework.exception.{ValidationException, HttpException}
-import collection.mutable.{MutableList, HashMap}
+import collection.mutable.{MutableList}
 import org.bowlerframework.{HTTP, Response, Request}
-import org.bowlerframework.http.BowlerHttpSession
 import org.bowlerframework.model.ViewModelBuilder
 
 /**
@@ -47,23 +45,11 @@ class ScalateViewRenderer extends ViewRenderer{
       val list = new MutableList[String]
       request.getSession.getErrors.get.foreach(f => list += f._2)
       model += "validationErrors" -> list.toList
-      request.getSession.resetValidations
     }
 
     render(request, response, model.toMap)
+    request.getSession.resetValidations
   }
-
-  def renderView(request: Request, response: Response) = {
-    val model = new HashMap[String, Any]
-    if(request.getSession.getErrors != None){
-      val list = new MutableList[String]
-      request.getSession.getErrors.get.foreach(f => list += f._2)
-      model += "validationErrors" -> list.toList
-      request.getSession.resetValidations
-    }
-    render(request, response, model.toMap)
-  }
-
 
   private def render(request: Request, response: Response, model: Map[String, Any]) ={
     response.setContentType("text/html")
@@ -95,7 +81,6 @@ class ScalateViewRenderer extends ViewRenderer{
     else{
       writer = new PrintWriter(stringWriter)
     }
-
 
     val responseContext = new DefaultRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
     responseContext.render(parent.uri, layoutModel.toMap)
