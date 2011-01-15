@@ -26,11 +26,11 @@ class DummyRequest(method: HTTP.Method, path: String, params: Map[String, Any], 
 
   def getRequestBodyAsString = body
 
-  def getBooleanParameter(name: String) = booleanTransformer.toValue(params(name).toString).asInstanceOf[Boolean]
+  def getBooleanParameter(name: String) = booleanTransformer.toValue(params(name).toString).get.asInstanceOf[Boolean]
 
-  def getLongParameter(name: String) = longTransformer.toValue(params(name).toString).asInstanceOf[Long]
+  def getLongParameter(name: String) = longTransformer.toValue(params(name).toString).get.asInstanceOf[Long]
 
-  def getIntParameter(name: String) = intTransformer.toValue(params(name).toString).asInstanceOf[Int]
+  def getIntParameter(name: String) = intTransformer.toValue(params(name).toString).get.asInstanceOf[Int]
 
   def getParameter(name: String) = params(name)
 

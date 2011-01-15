@@ -194,7 +194,7 @@ class DefaultRequestMapper extends RequestMapper {
 
   private def getValueForTransformer[T](request: HashMap[String, Any], nameHint: String, cls: Class[_]): T = {
     if (nameHint != null) {
-      val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).asInstanceOf[T]
+      val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).getOrElse(null).asInstanceOf[T]
       if (response != null && response != None) {
         request.remove(nameHint)
         return response
@@ -206,7 +206,7 @@ class DefaultRequestMapper extends RequestMapper {
       val transformer = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T])
       request.iterator.find(f => {
         try {
-          response = transformer.toValue(f._2.toString).asInstanceOf[T]
+          response = transformer.toValue(f._2.toString).getOrElse(null).asInstanceOf[T]
           if (response != null && response != None) {
             request.remove(f._1)
             return response

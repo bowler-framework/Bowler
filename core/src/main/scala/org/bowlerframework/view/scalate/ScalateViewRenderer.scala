@@ -14,7 +14,7 @@ import org.bowlerframework.model.ViewModelBuilder
  * A ViewRenderer that uses Scalate templates to render views
  */
 
-class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
+class ScalateViewRenderer extends ViewRenderer{
 
   def onError(request: Request, response: Response, exception: Exception) = {
     response.setContentType("text/html")

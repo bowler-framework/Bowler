@@ -309,12 +309,12 @@ case class MyBean(id: Long, name: String, decimal: BigDecimal)
 case class OtherMapperBean(id: Long, name: String, decimal: BigDecimal, beans: List[MyBean])
 
 
-class MyBeanTransformer extends StringValueTransformer{
-  def toValue(from: String): AnyRef ={
+class MyBeanTransformer extends StringValueTransformer[MyBean]{
+  def toValue(from: String): Option[MyBean] ={
     if(from.equals("1"))
-      MyBean(1l, "someBean", new BigDecimal(new java.math.BigDecimal("54.4")))
+      return Some(MyBean(1l, "someBean", new BigDecimal(new java.math.BigDecimal("54.4"))))
     else
-      null
+      None
   }
 }
 
