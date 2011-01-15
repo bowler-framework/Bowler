@@ -66,10 +66,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     this.mapRequest[Widget](request)(widget => {
       validate{
         val validator = new WidgetValidator(widget)
-        val failures = validator.validateAndReturnErrorMessages
-        if(failures != null && failures.size > 0)
-          Some(failures)
-        else None
+        validator.validate
       }
       Widgets.create(widget)
       response.sendRedirect("/widgets")
@@ -80,10 +77,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     this.mapRequest[Widget](request)(widget => {
       validate{
         val validator = new WidgetValidator(widget)
-        val failures = validator.validateAndReturnErrorMessages
-        if(failures != null && failures.size > 0)
-          Some(failures)
-        else None
+        validator.validate
       }
       Widgets.update(widget)
       response.sendRedirect("/widgets")
