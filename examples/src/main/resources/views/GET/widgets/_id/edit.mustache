@@ -6,8 +6,9 @@ Edit Widget
 </ul>
 {{#widget}}
 <form method="POST" action="/widgets/{{id}}">
+<input type="hidden" name="widget.id" value="{{id}}"/>
 Id<br/>
-<input name="widget.id" value="{{id}}"/><br/>
+{{id}}<br/>
 Name<br/>
 <input name="widget.name" value="{{name}}"/><br/>
 

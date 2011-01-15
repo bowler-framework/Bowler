@@ -64,14 +64,27 @@ class WidgetController extends Controller with ParameterMapper with Validations 
   post("/widgets")((request, response) =>{
     println(request.getParameterMap)
     this.mapRequest[Widget](request)(widget => {
-       Widgets.update(widget)
+      validate{
+        val validator = new WidgetValidator(widget)
+        val failures = validator.validateAndReturnErrorMessages
+        if(failures != null && failures.size > 0)
+          Some(failures)
+        else None
+      }
+      Widgets.create(widget)
       response.sendRedirect("/widgets")
     })
   })
 
   post("/widgets/:id")((request, response) => {
-
     this.mapRequest[Widget](request)(widget => {
+      validate{
+        val validator = new WidgetValidator(widget)
+        val failures = validator.validateAndReturnErrorMessages
+        if(failures != null && failures.size > 0)
+          Some(failures)
+        else None
+      }
       Widgets.update(widget)
       response.sendRedirect("/widgets")
     })

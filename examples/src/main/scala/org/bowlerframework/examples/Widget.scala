@@ -9,7 +9,7 @@ import collection.mutable.MutableList
  * Time: 18:07
  * To change this template use File | Settings | File Templates.
  */
-case class Widget(id: Int, var name: String, var yearMade: Int, var description: String)
+case class Widget(id: Long, var name: String, var yearMade: java.lang.Integer, var description: String)
 
 object Widgets{
 
@@ -18,7 +18,7 @@ object Widgets{
 
   def findAll: List[Widget] = allWidgets.toList
 
-  def find(id: Int): Option[Widget] = allWidgets.find(w => (w.id == id))
+  def find(id: Long): Option[Widget] = allWidgets.find(w => (w.id == id))
 
   def delete(widget: Widget) ={
     allWidgets = allWidgets.filter(p => (p.id != widget.id))

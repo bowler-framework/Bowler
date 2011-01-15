@@ -11,13 +11,13 @@ class Bootstrap{
 	val controller = new WidgetController
 }
 
-class WidgetTransformer extends StringValueTransformer{
-  def toValue(from: String): AnyRef = {
+class WidgetTransformer extends StringValueTransformer[Widget]{
+  def toValue(from: String): Option[Widget] = {
     val widget = Widgets.find(Integer.parseInt(from))
     if(widget == None)
-      return null
+      return None
     else
-      return widget.get
+      return widget
   }
 }
 
