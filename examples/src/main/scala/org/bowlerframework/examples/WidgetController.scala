@@ -38,8 +38,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
         render(widget.get)
       else render
     })
-  }
-  )
+  })
 
   delete("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
@@ -48,8 +47,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
       else
         response.sendError(500)
     })
-  }
-  )
+  })
 
   get("/widgets/:id/edit")((request, response) => {
     mapRequest[Option[Widget]](request)(widget => {
@@ -59,12 +57,12 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     })
   })
 
-  get ("/widgets/new")((request, response) => {render})
+  get ("/widgets/new")((request, response) => {render(Widget(0, null, null, null))})
 
   post("/widgets")((request, response) =>{
     println(request.getParameterMap)
     this.mapRequest[Widget](request)(widget => {
-      validate{
+      validate(widget){
         val validator = new WidgetValidator(widget)
         validator.validate
       }
@@ -75,7 +73,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
 
   post("/widgets/:id")((request, response) => {
     this.mapRequest[Widget](request)(widget => {
-      validate{
+      validate(widget){
         val validator = new WidgetValidator(widget)
         validator.validate
       }
