@@ -22,7 +22,6 @@ class ScalateViewRenderer extends ViewRenderer{
       if(exception.isInstanceOf[ValidationException]){
         val validations = exception.asInstanceOf[ValidationException]
         request.getSession.setErrors(validations.errors)
-        println("Session: " + request.getSession.getId)
         if(request.getSession.getLastGetPath != None)
           response.sendRedirect(request.getSession.getLastGetPath.get)
       }else{
@@ -38,12 +37,17 @@ class ScalateViewRenderer extends ViewRenderer{
   }
 
   def renderView(request: Request, response: Response, models: Seq[Any]) = {
-    val model = ViewModelBuilder.buildModel(models)
+    val validated = request.getSession.getValidatedModel
+    var tempModel = models
+    if(validated != None && validated.get.size > 0)
+      tempModel = tempModel ++ validated.get
+
+    val model = ViewModelBuilder.buildModel(tempModel)
     if(request.getSession.getErrors != None){
       val list = new MutableList[String]
       request.getSession.getErrors.get.foreach(f => list += f._2)
       model += "validationErrors" -> list.toList
-      request.getSession.removeErrors
+      request.getSession.resetValidations
     }
 
     render(request, response, model.toMap)
@@ -55,7 +59,7 @@ class ScalateViewRenderer extends ViewRenderer{
       val list = new MutableList[String]
       request.getSession.getErrors.get.foreach(f => list += f._2)
       model += "validationErrors" -> list.toList
-      request.getSession.removeErrors
+      request.getSession.resetValidations
     }
     render(request, response, model.toMap)
   }
@@ -63,7 +67,6 @@ class ScalateViewRenderer extends ViewRenderer{
 
   private def render(request: Request, response: Response, model: Map[String, Any]) ={
     response.setContentType("text/html")
-    println("Session: " + request.getSession.getId)
 
     val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
     val engine = RenderEngine.getEngine

@@ -19,6 +19,7 @@ class DummySession extends Session{
 
   private val errors = "_bowlerValidationErrors"
   private val lastGetName = "_bowlerLastGetUrl"
+  private val validationModel = "_bowlerValidationModel"
 
 
   def getId = id
@@ -65,8 +66,10 @@ class DummySession extends Session{
     }
   }
 
-  def removeErrors = {
+  def resetValidations = {
     attributeMap.remove(errors)
+    attributeMap.remove(validationModel)
+
   }
 
   def getErrors: Option[List[Tuple2[String, String]]] = {
@@ -84,4 +87,18 @@ class DummySession extends Session{
   def setErrors(errors: List[(String, String)]) = {
     attributeMap.put(this.errors, errors)
   }
+
+  def getValidatedModel: Option[Seq[Any]] = {
+    try{
+      val model = attributeMap(validationModel).asInstanceOf[Seq[Any]]
+      if(model == null || model == None){
+        return None
+      }else
+        return Some(model)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def setValidationModel(model: Seq[Any]) = attributeMap += validationModel -> model
 }

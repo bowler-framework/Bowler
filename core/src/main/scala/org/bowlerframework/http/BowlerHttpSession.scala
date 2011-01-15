@@ -17,6 +17,7 @@ class BowlerHttpSession(session: HttpSession) extends Session{
 
   private val errors = "_bowlerValidationErrors"
   private val lastGetName = "_bowlerLastGetUrl"
+  private val validationModel = "_bowlerValidationModel"
 
   def getAttributeNames: List[String] = {
     val list = new MutableList[String]
@@ -59,8 +60,9 @@ class BowlerHttpSession(session: HttpSession) extends Session{
     }
   }
 
-  def removeErrors = {
+  def resetValidations = {
     session.removeAttribute(errors)
+    session.removeAttribute(validationModel)
   }
 
   def getErrors: Option[List[Tuple2[String, String]]] = {
@@ -77,5 +79,22 @@ class BowlerHttpSession(session: HttpSession) extends Session{
 
   def setErrors(errors: List[(String, String)]) = {
     session.setAttribute(this.errors, errors)
+  }
+
+  def getValidatedModel: Option[Seq[Any]] = {
+    try{
+      val models = session.getAttribute(validationModel).asInstanceOf[Seq[Any]]
+      if(models == null || models == None){
+        return None
+      }else
+        return Some(models)
+    }catch{
+      case e: NoSuchElementException => return None
+    }
+  }
+
+  def setValidationModel(model: Seq[Any]) = {
+    session.setAttribute(validationModel, model)
+    println("session set: " + model)
   }
 }

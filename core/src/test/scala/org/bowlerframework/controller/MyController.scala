@@ -24,7 +24,7 @@ class MyController extends Controller with Validations{
   // handles HTTP POST to "/somePost"
   post("/somePost")((request, response) => {
 
-    validate{
+    validate(None){
       if(RequestScope.request.getParameterNames.exists(p => p.equals("name")))
         None
       else{

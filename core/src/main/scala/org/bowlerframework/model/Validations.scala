@@ -1,6 +1,7 @@
 package org.bowlerframework.model
 
 import org.bowlerframework.exception.ValidationException
+import org.bowlerframework.RequestScope._
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,11 +18,14 @@ trait Validations{
    * - having the closure/passed function return None                         <br/>
    * - Or having the Some(List[Tuple2[String,String]]) have an empty list<br/>
    * Validation failure runs the onValidationErrors function and terminates processing of the request. <br/>
-   * List should be in the format of key -> message, ie key of property that failed validation and message to be shown to client.
+   * List should be in the format of key -> message, ie key of property that failed validation and message to be shown to client. <br/><br/>
+   *
    */
-  def validate(function: => Option[List[Tuple2[String, String]]]){
+  def validate(toValidate: Any*)(function: => Option[List[Tuple2[String, String]]]){
+    request.getSession.resetValidations
     val errors = function
     if(!None.equals(errors) && errors.get.size > 0){
+      request.getSession.setValidationModel(toValidate.toSeq)
       throw new ValidationException(errors.get)
     }
   }

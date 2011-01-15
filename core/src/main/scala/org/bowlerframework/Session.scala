@@ -19,8 +19,12 @@ trait Session{
 
   def setErrors(errors: List[Tuple2[String, String]])
   def getErrors: Option[List[Tuple2[String, String]]]
-  def removeErrors
+  def resetValidations
 
   def getLastGetPath: Option[String]
   def setLastGetPath(path: String)
+
+  def setValidationModel(model: Seq[Any])
+  def getValidatedModel: Option[Seq[Any]]
+
 }
