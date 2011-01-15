@@ -63,7 +63,6 @@ class ScalateViewRenderer extends ViewRenderer with StringInputStreamReader{
 
   private def render(request: Request, response: Response, model: Map[String, Any]) ={
     response.setContentType("text/html")
-    println("viewModel: " + model)
     println("Session: " + request.getSession.getId)
 
     val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
