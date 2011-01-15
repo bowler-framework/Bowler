@@ -79,6 +79,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
         val validator = new WidgetValidator(widget)
         validator.validate
       }
+      println("update")
       Widgets.update(widget)
       response.sendRedirect("/widgets")
     })

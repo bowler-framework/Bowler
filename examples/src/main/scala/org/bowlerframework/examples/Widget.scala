@@ -18,7 +18,13 @@ object Widgets{
 
   def findAll: List[Widget] = allWidgets.toList
 
-  def find(id: Long): Option[Widget] = allWidgets.find(w => (w.id == id))
+  def find(id: Long): Option[Widget] = {
+    val w = allWidgets.find(w => (w.id == id))
+    if(w != None){
+      val widget = Widget(w.get.id, w.get.name, w.get.yearMade, w.get.description)
+      return Some(widget)
+    }else return w
+  }
 
   def delete(widget: Widget) ={
     allWidgets = allWidgets.filter(p => (p.id != widget.id))
