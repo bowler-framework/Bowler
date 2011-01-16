@@ -1,1 +1,0 @@
-Core project for Bowler
