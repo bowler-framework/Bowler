@@ -1,18 +1,17 @@
 package org.bowlerframework.examples
 
-import collection.mutable.MutableList
 import org.bowlerframework.controller.Controller
-import com.recursivity.commons.bean.{TransformerRegistry, StringValueTransformer}
-import org.bowlerframework.model.{AliasRegistry, ParameterMapper, Validations}
-import org.bowlerframework.view.{ViewModel, Renderable}
-import com.recursivity.commons.validator.Validator
+import org.bowlerframework.model.{ ParameterMapper, Validations}
+import org.bowlerframework.view.{Renderable}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/01/2011
- * Time: 18:05
- * To change this template use File | Settings | File Templates.
+ * Our main application controller, showing a simple CRUD interface.
+ *
+ * extends:
+ * - Controller: used to construct routes and deal with them by providing functions that respond to routes.
+ * - ParameterMapper: takes a request and maps any values into beans or other objects.
+ * - Validations: validation enables the Controller
+ * - Renderable: allows you to render View Model objects.
  */
 
 class WidgetController extends Controller with ParameterMapper with Validations with Renderable {
@@ -29,10 +28,14 @@ class WidgetController extends Controller with ParameterMapper with Validations 
       render(widgets)
   }
 
-
+  // renders the base routes
   get("/widgets")((request, response) => renderWidgets)
   get("/widgets/")((request, response) => renderWidgets)
+  get("/composable")((request, response) => renderWidgets)
+  get("/composable/")((request, response) => renderWidgets)
 
+
+  // responds to GET with a named parameter (:id becomes named to id)
   get("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
       if(widget != None)
@@ -41,6 +44,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     })
   })
 
+  // responds to HTTP DELETE with named param
   delete("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
       if(widget != None)
@@ -50,6 +54,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     })
   })
 
+  // retrieves an edit form for a widget that lets you edit a pre-existing widget.
   get("/widgets/:id/edit")((request, response) => {
     mapRequest[Option[Widget]](request)(widget => {
       if(widget != None)
@@ -58,21 +63,30 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     })
   })
 
+  // form for creating a new Widget - passes in a new, empty widget to be filled out.
   get ("/widgets/new")((request, response) => {render(Widget(0, null, null, null))})
 
+  // HTTP POST for creating new Widgets.
   post("/widgets")((request, response) =>{
-    println(request.getParameterMap)
+
+    // Map the request into the resulting Widget..
     this.mapRequest[Widget](request)(widget => {
+
+      // validate the Widget, pass the widget as a param, so the validation error functionality knows which object
+      // failed validation, IF it fails.
       validate(widget){
         val validator = new WidgetValidator(widget)
         validator.add(new UniqueValidator({widget.id}))
         validator.validate
       }
       Widgets.create(widget)
+      // send a redirect to the base page.
       response.sendRedirect("/widgets")
     })
   })
 
+
+  // similar to the above POST, but for updating existing widgets.
   post("/widgets/:id")((request, response) => {
     this.mapRequest[Widget](request)(widget => {
       validate(widget){

@@ -4,14 +4,12 @@ import com.recursivity.commons.validator._
 import org.bowlerframework.model.DefaultModelValidator
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 15/01/2011
- * Time: 01:25
- * To change this template use File | Settings | File Templates.
+ * Validates a widget - requires a .properties file on the classpath with the same package and class as this class.
  */
 
 class WidgetValidator(widget: Widget) extends DefaultModelValidator(classOf[WidgetValidator]) {
+
+  // adding individual field validators. The string key is the key used to lookup the property name for the error message.
   this.add(new NotNullOrNoneValidator("name", {
     widget.name
   }))
@@ -45,6 +43,9 @@ class WidgetValidator(widget: Widget) extends DefaultModelValidator(classOf[Widg
 
 }
 
+/**
+ * Checks uniqueness of a Widget for create
+ */
 class UniqueValidator(func: => Long) extends Validator {
   def getKey = "id"
 

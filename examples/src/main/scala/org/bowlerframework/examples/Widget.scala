@@ -3,14 +3,13 @@ package org.bowlerframework.examples
 import collection.mutable.MutableList
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/01/2011
- * Time: 18:07
- * To change this template use File | Settings | File Templates.
+ * Just a simple bean/value object that gets "persisted" (well, not really) by the Widgets service
  */
 case class Widget(id: Long, var name: String, var yearMade: java.lang.Integer, var description: String)
 
+/**
+ * Dumb CRUD service for Widget's
+ */
 object Widgets{
 
   var allWidgets = new MutableList[Widget]
