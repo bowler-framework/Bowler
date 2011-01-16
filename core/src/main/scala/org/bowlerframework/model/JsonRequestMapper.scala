@@ -5,11 +5,7 @@ import net.liftweb.json.JsonParser._
 import com.recursivity.commons.bean.GenericsParser
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 21/12/2010
- * Time: 22:13
- * To change this layout use File | Settings | File Templates.
+ * RequestMapper for JSON requests.
  */
 
 class JsonRequestMapper extends RequestMapper {

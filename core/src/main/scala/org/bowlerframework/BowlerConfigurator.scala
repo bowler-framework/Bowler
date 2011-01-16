@@ -6,11 +6,7 @@ import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
 import reflect.BeanProperty
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: Dec 9, 2010
- * Time: 11:30:58 PM
- * To change this layout use File | Settings | File Templates.
+ * Kind of the "hub"/centre point for all things configuration within Bowler.
  */
 
 object BowlerConfigurator extends ApplicationRouter {

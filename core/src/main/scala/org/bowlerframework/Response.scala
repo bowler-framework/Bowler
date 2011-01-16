@@ -3,11 +3,7 @@ package org.bowlerframework
 import java.io.{PrintWriter, OutputStream}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 23:57
- * To change this layout use File | Settings | File Templates.
+ * Analogous to HTTPServletResponse, but used to indirect from Servlet API (other HTTP environments and testing).
  */
 
 trait Response{

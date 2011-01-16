@@ -4,11 +4,8 @@ import util.matching.Regex
 import org.bowlerframework.{BowlerConfigurator, Request, Response}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 19/12/2010
- * Time: 21:20
- * To change this layout use File | Settings | File Templates.
+ * Controller type that allows you to define a function to be used "around" request-response cycles. Useful for instance
+ * in having transactional tx.start, tx.commit and tx.rollback type functionality.
  */
 
 trait InterceptingController extends Controller{

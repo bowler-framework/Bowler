@@ -3,11 +3,7 @@ package org.bowlerframework
 import http.BowlerHttpRequest
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 16/12/2010
- * Time: 22:28
- * To change this layout use File | Settings | File Templates.
+ * Useful HTTP utilities.
  */
 
 object HTTP extends Enumeration{
@@ -28,6 +24,10 @@ object HTTP extends Enumeration{
       return "/"
   }
 
+  /**
+   * maps an app uri to a perfect relative URI, for instance if the app and/or servlet context is /app, and the uri within the app is
+   * /myUri, this will return /app/myUri, given /myUri as an arg.
+   */
   def relativeUrl(uri: String): String = {
     if(uri.startsWith("/"))
       return basePath + uri.substring(1)

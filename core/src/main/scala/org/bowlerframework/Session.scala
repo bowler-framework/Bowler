@@ -1,11 +1,7 @@
 package org.bowlerframework
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 00:06
- * To change this layout use File | Settings | File Templates.
+ * Base session abstraction for Bowler
  */
 
 trait Session{

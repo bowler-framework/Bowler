@@ -3,11 +3,7 @@ package org.bowlerframework
 import model.RequestMapper
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 25/12/2010
- * Time: 00:01
- * To change this layout use File | Settings | File Templates.
+ * Choses a strategy for mapping Requests.
  */
 
 trait RequestMappingStrategy{

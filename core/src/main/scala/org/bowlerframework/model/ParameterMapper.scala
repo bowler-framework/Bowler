@@ -4,11 +4,11 @@ package org.bowlerframework.model
 import org.bowlerframework.{BowlerConfigurator, Request}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 12/12/2010
- * Time: 23:42
- * To change this layout use File | Settings | File Templates.
+ * Maps from a Request into any number of object types (limited to 12) IF a mapping can be resolved.
+ *
+ * To give the mapper a hint, you may prefix request parameters with the alias of the object type you want them mapped into,
+ * for instance: myBean.id for the id of an object of type MyBean (if no other alias has been registered).
+ *
  */
 
 trait ParameterMapper {

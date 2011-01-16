@@ -23,7 +23,7 @@ class ScalateViewRendererTest extends FunSuite{
 
   test("render view with simple layout"){
     TemplateRegistry.reset
-    TemplateRegistry.appendTemplateSelectors(List(new DefaultLayoutSelector(Layout("simple"))))
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple"))))
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -37,7 +37,7 @@ class ScalateViewRendererTest extends FunSuite{
 
   test("render view with nested layout"){
     TemplateRegistry.reset
-    TemplateRegistry.appendTemplateSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent"))))))
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent"))))))
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -51,7 +51,7 @@ class ScalateViewRendererTest extends FunSuite{
 
   test("render view with nested layout, where parent renders other child layouts"){
     TemplateRegistry.reset
-    TemplateRegistry.appendTemplateSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))))
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))))
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))

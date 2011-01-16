@@ -4,11 +4,8 @@ import model.{RequestMapper, JsonRequestMapper, DefaultRequestMapper}
 import collection.mutable.HashMap
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 25/12/2010
- * Time: 00:06
- * To change this layout use File | Settings | File Templates.
+ * A default RequestMappingStrategy that will use a default HTTP Request mapper, or a JSON based mapper if the
+ * Content-Type header of "application/json" is passed.
  */
 
 class DefaultRequestMappingStrategy extends RequestMappingStrategy {

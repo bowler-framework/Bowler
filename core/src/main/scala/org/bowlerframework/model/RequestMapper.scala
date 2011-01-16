@@ -3,11 +3,7 @@ package org.bowlerframework.model
 import org.bowlerframework.Request
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 21/12/2010
- * Time: 21:55
- * To change this layout use File | Settings | File Templates.
+ * Maps a single value from a request, for instance mapping a bean from a request.
  */
 
 trait RequestMapper{

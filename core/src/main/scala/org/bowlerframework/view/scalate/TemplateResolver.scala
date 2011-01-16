@@ -32,7 +32,6 @@ trait TemplateResolver{
       } catch {
         case e: IOException => {} // do nothing, continue to normal execution path
       }
-
     }
 
     if (!TemplateRegistry.rootViewPackageOrFolder.endsWith("/"))

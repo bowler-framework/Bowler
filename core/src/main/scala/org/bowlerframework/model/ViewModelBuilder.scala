@@ -4,11 +4,7 @@ import org.bowlerframework.view.{ViewModel, ViewRenderer}
 import collection.mutable.{WrappedArray, HashMap}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/01/2011
- * Time: 19:50
- * To change this template use File | Settings | File Templates.
+ * Used internally to map from a Seq of view models into something useful for Scalate.
  */
 
 object ViewModelBuilder{

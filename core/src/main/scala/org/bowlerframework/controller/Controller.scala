@@ -4,11 +4,7 @@ import util.matching.Regex
 import org.bowlerframework._
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 15/12/2010
- * Time: 19:17
- * To change this layout use File | Settings | File Templates.
+ * Base Controller trait to be extended. Used to define traits.
  */
 
 trait Controller {

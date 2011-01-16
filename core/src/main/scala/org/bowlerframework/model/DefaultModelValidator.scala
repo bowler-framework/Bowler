@@ -3,11 +3,7 @@ package org.bowlerframework.model
 import com.recursivity.commons.validator.{ClasspathMessageResolver, ValidationGroup}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 15/01/2011
- * Time: 23:08
- * To change this template use File | Settings | File Templates.
+ * Default helper class for dealing with validations (built on the validations with localisation support in <a href="http://github.com/wfaler/recursivity-commons">Recursivity Commons</a>
  */
 
 class DefaultModelValidator(messageBundleContext: Class[_]) extends ValidationGroup(new ClasspathMessageResolver(messageBundleContext)) with ModelValidator{

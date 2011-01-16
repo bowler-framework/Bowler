@@ -8,11 +8,7 @@ import collection.TraversableLike
 import collection.mutable.{MutableList, HashMap}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 21/12/2010
- * Time: 21:57
- * To change this layout use File | Settings | File Templates.
+ * Mapps a single value from a request, for instance a bean from a request.
  */
 
 class DefaultRequestMapper extends RequestMapper {

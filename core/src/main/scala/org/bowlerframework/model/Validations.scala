@@ -4,11 +4,7 @@ import org.bowlerframework.exception.ValidationException
 import org.bowlerframework.RequestScope._
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 15/12/2010
- * Time: 21:57
- * To change this layout use File | Settings | File Templates.
+ * trait to use to enable the validate(mybean){} validation block
  */
 
 trait Validations{
@@ -19,6 +15,9 @@ trait Validations{
    * - Or having the Some(List[Tuple2[String,String]]) have an empty list<br/>
    * Validation failure runs the onValidationErrors function and terminates processing of the request. <br/>
    * List should be in the format of key -> message, ie key of property that failed validation and message to be shown to client. <br/><br/>
+   *
+   * The varargs are there to give the validation error handling cycle a hint on which objects may have validation errors and so that state
+   * can be retained in forms on validation errors.
    *
    */
   def validate(toValidate: Any*)(function: => Option[List[Tuple2[String, String]]]){

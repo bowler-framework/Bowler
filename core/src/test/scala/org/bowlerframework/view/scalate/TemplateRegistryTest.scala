@@ -18,7 +18,7 @@ class TemplateRegistryTest extends FunSuite{
 
   TemplateRegistry.reset
 
-  TemplateRegistry.appendTemplateSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), HTTP.POST, new Regex("^.*/hello/.*$")),
+  TemplateRegistry.appendLayoutSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), HTTP.POST, new Regex("^.*/hello/.*$")),
     new UriLayoutSelector(Layout("uri"), new Regex("^.*/hello/.*$")), new DefaultLayoutSelector(Layout("default"))))
 
   TemplateRegistry.appendSuffixSelectors(List(new UriAndMethodSuffixSelector("uriAndMethod", HTTP.POST, new Regex("^.*/hello/.*$")),

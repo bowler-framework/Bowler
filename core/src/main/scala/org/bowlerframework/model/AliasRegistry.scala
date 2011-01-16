@@ -5,11 +5,7 @@ import collection.TraversableLike
 import com.recursivity.commons.bean.{GenericsParser, GenericTypeDefinition}
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 22/12/2010
- * Time: 23:11
- * To change this layout use File | Settings | File Templates.
+ * Used to work out aliases for objects to use in templates. Defaults to className for a class of com.mycompany.ClassName if no other name is registered.
  */
 
 object AliasRegistry{
