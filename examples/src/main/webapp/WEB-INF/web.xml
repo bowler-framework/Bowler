@@ -26,18 +26,18 @@
 
   <display-name>Bowler Sample</display-name>
 
-  <servlet>
-    <servlet-name>SampleServlet</servlet-name>
-    <servlet-class>org.bowlerframework.http.BowlerServlet</servlet-class>
-    <init-param>
-            <param-name>bootstrapClass</param-name>
-            <param-value>org.bowlerframework.examples.Bootstrap</param-value>
-    </init-param>
-  </servlet>
+    <filter>
+		<filter-name>examples</filter-name>
+ 		<filter-class>org.bowlerframework.http.BowlerFilter</filter-class>
+		<init-param>
+			<param-name>bootstrapClass</param-name>
+			<param-value>org.bowlerframework.examples.Bootstrap</param-value>
+ 		</init-param>
+ 	</filter>
 
-  <servlet-mapping>
-    <servlet-name>SampleServlet</servlet-name>
-    <url-pattern>/*</url-pattern>
-  </servlet-mapping>
+ <filter-mapping>
+  <filter-name>examples</filter-name>
+	<url-pattern>/*</url-pattern>
+ </filter-mapping>
 
 </web-app>
