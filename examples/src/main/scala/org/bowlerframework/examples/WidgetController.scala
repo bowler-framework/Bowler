@@ -5,6 +5,7 @@ import org.bowlerframework.controller.Controller
 import com.recursivity.commons.bean.{TransformerRegistry, StringValueTransformer}
 import org.bowlerframework.model.{AliasRegistry, ParameterMapper, Validations}
 import org.bowlerframework.view.{ViewModel, Renderable}
+import com.recursivity.commons.validator.Validator
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,6 +65,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
     this.mapRequest[Widget](request)(widget => {
       validate(widget){
         val validator = new WidgetValidator(widget)
+        validator.add(new UniqueValidator({widget.id}))
         validator.validate
       }
       Widgets.create(widget)
