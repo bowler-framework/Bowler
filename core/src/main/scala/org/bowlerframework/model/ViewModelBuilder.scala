@@ -35,8 +35,15 @@ object ViewModelBuilder{
       return model.asInstanceOf[ViewModel].alias
     else if(model.isInstanceOf[Tuple2[String, _]])
       return model.asInstanceOf[Tuple2[String, _]]._1
-    else
-      return AliasRegistry.getModelAlias(model).get
+    else{
+      if(model != None){
+        val alias = AliasRegistry.getModelAlias(model)
+        if(alias != None)
+          return alias.get
+        else return ""
+
+      } else return ""
+    }
   }
 
   private def getModelValue(model: Any): Any = {

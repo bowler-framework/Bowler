@@ -35,11 +35,11 @@ object TemplateRegistry{
 
   private var layoutSelectors = new MutableList[LayoutSelector]()
 
-  def appendLayoutSelectors(selectors: List[LayoutSelector]) = selectors.foreach(f => {layoutSelectors += f})
+  def appendLayoutSelectors(selectors: List[_ <: LayoutSelector]) = selectors.foreach(f => {layoutSelectors += f})
 
   def appendLayoutSelector(selector: LayoutSelector) = {layoutSelectors += selector}
 
-  def appendSuffixSelectors(selectors: List[TemplateSuffixSelector]) = selectors.foreach(f => {suffixSelectors += f})
+  def appendSuffixSelectors(selectors: List[_ <: TemplateSuffixSelector]) = selectors.foreach(f => {suffixSelectors += f})
 
   def appendSuffixSelector(selector: TemplateSuffixSelector) = {suffixSelectors += selector}
 

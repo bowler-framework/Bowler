@@ -111,6 +111,7 @@ class JsonViewRendererTest extends FunSuite{
     assert("[{\"key\":\"name\",\"message\":\"name is mandatory!\"},{\"key\":\"age\",\"message\":\"age must be over 18!\"}]" == resp.toString)
 
   }
+
 }
 case class Group(name: String, biggestWinner: Winner, winners: List[Winner])
 case class Winner(id: Long, numbers: List[Int])
