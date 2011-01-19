@@ -4,6 +4,7 @@ import org.fusesource.scalate.DefaultRenderContext
 import org.scalatest.FunSuite
 import org.fusesource.scalate.util.{FileResourceLoader, Resource}
 import java.io.{StringWriter, PrintWriter}
+//import org.bowlerframework.view.scalate.BowlerRenderContext._
 
 /**
  * Created by IntelliJ IDEA.
@@ -98,6 +99,36 @@ class ScalateRenderEngineTest extends FunSuite{
     context.render(uri, model)
     assert("hello wille" == writer.toString)
     RenderEngine.reset
+  }
+
+  test("request Context"){
+    val model = Map("greet" -> "hello")
+    val engine = RenderEngine.getEngine
+    val uri =  "requestContext.mustache"
+    var greet = "some greet"
+
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = {
+        if(!uri.contains("link:/greet"))
+          Some(Resource.fromText(uri, "Greet is: {{>link:/greet}}"))
+        else {
+          greet = BowlerRenderContext.modelContext("greet").asInstanceOf[String]
+          Some(Resource.fromText(uri, greet))
+        }
+      }
+    }
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new BowlerRenderContext(uri, engine, pw)
+
+    context.render(uri, model)
+    println(writer.toString)
+    assert(writer.toString.equals("Greet is: hello"))
+    //println("greet")
+    assert(greet == "hello")
+    RenderEngine.reset
+
+
   }
 
 }
