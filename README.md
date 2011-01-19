@@ -2,7 +2,7 @@
 A RESTful, multi-channel ready web framework in Scala with a functional flavour, built on top of [Scalatra](http://www.scalatra.org/) and [Scalate](http://scalate.fusesource.org/), with [Lift-JSON](https://github.com/lift/lift/tree/master/framework/lift-base/lift-json/) doing the heavy JSON lifting.
 The project is built with [Simple Build Tool ("sbt")](http://code.google.com/p/simple-build-tool/)- we intend to further add custom sbt processors in the future to automate boilerplate tasks.
 
-Apologies for the sparse documentation, there is more documentation to come soon!
+More documentation and setup details are available on the [project website](http://bowlerframework.org)
 
 ## Design Goals (some of them)
 * RESTfulness - being true to RESTful principles and the intent of the HTTP protocol.
