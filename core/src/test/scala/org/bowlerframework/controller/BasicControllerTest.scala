@@ -4,10 +4,10 @@ package org.bowlerframework.controller
 import org.scalatra.test.scalatest.ScalatraFunSuite
 import org.bowlerframework.http.BowlerFilter
 import util.matching.Regex
-import org.bowlerframework.view.{ViewRenderer, RenderStrategy}
 import org.bowlerframework.{Response, Request, BowlerConfigurator, RequestScope}
 
 import org.bowlerframework.exception.ValidationException
+import org.bowlerframework.view.{DefaultRenderStrategy, ViewRenderer, RenderStrategy}
 
 /**
  * Created by IntelliJ IDEA.
@@ -65,6 +65,8 @@ class BasicControllerTest extends ScalatraFunSuite{
       assert(!controller.responseString.equals("success!"))
       assert(this.response.getContent.equals("name:Name is a required parameter!"))
     }
+
+    BowlerConfigurator.setRenderStrategy(new DefaultRenderStrategy)
   }
 
 }

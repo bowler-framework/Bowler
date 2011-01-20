@@ -1,7 +1,6 @@
 package org.bowlerframework.view.scalate
 
 import org.bowlerframework.view.{ViewRenderer}
-import org.fusesource.scalate.DefaultRenderContext
 import java.io.{StringWriter, PrintWriter}
 import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.{MutableList}
@@ -58,7 +57,7 @@ class ScalateViewRenderer extends ViewRenderer{
     val engine = RenderEngine.getEngine
     val writer = new StringWriter
     val pw = new PrintWriter(writer)
-    val context = new DefaultRenderContext(view.uri, engine, pw)
+    val context = new BowlerRenderContext(view.uri, engine, pw)
     context.render(view.uri, model)
     val viewValue = writer.toString
     val layout = TemplateRegistry.getLayout(request)
@@ -82,7 +81,7 @@ class ScalateViewRenderer extends ViewRenderer{
       writer = new PrintWriter(stringWriter)
     }
 
-    val responseContext = new DefaultRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
+    val responseContext = new BowlerRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
     responseContext.render(parent.uri, layoutModel.toMap)
     if(layout.parentLayout != None)
       renderLayout(layout.parentLayout.get, request, response, viewModel, stringWriter.toString)

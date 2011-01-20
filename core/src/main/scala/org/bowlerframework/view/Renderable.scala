@@ -14,7 +14,9 @@ trait Renderable{
 
   def render: Unit = render(RequestScope.request,RequestScope.response)
 
-  def render(models: Any*):Unit = renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
+  def render(models: Any*):Unit ={
+    renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
+  }
 
   def render(request: Request, response: Response, models: Any*): Unit = renderSeq(request,response, models.toSeq)
 

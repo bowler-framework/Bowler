@@ -27,14 +27,29 @@ class RenderableTest extends FunSuite with Renderable{
     assert("[]" == resp.toString)
   }
 
+  test("non-empty seq JSON"){
+    val request = makeJsonRequest("/simple")
+    request.setMappedPath(new MappedPath("/simple", false))
+    val resp = makeResponse
+    this.render(request, resp, List("hello"))
+    assert("[\"hello\"]" == resp.toString)
+  }
+
   test("empty seq HTML"){
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
     this.render(request, resp, List[Any]())
-    println(resp.toString)
     assert(resp.toString.contains("Where's the list? Hello"))
 
+  }
+
+  test("render 204 JSON"){
+    val request = makeJsonRequest("/simple")
+    request.setMappedPath(new MappedPath("/simple", false))
+    val resp = makeResponse
+    this.render(request, resp)
+    assert(resp.getStatus == 204)
   }
 
 
