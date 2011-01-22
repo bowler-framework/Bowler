@@ -1,7 +1,7 @@
 package org.bowlerframework.model
 
 import org.scalatest.FunSuite
-import com.recursivity.commons.validator.{MinIntValidator, MaxIntValidator}
+import com.recursivity.commons.validator.{MinInt, MaxInt, MinIntValidator, MaxIntValidator}
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,8 +15,8 @@ class DefaultModelValidatorTest extends FunSuite{
   test("test validation failure"){
     val validator = new DefaultModelValidator(this.getClass)
 
-    validator.add(new MaxIntValidator("integer", 4, {5}))
-    validator.add(new MinIntValidator("integer", 6, {5}))
+    validator.add(MaxInt("integer", 4, {5}))
+    validator.add(MinInt("integer", 6, {5}))
 
     val errors = validator.validate
     assert(errors != None)
@@ -32,8 +32,8 @@ class DefaultModelValidatorTest extends FunSuite{
   test("validation success"){
     val validator = new DefaultModelValidator(this.getClass)
 
-    validator.add(new MaxIntValidator("integer", 7, {5}))
-    validator.add(new MinIntValidator("integer", 3, {5}))
+    validator.add(MaxInt("integer", 7, {5}))
+    validator.add(MinInt("integer", 3, {5}))
 
     val errors = validator.validate
     assert(errors == None)
