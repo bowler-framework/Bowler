@@ -50,7 +50,11 @@ object TemplateRegistry{
     pathTemplateOverrides = new HashMap[String, String]
   }
 
-  def getLayout(request: Request) = layoutSelectors.find(p => {p.find(request) != None}).get.find(request).get
+  def getLayout(request: Request): Option[Layout] = {
+    val selector = layoutSelectors.find(p => {p.find(request) != None})
+    if(selector == None) return None
+    else return selector.get.find(request)
+  }
 
   def getSuffixes(request: Request): List[String] = suffixSelectors.filter(p => {p.find(request) != None}).map(f => {f.find(request).get}).toList
 

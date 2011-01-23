@@ -61,7 +61,10 @@ class ScalateViewRenderer extends ViewRenderer{
     context.render(view.uri, model)
     val viewValue = writer.toString
     val layout = TemplateRegistry.getLayout(request)
-    renderLayout(layout, request, response, model, viewValue)
+    if(layout != None)
+      renderLayout(layout.get, request, response, model, viewValue)
+    else
+      response.getWriter.write(viewValue)
 
     if(request.getMethod == HTTP.GET){
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))

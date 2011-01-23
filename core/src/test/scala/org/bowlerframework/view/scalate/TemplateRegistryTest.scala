@@ -25,15 +25,15 @@ class TemplateRegistryTest extends FunSuite{
     new UriSuffixSelector("uri", new Regex("^.*/hello/.*$"))))
 
   test("get default layout"){
-    assert("default" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).name)
+    assert("default" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).get.name)
   }
 
   test("get URI specific layout"){
-    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/hello/", Map(), null)).name)
+    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/hello/", Map(), null)).get.name)
   }
 
   test("get URI AND Method specific layout"){
-    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(HTTP.POST, "/hello/", Map(), null)).name)
+    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(HTTP.POST, "/hello/", Map(), null)).get.name)
   }
 
   test("get 2 suffixes"){

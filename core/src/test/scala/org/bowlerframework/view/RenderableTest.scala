@@ -16,8 +16,7 @@ import scalate.{Layout, TemplateRegistry}
  */
 
 class RenderableTest extends FunSuite with Renderable{
-  TemplateRegistry.reset
-  TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+
 
   test("empty seq JSON"){
     val request = makeJsonRequest("/simple")
@@ -36,6 +35,8 @@ class RenderableTest extends FunSuite with Renderable{
   }
 
   test("empty seq HTML"){
+    TemplateRegistry.reset
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -50,6 +51,16 @@ class RenderableTest extends FunSuite with Renderable{
     val resp = makeResponse
     this.render(request, resp)
     assert(resp.getStatus == 204)
+  }
+
+  test("render with no template"){
+    TemplateRegistry.reset
+
+    val request = makeRequest("/simple")
+    request.setMappedPath(new MappedPath("/simple", false))
+    val resp = makeResponse
+    this.render(request, resp, ViewModel("name", "Wille"))
+    assert(resp.toString.contains("Hello Wille"))
   }
 
 
