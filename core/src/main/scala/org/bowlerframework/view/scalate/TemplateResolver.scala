@@ -14,8 +14,6 @@ trait TemplateResolver{
   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template
 
 
-
-
     /** Order of preference for view template resolution should be:<br/>
    * <ol>
    *  <li>TemplateSuffixSelector choice</li>
@@ -63,7 +61,10 @@ trait TemplateResolver{
    * </ol>
    */
   def resolveTemplate(request: Request, path: String): Template = {
-    return resolveResource(path, TemplateRegistry.templateTypePreference, request.getLocales)
+    if(request != null)
+      return resolveResource(path, TemplateRegistry.templateTypePreference, request.getLocales)
+    else
+       return resolveResource(path, TemplateRegistry.templateTypePreference, Nil)
   }
 
 

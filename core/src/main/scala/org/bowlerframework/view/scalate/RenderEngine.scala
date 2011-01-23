@@ -18,7 +18,9 @@ object RenderEngine{
     engine.allowCaching = true
     engine.allowReload = false
     engine.resourceLoader = new FileResourceLoader {
-      override def resource(uri: String): Option[Resource] = Some(Resource.fromText(uri, TemplateRegistry.templateResolver.getAbsoluteResource(uri)))
+      override def resource(uri: String): Option[Resource] = {
+        Some(Resource.fromText(uri, TemplateRegistry.templateResolver.getAbsoluteResource(uri)))
+      }
     }
   }
 }

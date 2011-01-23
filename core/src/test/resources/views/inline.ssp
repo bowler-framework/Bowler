@@ -1,0 +1,4 @@
+<% import org.bowlerframework.view.scalate.DropDown._  %>
+<%@ val bean: org.bowlerframework.view.scalate.ScalateBean %>
+
+<select>${unescape(options(bean))}</select>

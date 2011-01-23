@@ -23,6 +23,6 @@ class BowlerRenderContext(uri: String, engine: TemplateEngine, pw: PrintWriter) 
 
 object BowlerRenderContext{
   private val _modelContext = new DynamicVariable[Map[String, Any]](null)
-  def modelContext = _modelContext value
+  def contextModel = _modelContext value
 }
 

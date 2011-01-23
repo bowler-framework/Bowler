@@ -109,10 +109,10 @@ class ScalateRenderEngineTest extends FunSuite{
 
     engine.resourceLoader = new FileResourceLoader {
       override def resource(uri: String): Option[Resource] = {
-        if(!uri.contains("link:/greet"))
-          Some(Resource.fromText(uri, "Greet is: {{>link:/greet}}"))
+        if(!uri.contains("bowler:/"))
+          Some(Resource.fromText(uri, "Greet is: {{>bowler://com.recursivity.Component}}"))
         else {
-          greet = BowlerRenderContext.modelContext("greet").asInstanceOf[String]
+          greet = BowlerRenderContext.contextModel("greet").asInstanceOf[String]
           Some(Resource.fromText(uri, greet))
         }
       }
@@ -127,10 +127,28 @@ class ScalateRenderEngineTest extends FunSuite{
     //println("greet")
     assert(greet == "hello")
     RenderEngine.reset
+  }
 
+  test("dropdown model"){
+    RenderEngine.reset
+    val uri =  "/views/inline.ssp"
+    val model = Map("bean" -> ScalateBean("hello"))
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new BowlerRenderContext(uri, RenderEngine.getEngine, pw)
+
+    context.render(uri, model)
+    println(writer.toString)
 
   }
 
 }
 
 case class ScalateBean(name: String)
+
+object DropDown{
+  def options(bean: ScalateBean): String = {
+    "<option id=1>" + bean.name + "</option><option id=2>" + bean.name + "2</option>"
+
+  }
+}
