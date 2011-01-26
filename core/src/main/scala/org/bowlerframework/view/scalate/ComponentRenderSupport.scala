@@ -4,6 +4,7 @@ import org.fusesource.scalate.util.{Resource, FileResourceLoader}
 import java.io.{StringWriter, PrintWriter}
 import org.fusesource.scalate.{DefaultRenderContext, TemplateEngine}
 import org.bowlerframework.RequestScope
+import org.bowlerframework.model.ViewModelBuilder
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +16,15 @@ import org.bowlerframework.RequestScope
 
 trait ComponentRenderSupport {
 
-  def render(model: Map[String, Any], action: String = "index"): String = {
+  def render(models: Any*): String = {
+    renderMap(ViewModelBuilder.buildModel(models.toSeq).toMap)
+  }
+
+  def renderWithNamed(action: String, models: Any*){
+    render(ViewModelBuilder.buildModel(models.toSeq), action)
+  }
+
+  def renderMap(model: Map[String, Any], action: String = "index"): String = {
     var uri = "/" + this.getClass.getName.replace(".", "/")
     uri = uri.replace("$", "") + "_" + action
     println(this.getClass.getName)
