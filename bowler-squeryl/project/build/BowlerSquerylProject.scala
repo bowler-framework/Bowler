@@ -8,6 +8,8 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultProject(info){
 
 	  val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "test"
 
+  val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
+
 	// allows you to use an embedded/in-JVM jetty-server to run unit-tests.
 	  val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M2" % "test"
 
