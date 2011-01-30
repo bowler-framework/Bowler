@@ -8,6 +8,7 @@ import java.io.{PrintWriter, StringWriter}
 import org.squeryl.adapters.{MySQLAdapter, H2Adapter}
 import org.squeryl.internals.DatabaseAdapter
 import com.mchange.v2.c3p0.{ComboPooledDataSource}
+import org.squeryl.dsl.ast.{ConstantExpressionNode, BinaryOperatorNodeLogicalBoolean}
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,6 +19,13 @@ import com.mchange.v2.c3p0.{ComboPooledDataSource}
  */
 
 class SquerylTest extends FunSuite{
+
+    implicit def boolean2booleanFieldEqualsTrue(b: BooleanType) =
+     new BinaryOperatorNodeLogicalBoolean(
+       createLeafNodeOfScalarBooleanType(b),
+       new ConstantExpressionNode[Boolean](mapBoolean2BooleanType(true)), "=")
+
+  def mapBoolean2BooleanType(b: Boolean) = b
 
   val adapter: Map[String, DatabaseAdapter] = Map(
 		"h2" -> new H2Adapter,
@@ -31,7 +39,7 @@ class SquerylTest extends FunSuite{
 
 	val cpds  = new ComboPooledDataSource
 	cpds.setDriverClass(driver("h2"))
-	cpds.setJdbcUrl("jdbc:h2:test")
+	cpds.setJdbcUrl("jdbc:h2:mem:test")
 	cpds.setUser("sa")
 	cpds.setPassword("")
 
@@ -56,14 +64,17 @@ class SquerylTest extends FunSuite{
     println(writer.toString)
 
 
-    //val con = session.connection
-   // con.createStatement.execute(writer.toString)
+    val con = session.connection
+    con.createStatement.execute(writer.toString)
 
-   // Library.authors.insert(new Author(1, "Michel","Folco", Some("michel@folco.com")))
+    Library.authors.insert(new Author(1, "Michel","Folco", Some("michel@folco.com")))
     transaction{
-      val a = from(Library.authors)(a=> where(a.lastName === "Folco") select(a))
+      val a = from(Library.authors)(a=> where(a.id.equals(1)) select(a))
+      val results = from(Library.authors)(a => select(a)).page(0, 10)
+      println(results.head.email)
       println("Author is: " + a.head.email)
     }
+
 
 
    session.close
