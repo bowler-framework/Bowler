@@ -12,7 +12,7 @@ import org.squeryl.PrimitiveTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class SquerylDao[T <: KeyedEntity[K], K](resourceName: String, table: Table[T])(implicit m : scala.Predef.Manifest[T]){
+abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T]){
   private val typeString = m.toString.replace("[", "<").replace("]", ">")
   private val typeDef = GenericsParser.parseDefinition(typeString)
   def entityType = Class.forName(typeDef.clazz)

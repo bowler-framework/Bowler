@@ -15,7 +15,7 @@ import org.bowlerframework.{Response, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class CrudController[T <: KeyedEntity[K], K](resourceName: String, dao: SquerylDao[T, K]) extends SquerylController with Validations with ParameterMapper with Renderable{
+abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String) extends SquerylController with Validations with ParameterMapper with Renderable{
 
   get("/" + resourceName + "/")((req, resp) =>{listResources(1, req, resp)})
   get("/" + resourceName)((req, resp) =>{listResources(1, req, resp)})
