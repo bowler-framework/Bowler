@@ -1,8 +1,9 @@
 package org.bowlerframework.squeryl
 
 import org.squeryl.{KeyedEntity, Table}
-import com.recursivity.commons.bean.GenericsParser
 import org.squeryl.PrimitiveTypeMode._
+import com.recursivity.commons.bean.{GenericsParser}
+import org.squeryl.dsl.QueryYield
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,11 +19,18 @@ abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : 
   def entityType = Class.forName(typeDef.clazz)
   def keyType = Class.forName(typeDef.genericTypes.get.head.clazz)
 
-  def delete(id: K)
+  def create(entity: T) = table.insert(entity)
 
-  def findAll(offset: Int, results: Int) = from(table)(a => select(a)).page(offset, results).toList
+  def update(entity: T) = table.update(entity)
+
+  def findAll(offset: Int = 0, results: Int = Integer.MAX_VALUE) = from(table)(a => select(a)).page(offset, results).toList
+
+  //def orderByClause: QueryYield[_]
 
   def findById(id: K): Option[T]
+
+  def delete(entity: T) = table.delete(entity.id)
 }
 
-// add more keyed dao's here
+
+
