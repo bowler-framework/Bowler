@@ -1,7 +1,7 @@
 package org.bowlerframework.squeryl
 
 
-import dao.LongKeyedDao
+import dao.{StringKeyedDao, LongKeyedDao}
 import org.scalatest.FunSuite
 import org.squeryl.PrimitiveTypeMode._
 
@@ -19,6 +19,7 @@ class SquerylDaoTest extends FunSuite with InMemoryDbTest{
   import Library._
 
   val dao = new LongKeyedDao[Author](authors)
+  val personDao = new StringKeyedDao[Person](people)
 
   test("CRUD"){
     startTx
@@ -107,6 +108,64 @@ class SquerylDaoTest extends FunSuite with InMemoryDbTest{
 
   test("key type"){
     assert(dao.keyType == classOf[Long])
+  }
+
+  test("string keyed dao"){
+
+    startTx
+    transaction{
+      val person = new Person("wille", "faler")
+      personDao.create(person)
+      val p = personDao.findById("wille")
+      assert(p != None)
+      assert(p.get.id == "wille")
+      assert(p.get.name == "faler")
+
+      personDao.delete(p.get)
+      assert(None == personDao.findById("wille"))
+    }
+
+    commitTx
+  }
+
+  test("test uniqueValidator"){
+    startTx
+    val person = new Person("wille", "faler")
+    val validator = new SquerylUniqueValidator[Person, String]("id", personDao, {person.id})
+
+    transaction{
+      assert(validator.isValid)
+      personDao.create(person)
+      assert(!validator.isValid)
+      personDao.delete(person)
+    }
+    commitTx
+  }
+
+  test("test SquerylTransformer"){
+     startTx
+
+    transaction{
+      val author = new Author(0, "Jane","Doe", Some("janedoe@gmail.com"))
+
+      dao.create(author)
+      val id = author.id
+      val stringId = "" + id
+      val transformer = new SquerylTransformer[Author, Long](dao)
+
+      val res = transformer.toValue(stringId)
+      assert(res != None)
+      assert(res.get.firstName == "Jane")
+      assert(res.get.lastName == "Doe")
+
+      assert(None == transformer.toValue("99999999999999999"))
+      dao.delete(author)
+
+
+    }
+
+    commitTx
+
   }
 
 

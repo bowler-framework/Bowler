@@ -44,7 +44,7 @@ trait InMemoryDbTest{
     try{
       val writer = new StringWriter
       Library.printDdl(new PrintWriter(writer))
-      println(writer.toString)
+     // println(writer.toString)
       val con = session.connection
       con.createStatement.execute(writer.toString)
     }catch{
@@ -66,6 +66,13 @@ import org.squeryl.Schema
 object Library extends Schema {
 
   val authors = table[Author]("authors")
+  val people = table[Person]("people")
+}
+
+case class Person(val id: String,
+             val name: String) extends KeyedEntity[String]{
+
+  def this() = this("","")
 }
 
 case class Author(val id: Long,
