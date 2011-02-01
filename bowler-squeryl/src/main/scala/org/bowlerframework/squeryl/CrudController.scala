@@ -15,7 +15,7 @@ import org.bowlerframework.{Response, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String)
+class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String)
                                                      (implicit m : scala.Predef.Manifest[T]) extends SquerylController with Validations with ParameterMapper with Renderable{
   val transformer = new SquerylTransformer[T, K](dao)
   TransformerRegistry.registerSingletonTransformer(dao.entityType, transformer)
@@ -31,27 +31,33 @@ abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], res
   delete("/"  + resourceName + "/:id")((request, response) => {
     this.mapRequest[T](request)(bean => {
       dao.delete(bean)
+      response.setStatus(204)
     })
   })
 
 
   // HTTP POST for creating new Widgets.
   post("/" + resourceName + "/")((request, response) =>{
+    this.mapRequest[T](request)(bean => {
 
+      // add validation
+      dao.create(bean)
+      render(bean)
+    })
   })
 
-  put("/" + resourceName + "/")((request, response) =>{
 
-  })
 
   // similar to the above POST, but for updating existing widgets.
   post("/" + resourceName + "/:id")((request, response) => {
+     this.mapRequest[T](request)(bean => {
 
+       //add validation
+        dao.update(bean)
+        render(bean)
+    })
   })
 
-  put("/" + resourceName + "/:id")((request, response) => {
-
-  })
 
 
   def renderBean(request: Request, response: Response){
@@ -77,10 +83,11 @@ abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], res
     // add check for request param of "itemsInList"
     if(items == None)
       request.getSession.setAttribute("_bowlerListItems", 10)
-    val offset = page * items.getOrElse(10)
+    val offset = (page - 1) * items.getOrElse(10)
     val maxItems = items.getOrElse(10)
 
     render(dao.findAll(offset, maxItems))
   }
+
 
 }

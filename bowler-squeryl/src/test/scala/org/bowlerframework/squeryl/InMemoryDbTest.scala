@@ -6,6 +6,7 @@ import org.squeryl.internals.DatabaseAdapter
 import com.mchange.v2.c3p0.{ComboPooledDataSource}
 import org.squeryl.dsl.ast.{ConstantExpressionNode, BinaryOperatorNodeLogicalBoolean}
 import org.squeryl.{KeyedEntity, SessionFactory, Session}
+import net.liftweb.json.JsonParser._
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
@@ -15,6 +16,7 @@ import org.squeryl.{KeyedEntity, SessionFactory, Session}
  */
 
 trait InMemoryDbTest{
+  implicit val formats = net.liftweb.json.DefaultFormats
   var cpds  = new ComboPooledDataSource
   var session: Session = null
 
@@ -58,6 +60,28 @@ trait InMemoryDbTest{
    session.close
    cpds.close
   }
+
+  def commit = {
+    session.close
+  }
+
+  def startPage = {
+    startTx
+    session.close
+
+  }
+
+  def getValue[T](body: String, nameHint: String)(implicit m: Manifest[T]): T = {
+    val json = parse(body)
+    if (nameHint == null) {
+      return json.extract[T]
+    } else {
+      val namedJson = json \\ nameHint
+      return namedJson.extract[T]
+    }
+  }
+
+
 }
 
 
