@@ -15,7 +15,8 @@ import org.bowlerframework.{Response, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String)(implicit m : scala.Predef.Manifest[T]) extends SquerylController with Validations with ParameterMapper with Renderable{
+abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String)
+                                                     (implicit m : scala.Predef.Manifest[T]) extends SquerylController with Validations with ParameterMapper with Renderable{
   val transformer = new SquerylTransformer[T, K](dao)
   TransformerRegistry.registerSingletonTransformer(dao.entityType, transformer)
 
@@ -27,7 +28,7 @@ abstract class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], res
   get("/" + resourceName + "/:id")((req, resp) => renderBean(req, resp))
   get("/" + resourceName + "/:id/edit")((req, resp) => renderBean(req, resp))
 
-  delete("/widgets/:id")((request, response) => {
+  delete("/"  + resourceName + "/:id")((request, response) => {
     this.mapRequest[T](request)(bean => {
       dao.delete(bean)
     })

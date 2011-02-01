@@ -13,11 +13,26 @@ import org.squeryl.dsl.QueryYield
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T]){
+abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]){
   private val typeString = m.toString.replace("[", "<").replace("]", ">")
+  private val keyString = k.toString.replace("[", "<").replace("]", ">")
   private val typeDef = GenericsParser.parseDefinition(typeString)
+  private val keyDef = GenericsParser.parseDefinition(keyString)
   def entityType = Class.forName(typeDef.clazz)
-  def keyType = Class.forName(typeDef.genericTypes.get.head.clazz)
+
+
+  var fieldCls: Class[_] = null
+    keyDef.clazz match {
+      case "Long" => fieldCls = classOf[Long]
+      case "Int" => fieldCls = classOf[java.lang.Integer]
+      case "Float" => fieldCls = classOf[java.lang.Float]
+      case "Double" => fieldCls = classOf[java.lang.Double]
+      case "Boolean" => fieldCls = classOf[Boolean]
+      case "Short" => fieldCls = classOf[java.lang.Short]
+      case _ => fieldCls = Class.forName(keyDef.clazz)
+    }
+
+  def keyType = fieldCls
 
   def create(entity: T) = table.insert(entity)
 

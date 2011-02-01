@@ -15,7 +15,7 @@ import org.squeryl.PrimitiveTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 
-class SquerylDaoTest extends FunSuite with InMemoryTest{
+class SquerylDaoTest extends FunSuite with InMemoryDbTest{
   import Library._
 
   val dao = new LongKeyedDao[Author](authors)
@@ -78,17 +78,35 @@ class SquerylDaoTest extends FunSuite with InMemoryTest{
 
       val all = dao.findAll()
       assert(all.size == 15)
-      assert(all.head.lastName == "Doe")
+      assert(all.last.firstName == "15")
+      assert(all.head.firstName == "1")
 
       val firstTen = dao.findAll(0, 10)
       println(firstTen.size)
       assert(firstTen.size == 10)
+      assert(firstTen.last.firstName == "10")
+      assert(firstTen.head.firstName == "1")
+      val lastFive = dao.findAll(10, 10)
+
+      assert(lastFive.size == 5)
+      assert(lastFive.last.firstName == "15")
+      assert(lastFive.head.firstName == "11")
+
+      all.foreach(f => dao.delete(f))
 
 
     }
 
     commitTx
 
+  }
+
+  test("entity type"){
+    assert(dao.entityType == classOf[Author])
+  }
+
+  test("key type"){
+    assert(dao.keyType == classOf[Long])
   }
 
 
