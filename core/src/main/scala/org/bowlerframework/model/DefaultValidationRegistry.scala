@@ -11,11 +11,11 @@ import collection.mutable.HashMap
  */
 
 object DefaultValidationRegistry{
-  private val registry = new HashMap[Class[_], ModelValidatorBuilder]
+  private val registry = new HashMap[Class[_], ModelValidatorBuilder[_]]
 
-  def addValidation(cls: Class[_], validator: ModelValidatorBuilder) = registry.put(cls, validator)
+  def addValidation(cls: Class[_], validator: ModelValidatorBuilder[_]) = registry.put(cls, validator)
 
-  def getValidators(cls: Class[_]): Option[ModelValidatorBuilder] = {
+  def getValidators(cls: Class[_]): Option[ModelValidatorBuilder[_]] = {
     try{
       return Some(registry(cls))
     }catch{

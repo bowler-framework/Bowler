@@ -1,5 +1,7 @@
 package org.bowlerframework.model
 
+import com.recursivity.commons.validator.Validator
+
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
@@ -8,4 +10,6 @@ package org.bowlerframework.model
  * To change this template use File | Settings | File Templates.
  */
 
-class ModelValidatorBuilder(model: AnyRef) extends DefaultModelValidator(model.getClass)
+trait ModelValidatorBuilder[T] extends ModelValidator{
+  def initialize(bean: T)
+}
