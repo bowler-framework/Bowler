@@ -3,13 +3,12 @@ package org.bowlerframework.model
 import com.recursivity.commons.validator.Validator
 
 /**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 01/02/2011
- * Time: 23:57
- * To change this template use File | Settings | File Templates.
+ * Initializes itself and its validators with a bean.
  */
 
 trait ModelValidatorBuilder[T] extends ModelValidator{
+  /**
+   * Should initialize all Validators with the use of the bean.
+   */
   def initialize(bean: T)
 }
