@@ -4,6 +4,8 @@ import dao.LongKeyedDao
 import org.scalatra.test.scalatest.ScalatraFunSuite
 import org.squeryl.PrimitiveTypeMode._
 import org.bowlerframework.http.BowlerFilter
+import org.bowlerframework.model.{DefaultValidationRegistry, DefaultModelValidator, ModelValidatorBuilder}
+import com.recursivity.commons.validator.MinLength
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,6 +17,8 @@ import org.bowlerframework.http.BowlerFilter
 
 class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     import Library._
+
+  DefaultValidationRegistry.registerValidatorBuilder(classOf[Author], new AuthorValidatorBuilder)
 
   val dao = new LongKeyedDao[Author](authors)
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
@@ -181,8 +185,41 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     commitTx
 
   }
+
+
+  // TODO
+  test("create"){
+
+  }
+
+  test("create with unique fail"){
+
+  }
+
+  test("create with ModelValidatorBuilder"){
+
+  }
+
+  test("update"){
+
+  }
+
+  test("update with unique fail"){
+
+  }
+
+  test("update with ModelValidatorBuilder"){
+
+  }
 }
 
 case class ListHolder(list: List[Author])
+
+class AuthorValidatorBuilder extends DefaultModelValidator(classOf[Author]) with ModelValidatorBuilder[Author]{
+
+  def initialize(author: Author){
+    add(MinLength("firstName", 3, {author.firstName}))
+  }
+}
 
 
