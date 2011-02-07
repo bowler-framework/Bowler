@@ -51,6 +51,7 @@ class BasicControllerTest extends ScalatraFunSuite{
           if(exception.isInstanceOf[ValidationException]){
             exception.asInstanceOf[ValidationException].errors.foreach(e =>{
               response.getWriter.write(e._1 + ":" + e._2)
+              //response.sendError(400)
             })
           }
         }

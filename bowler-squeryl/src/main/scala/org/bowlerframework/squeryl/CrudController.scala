@@ -57,8 +57,7 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
       validate(bean){
         var validator: ModelValidator = new DefaultModelValidator(dao.entityType)
         if(DefaultValidationRegistry.getValidatorBuilder(dao.entityType) != None){
-          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get
-          validator.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
+          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
         validator.add(new SquerylUniqueValidator[T, K]("id", dao, {bean.id}))
         validator.validate
@@ -77,8 +76,7 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
       validate(bean) {
         var validator: ModelValidator = new DefaultModelValidator(dao.entityType)
         if(DefaultValidationRegistry.getValidatorBuilder(dao.entityType) != None){
-          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get
-          validator.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
+          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
         validator.add(Equals("id", {id}, {bean.id}))
         validator.validate
@@ -98,7 +96,7 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
 
   def parseId(request: Request, idName: String): K = {
     return TransformerRegistry.resolveTransformer(dao.keyType).
-      getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(request.getStringParameter(idName)).asInstanceOf[K]
+      getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(request.getStringParameter(idName)).getOrElse(throw new IllegalArgumentException("Cannot convert key to correct key type")).asInstanceOf[K]
   }
 
   def listResources(page: Int, request: Request, response: Response) = {

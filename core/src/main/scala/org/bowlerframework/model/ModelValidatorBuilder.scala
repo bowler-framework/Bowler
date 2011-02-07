@@ -6,9 +6,9 @@ import com.recursivity.commons.validator.Validator
  * Initializes itself and its validators with a bean.
  */
 
-trait ModelValidatorBuilder[T] extends ModelValidator{
+trait ModelValidatorBuilder[T]{
   /**
    * Should initialize all Validators with the use of the bean.
    */
-  def initialize(bean: T)
+  def initialize(bean: T): ModelValidator
 }

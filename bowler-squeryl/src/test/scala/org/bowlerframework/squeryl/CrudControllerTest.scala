@@ -4,8 +4,8 @@ import dao.LongKeyedDao
 import org.scalatra.test.scalatest.ScalatraFunSuite
 import org.squeryl.PrimitiveTypeMode._
 import org.bowlerframework.http.BowlerFilter
-import org.bowlerframework.model.{DefaultValidationRegistry, DefaultModelValidator, ModelValidatorBuilder}
 import com.recursivity.commons.validator.MinLength
+import org.bowlerframework.model.{ModelValidator, DefaultValidationRegistry, DefaultModelValidator, ModelValidatorBuilder}
 
 /**
  * Created by IntelliJ IDEA.
@@ -187,38 +187,168 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   }
 
 
-  // TODO
   test("create"){
+    val controller = new CrudController[Author, Long](dao, "authors")
+    var result: String = null
+    val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.body
+    }
+
+    var auth = this.getValue[Author](result, null)
+
+    assert(auth.id > 0)
+    assert(auth.firstName == "postAuthor")
+    assert(auth.lastName == "author")
+    assert(auth.email.get == "some@email.com")
+
+    this.get("/authors/" + auth.id,  Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.body
+    }
+
+    auth = this.getValue[Author](result, null)
+
+    assert(auth.id > 0)
+    assert(auth.firstName == "postAuthor")
+    assert(auth.lastName == "author")
+    assert(auth.email.get == "some@email.com")
+
+    startTx
+    transaction{
+      dao.delete(auth)
+    }
+
+    commitTx
 
   }
 
   test("create with unique fail"){
+    startTx
+    var id: Long = 1
+    transaction{
+      val author = new Author(0, "4qweqe5","Doe", Some("johndoe@gmail.com"))
+      dao.create(author)
+      id = author.id
+    }
+    commit
+
+    val controller = new CrudController[Author, Long](dao, "authors")
+    var result: Int = 200
+    val list = List[Tuple2[String, String]](("author.id", "" + id), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.status
+    }
+
+    assert(400 == result)
+
+    startTx
+    transaction{
+      dao.delete(dao.findById(id).get)
+    }
+
+    commitTx
 
   }
 
-  test("create with ModelValidatorBuilder"){
+  test("create with ModelValidatorBuilder (name to short)"){
+    val controller = new CrudController[Author, Long](dao, "authors")
+    var result: Int = 200
+    val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "w"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.status
+    }
+
+    assert(400 == result)
 
   }
 
   test("update"){
+    startTx
+    var id: Long = 1
+    transaction{
+      val author = new Author(0, "45","Doe", Some("johndoe@gmail.com"))
+      dao.create(author)
+      id = author.id
+    }
+    commit
+
+
+    val controller = new CrudController[Author, Long](dao, "authors")
+    var result: Int = 200
+
+    println("AUTHOR ID: " +  id)
+    val list = List[Tuple2[String, String]](("author.id", "" + id), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+
+    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.status
+    }
+
+    var someBody: String = null
+    this.get("/authors/" + id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      someBody = this.body
+    }
+
+    val auth = this.getValue[Author](someBody, null)
+
+
+    assert(auth.id == id)
+    assert(auth.firstName == "postAuthor")
+    assert(auth.lastName == "author")
+    assert(auth.email.get == "some@email.com")
+
+    startTx
+    transaction{
+      dao.delete(auth)
+    }
+
+    commitTx
 
   }
 
-  test("update with unique fail"){
+  test("update with id fail"){
+    startTx
+    var id: Long = 1
+    transaction{
+      val author = new Author(0, "45","Doe", Some("johndoe@gmail.com"))
+      dao.create(author)
+      id = author.id
+    }
+    commit
 
+
+    val controller = new CrudController[Author, Long](dao, "authors")
+    var result: Int = 200
+
+    println("AUTHOR ID: " +  id)
+    val list = List[Tuple2[String, String]](("author.id", "" + (id + 1)), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+
+    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      result = this.status
+    }
+
+    assert(400 == result)
+
+    startTx
+    transaction{
+      dao.delete(dao.findById(id).get)
+    }
+
+    commitTx
   }
 
-  test("update with ModelValidatorBuilder"){
-
-  }
 }
 
 case class ListHolder(list: List[Author])
 
 class AuthorValidatorBuilder extends DefaultModelValidator(classOf[Author]) with ModelValidatorBuilder[Author]{
 
-  def initialize(author: Author){
-    add(MinLength("firstName", 3, {author.firstName}))
+  def initialize(author: Author): ModelValidator = {
+    val validator: ModelValidator = new DefaultModelValidator(classOf[Author])
+    validator.add(MinLength("firstName", 3, {author.firstName}))
+    return validator
   }
 }
 
