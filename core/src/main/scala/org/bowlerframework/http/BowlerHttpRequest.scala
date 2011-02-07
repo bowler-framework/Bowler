@@ -5,7 +5,7 @@ import collection.mutable.MutableList
 import com.recursivity.commons.bean._
 import com.recursivity.commons.StringInputStreamReader
 import org.apache.commons.fileupload.FileItem
-import org.bowlerframework.{MappedPath, HTTP, ContentTypeResolver, Request}
+import org.bowlerframework._
 
 /**
  * Created by IntelliJ IDEA.
@@ -101,12 +101,12 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
     ContentTypeResolver.contentType(request.getHeader("accept"))
   }
 
-  def getMethod: HTTP.Method = {
+  def getMethod: HttpMethod = {
     request.getMethod match {
-      case "GET" => return HTTP.GET
-      case "PUT" => return HTTP.PUT
-      case "POST" => return HTTP.POST
-      case "DELETE" => return HTTP.DELETE
+      case "GET" => return GET
+      case "PUT" => return PUT
+      case "POST" => return POST
+      case "DELETE" => return DELETE
     }
 
   }

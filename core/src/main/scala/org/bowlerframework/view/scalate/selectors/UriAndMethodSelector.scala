@@ -1,7 +1,7 @@
 package org.bowlerframework.view.scalate.selectors
 
 import util.matching.Regex
-import org.bowlerframework.{HTTP, Request}
+import org.bowlerframework.{HttpMethod, HTTP, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +11,7 @@ import org.bowlerframework.{HTTP, Request}
  * To change this template use File | Settings | File Templates.
  */
 
-class UriAndMethodSelector[T](item: T, method: HTTP.Method, uri: Regex) extends UriSelector[T](item, uri){
+class UriAndMethodSelector[T](item: T, method: HttpMethod, uri: Regex) extends UriSelector[T](item, uri){
   override def find(request: Request): Option[T] ={
     if(request.getMethod == method)
       return super.find(request)

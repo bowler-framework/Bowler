@@ -4,8 +4,8 @@ import org.bowlerframework.view.{ViewRenderer}
 import java.io.{StringWriter, PrintWriter}
 import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.{MutableList}
-import org.bowlerframework.{HTTP, Response, Request}
 import org.bowlerframework.model.ViewModelBuilder
+import org.bowlerframework.{GET, HTTP, Response, Request}
 
 /**
  * A ViewRenderer that uses Scalate templates to render views
@@ -66,7 +66,7 @@ class ScalateViewRenderer extends ViewRenderer{
     else
       response.getWriter.write(viewValue)
 
-    if(request.getMethod == HTTP.GET){
+    if(request.getMethod == GET){
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
     }
   }

@@ -3,8 +3,8 @@ package org.bowlerframework.model
 
 import org.scalatest.FunSuite
 import com.recursivity.commons.bean.{StringValueTransformer, TransformerRegistry}
-import org.bowlerframework.HTTP
 import org.bowlerframework.jvm.DummyRequest
+import org.bowlerframework.{GET, POST, HttpMethod, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -109,7 +109,7 @@ class DefaultRequestMapperTest extends FunSuite {
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
-    val request = new DummyRequest(HTTP.GET, "/", map, null)
+    val request = new DummyRequest(GET, "/", map, null)
 
     try{
       val bean =  mapper.getValue[OtherMapperBean](request)
@@ -123,7 +123,7 @@ class DefaultRequestMapperTest extends FunSuite {
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
-    val request = new DummyRequest(HTTP.GET, "/", map, null)
+    val request = new DummyRequest(GET, "/", map, null)
 
     try{
       val myBean = mapper.getValue[MyBean](request)
@@ -134,7 +134,7 @@ class DefaultRequestMapperTest extends FunSuite {
 
   test("alias parameters with transformer hit GET (should not edit any values)"){
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val myBean =  mapper.getValue[MyBean](makeRequest(HTTP.GET, Map("id" -> "1", "name" -> "otherBean")))
+    val myBean =  mapper.getValue[MyBean](makeRequest(GET, Map("id" -> "1", "name" -> "otherBean")))
     assert(myBean != null)
     assert(myBean.id == 1l)
     println("Decimal is: " + myBean.name)
@@ -152,7 +152,7 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
   test("test Transient marker trait"){
-    val bean = mapper.getValue[TransientBean](makeRequest(HTTP.GET, Map("id" -> "43", "name" -> "transientBean")))
+    val bean = mapper.getValue[TransientBean](makeRequest(GET, Map("id" -> "43", "name" -> "transientBean")))
     assert(bean != null)
     assert(bean.isInstanceOf[TransientBean])
     assert(bean.id == 43l)
@@ -162,7 +162,7 @@ class DefaultRequestMapperTest extends FunSuite {
 
 
   test("Option with value"){
-    val holder = mapper.getValue[Option[TransientBean]](makeRequest(HTTP.GET, Map("id" -> "43", "name" -> "transientBean")))
+    val holder = mapper.getValue[Option[TransientBean]](makeRequest(GET, Map("id" -> "43", "name" -> "transientBean")))
     assert(holder.isInstanceOf[Some[TransientBean]])
     val bean = holder.get
     assert(bean != null)
@@ -175,7 +175,7 @@ class DefaultRequestMapperTest extends FunSuite {
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
-    val request = new DummyRequest(HTTP.GET, "/", map, null)
+    val request = new DummyRequest(GET, "/", map, null)
     assert(None.equals(mapper.getValue[Option[MyBean]](request)))
   }
 
@@ -229,7 +229,7 @@ class DefaultRequestMapperTest extends FunSuite {
   test("empty Option[List] should return None"){
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
     val map = Map("name" -> "somename" ,"beans" -> List("2"))
-    val request = makeRequest(HTTP.GET, map)
+    val request = makeRequest(GET, map)
     val beans = mapper.getValue[Option[List[MyBean]]](request)
     println(beans)
     assert(beans == None)
@@ -297,8 +297,8 @@ class DefaultRequestMapperTest extends FunSuite {
 
 
 
-  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.POST, "/", params, null)
-  def makeRequest(method: HTTP.Method, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
+  def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
+  def makeRequest(method: HttpMethod, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
 
   //def make
 

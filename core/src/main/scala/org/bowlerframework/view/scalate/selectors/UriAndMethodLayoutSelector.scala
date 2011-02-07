@@ -2,7 +2,7 @@ package org.bowlerframework.view.scalate.selectors
 
 import util.matching.Regex
 import org.bowlerframework.view.scalate.Layout
-import org.bowlerframework.{Request, HTTP}
+import org.bowlerframework.{HttpMethod, Request, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,4 +12,4 @@ import org.bowlerframework.{Request, HTTP}
  * To change this layout use File | Settings | File Templates.
  */
 
-class UriAndMethodLayoutSelector(layout: Layout, method: HTTP.Method, uri: Regex) extends UriAndMethodSelector[Layout](layout, method, uri) with LayoutSelector
+class UriAndMethodLayoutSelector(layout: Layout, method: HttpMethod, uri: Regex) extends UriAndMethodSelector[Layout](layout, method, uri) with LayoutSelector

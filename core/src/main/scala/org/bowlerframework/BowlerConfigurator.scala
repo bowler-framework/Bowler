@@ -31,25 +31,25 @@ object BowlerConfigurator extends ApplicationRouter {
   def setRequestMappingStrategy(mappingStrategy: RequestMappingStrategy) = {this.requestMappingStrategy = mappingStrategy}
 
 
-  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
+  def addApplicationRoute(protocol: HttpMethod, routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
 
-  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
+  def addApplicationRoute(protocol: HttpMethod, routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)
 
-  def get(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.GET, routeMatchers, routeExecutor)
+  def get(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(GET, routeMatchers, routeExecutor)
 
-  def put(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.PUT, routeMatchers, routeExecutor)
+  def put(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(PUT, routeMatchers, routeExecutor)
 
-  def post(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.POST, routeMatchers, routeExecutor)
+  def post(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(POST, routeMatchers, routeExecutor)
 
-  def delete(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.DELETE, routeMatchers, routeExecutor)
+  def delete(routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(DELETE, routeMatchers, routeExecutor)
 
-  def get(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.GET, routeMatchers, routeExecutor)
+  def get(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(GET, routeMatchers, routeExecutor)
 
-  def put(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.PUT, routeMatchers, routeExecutor)
+  def put(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(PUT, routeMatchers, routeExecutor)
 
-  def post(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.POST, routeMatchers, routeExecutor)
+  def post(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(POST, routeMatchers, routeExecutor)
 
-  def delete(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(HTTP.DELETE, routeMatchers, routeExecutor)
+  def delete(routeMatchers: Regex, routeExecutor: RouteExecutor) = router.addApplicationRoute(DELETE, routeMatchers, routeExecutor)
 
 }
 

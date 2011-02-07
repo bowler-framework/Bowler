@@ -3,9 +3,9 @@ package org.bowlerframework.view.scalate
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import java.io.IOException
-import org.bowlerframework.{MappedPath, HTTP}
 import selectors.{HeaderContainsSuffixSelector, HeaderContainsLayoutSelector, DefaultLayoutSelector}
 import util.matching.Regex
+import org.bowlerframework.{GET, MappedPath, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -183,7 +183,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
 
-  def makeRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null)
-  def makeRequest(path: String, headers: Map[String, String]) = new DummyRequest(HTTP.GET, path, Map(), null, headers)
+  def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
+  def makeRequest(path: String, headers: Map[String, String]) = new DummyRequest(GET, path, Map(), null, headers)
   //Accept-Language:
 }

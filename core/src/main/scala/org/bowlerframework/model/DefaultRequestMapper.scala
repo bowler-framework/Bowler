@@ -3,9 +3,9 @@ package org.bowlerframework.model
 import com.recursivity.commons.bean.{BeanUtils, GenericTypeDefinition, TransformerRegistry}
 import org.apache.commons.fileupload.FileItem
 import util.DynamicVariable
-import org.bowlerframework.{HTTP, Request}
 import collection.TraversableLike
 import collection.mutable.{MutableList, HashMap}
+import org.bowlerframework.{PUT, POST, HTTP, Request}
 
 /**
  * Mapps a single value from a request, for instance a bean from a request.
@@ -59,16 +59,16 @@ class DefaultRequestMapper extends RequestMapper {
       }
 
       val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
-      if (response == null && !TransformerRegistry(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))) {
+      if (response == null && !TransformerRegistry(cls).equals(None) && (httpRequest.getMethod.equals(POST) || httpRequest.getMethod.equals(PUT))) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
-      } else if (response == null && (!httpRequest.getMethod.equals(HTTP.POST) || !httpRequest.getMethod.equals(HTTP.PUT))) {
+      } else if (response == null && (!httpRequest.getMethod.equals(POST) || !httpRequest.getMethod.equals(PUT))) {
         return None.asInstanceOf[T]
       } else if (response != None || !TransformerRegistry(cls).equals(None)) {
-        if (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))
+        if (httpRequest.getMethod.equals(POST) || httpRequest.getMethod.equals(PUT))
           return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
         else
           return response
-      } else if (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT) || classOf[Transient].isAssignableFrom(cls)) {
+      } else if (httpRequest.getMethod.equals(POST) || httpRequest.getMethod.equals(PUT) || classOf[Transient].isAssignableFrom(cls)) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
       } else {
         return None.asInstanceOf[T]

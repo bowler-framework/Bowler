@@ -1,7 +1,7 @@
 package org.bowlerframework.view.scalate.selectors
 
 import util.matching.Regex
-import org.bowlerframework.HTTP
+import org.bowlerframework.{HttpMethod, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,4 +11,4 @@ import org.bowlerframework.HTTP
  * To change this template use File | Settings | File Templates.
  */
 
-class UriAndMethodSuffixSelector(suffix: String, method: HTTP.Method, uri: Regex) extends UriAndMethodSelector[String](suffix, method, uri) with TemplateSuffixSelector
+class UriAndMethodSuffixSelector(suffix: String, method: HttpMethod, uri: Regex) extends UriAndMethodSelector[String](suffix, method, uri) with TemplateSuffixSelector

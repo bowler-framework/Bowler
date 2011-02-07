@@ -2,7 +2,7 @@ package org.bowlerframework.model
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{HTTP}
+import org.bowlerframework.{GET, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -122,6 +122,6 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   //test("type safety")
 
 
-  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.GET, "/", params, null)
+  def makeRequest(params: Map[String, Any]) = new DummyRequest(GET, "/", params, null)
 
 }

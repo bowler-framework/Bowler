@@ -3,9 +3,9 @@ package org.bowlerframework.view
 import org.scalatest.FunSuite
 import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
-import org.bowlerframework.{Response, MappedPath, HTTP}
 import scalate.selectors.DefaultLayoutSelector
 import scalate.{Layout, TemplateRegistry}
+import org.bowlerframework.{GET, Response, MappedPath, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -70,7 +70,7 @@ class RenderableTest extends FunSuite with Renderable{
     return resp
   }
 
-  def makeRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null)
+  def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
 
-  def makeJsonRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null, Map("accept" -> "application/json"))
+  def makeJsonRequest(path: String) = new DummyRequest(GET, path, Map(), null, Map("accept" -> "application/json"))
 }

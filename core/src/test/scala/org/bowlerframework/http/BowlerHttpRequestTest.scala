@@ -148,7 +148,7 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
   }
 
   test("HTTP Method"){
-    var method: HTTP.Method = null
+    var method: HttpMethod = null
     BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
         method = scope.request.getMethod
@@ -157,7 +157,7 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
 
     get("/getParameterNames/foo/bar", ("param", "baz")) {
 
-      assert(HTTP.GET.equals(method))
+      assert(GET.equals(method))
     }
 
   }

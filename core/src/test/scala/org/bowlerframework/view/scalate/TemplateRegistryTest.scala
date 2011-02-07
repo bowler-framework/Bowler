@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import selectors._
 import util.matching.Regex
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{MappedPath, HTTP}
+import org.bowlerframework.{POST, GET, MappedPath, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,37 +18,37 @@ class TemplateRegistryTest extends FunSuite{
 
   TemplateRegistry.reset
 
-  TemplateRegistry.appendLayoutSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), HTTP.POST, new Regex("^.*/hello/.*$")),
+  TemplateRegistry.appendLayoutSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), POST, new Regex("^.*/hello/.*$")),
     new UriLayoutSelector(Layout("uri"), new Regex("^.*/hello/.*$")), new DefaultLayoutSelector(Layout("default"))))
 
-  TemplateRegistry.appendSuffixSelectors(List(new UriAndMethodSuffixSelector("uriAndMethod", HTTP.POST, new Regex("^.*/hello/.*$")),
+  TemplateRegistry.appendSuffixSelectors(List(new UriAndMethodSuffixSelector("uriAndMethod", POST, new Regex("^.*/hello/.*$")),
     new UriSuffixSelector("uri", new Regex("^.*/hello/.*$"))))
 
   test("get default layout"){
-    assert("default" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).get.name)
+    assert("default" == TemplateRegistry.getLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.name)
   }
 
   test("get URI specific layout"){
-    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(HTTP.GET, "/hello/", Map(), null)).get.name)
+    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(GET, "/hello/", Map(), null)).get.name)
   }
 
   test("get URI AND Method specific layout"){
-    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(HTTP.POST, "/hello/", Map(), null)).get.name)
+    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(POST, "/hello/", Map(), null)).get.name)
   }
 
   test("get 2 suffixes"){
-    assert(2 == TemplateRegistry.getSuffixes(new DummyRequest(HTTP.POST, "/hello/", Map(), null)).size)
-    assert(TemplateRegistry.getSuffixes(new DummyRequest(HTTP.POST, "/hello/", Map(), null))(0) == "uriAndMethod")
-    assert(TemplateRegistry.getSuffixes(new DummyRequest(HTTP.POST, "/hello/", Map(), null))(1) == "uri")
+    assert(2 == TemplateRegistry.getSuffixes(new DummyRequest(POST, "/hello/", Map(), null)).size)
+    assert(TemplateRegistry.getSuffixes(new DummyRequest(POST, "/hello/", Map(), null))(0) == "uriAndMethod")
+    assert(TemplateRegistry.getSuffixes(new DummyRequest(POST, "/hello/", Map(), null))(1) == "uri")
   }
 
   test("get 1 suffixes"){
-    assert(1 == TemplateRegistry.getSuffixes(new DummyRequest(HTTP.GET, "/hello/", Map(), null)).size)
-    assert(TemplateRegistry.getSuffixes(new DummyRequest(HTTP.GET, "/hello/", Map(), null))(0) == "uri")
+    assert(1 == TemplateRegistry.getSuffixes(new DummyRequest(GET, "/hello/", Map(), null)).size)
+    assert(TemplateRegistry.getSuffixes(new DummyRequest(GET, "/hello/", Map(), null))(0) == "uri")
   }
 
   test("get no suffixes"){
-    assert(0 == TemplateRegistry.getSuffixes(new DummyRequest(HTTP.GET, "/worldy/world", Map(), null)).size)
+    assert(0 == TemplateRegistry.getSuffixes(new DummyRequest(GET, "/worldy/world", Map(), null)).size)
   }
 
   test("regex string"){

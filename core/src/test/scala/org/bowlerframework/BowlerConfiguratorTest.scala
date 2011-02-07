@@ -15,13 +15,13 @@ import org.scalatest.FunSuite
 class BowlerConfiguratorTest extends FunSuite{
 
   test("getRequestMapper"){
-    val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(HTTP.GET, "/", null, null))
+    val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(GET, "/", null, null))
     assert(mapper != null)
     assert(mapper.getClass.equals(classOf[DefaultRequestMapper]))
   }
 
   test("json request mapper"){
-    val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(HTTP.GET, "/", null, null, Map("Content-Type" -> "application/json")))
+    val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(GET, "/", null, null, Map("Content-Type" -> "application/json")))
     assert(mapper != null)
     assert(mapper.getClass.equals(classOf[JsonRequestMapper]))
   }

@@ -13,7 +13,7 @@ import org.apache.commons.fileupload.FileItem
 
 trait Request{
   def getPath: String
-  def getMethod: HTTP.Method
+  def getMethod: HttpMethod
   def getServerName: String
   def isSecure: Boolean
 

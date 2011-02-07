@@ -1,8 +1,8 @@
 package org.bowlerframework.model
 
-import org.bowlerframework.{HTTP, Request}
 import net.liftweb.json.JsonParser._
 import com.recursivity.commons.bean.GenericTypeDefinition
+import org.bowlerframework.{GET, DELETE, HTTP, Request}
 
 /**
  * RequestMapper for JSON requests.
@@ -16,7 +16,7 @@ class JsonRequestMapper extends RequestMapper {
     typeString = typeString.replace("]", ">")
     val typeDef = GenericTypeDefinition(typeString)
 
-    if (request.getMethod == HTTP.GET || request.getMethod == HTTP.DELETE) {
+    if (request.getMethod == GET || request.getMethod == DELETE) {
       val mapper = new DefaultRequestMapper
       return mapper.getValue[T](request, nameHint)(m)
     } else{

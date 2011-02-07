@@ -22,22 +22,22 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     }
   }
 
-  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: String, routeExecutor: RouteExecutor) = {
-      protocol.toString match {
-        case "GET" => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case "PUT" => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case "POST" => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case "DELETE" => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+  def addApplicationRoute(protocol: HttpMethod, routeMatchers: String, routeExecutor: RouteExecutor) = {
+      protocol match {
+        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
+        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
+        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
+        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
       }
   }
 
 
-  def addApplicationRoute(protocol: HTTP.Method, routeMatchers: Regex, routeExecutor: RouteExecutor) = {
-      protocol.toString match {
-        case "GET" => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case "PUT" => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case "POST" => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case "DELETE" => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+  def addApplicationRoute(protocol: HttpMethod, routeMatchers: Regex, routeExecutor: RouteExecutor) = {
+      protocol match {
+        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
+        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
+        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
+        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
       }
   }
 

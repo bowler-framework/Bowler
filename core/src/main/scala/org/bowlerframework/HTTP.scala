@@ -6,10 +6,7 @@ import http.BowlerHttpRequest
  * Useful HTTP utilities.
  */
 
-object HTTP extends Enumeration{
-  type Method = Value
-
-  val GET, POST, PUT, DELETE = Value
+object HTTP{
 
   def basePath: String = {
     if(RequestScope.request.isInstanceOf[BowlerHttpRequest] && BowlerConfigurator.isServletApp){
@@ -36,3 +33,10 @@ object HTTP extends Enumeration{
   }
 
 }
+
+sealed trait HttpMethod
+
+case object GET extends HttpMethod
+case object POST extends HttpMethod
+case object PUT extends HttpMethod
+case object DELETE extends HttpMethod

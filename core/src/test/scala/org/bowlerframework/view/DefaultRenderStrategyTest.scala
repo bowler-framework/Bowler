@@ -2,8 +2,8 @@ package org.bowlerframework.view
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{HTTP, BowlerConfigurator}
 import scalate.ScalateViewRenderer
+import org.bowlerframework.{GET, HTTP, BowlerConfigurator}
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,14 +17,14 @@ class DefaultRenderStrategyTest extends FunSuite{
   BowlerConfigurator.setRenderStrategy(new DefaultRenderStrategy)
 
   test("get json strategy"){
-    val request = new DummyRequest(HTTP.GET,"/", Map(), null, Map("accept" -> "application/json"))
+    val request = new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json"))
     val viewRenderer = BowlerConfigurator.resolveViewRenderer(request)
     assert(viewRenderer != null)
     assert(viewRenderer.isInstanceOf[JsonViewRenderer])
   }
 
   test("get html renderer"){
-    val request = new DummyRequest(HTTP.GET,"/", Map(), null)
+    val request = new DummyRequest(GET,"/", Map(), null)
     val viewRenderer = BowlerConfigurator.resolveViewRenderer(request)
     assert(viewRenderer != null)
     assert(viewRenderer.isInstanceOf[ScalateViewRenderer])

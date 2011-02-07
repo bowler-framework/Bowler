@@ -1,9 +1,9 @@
 package org.bowlerframework.model
 
 import org.scalatest.FunSuite
-import org.bowlerframework.HTTP
 import org.bowlerframework.jvm.DummyRequest
 import java.util.Date
+import org.bowlerframework.{GET, POST, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -51,9 +51,9 @@ class JsonRequestMapperTest extends FunSuite{
 
   }
 
-  def makeRequest(body: String) = new DummyRequest(HTTP.POST, "/", Map(), body)
-  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.POST, "/", params, null)
-  def makeGetRequest(params: Map[String, Any]) = new DummyRequest(HTTP.GET, "/", params, null)
+  def makeRequest(body: String) = new DummyRequest(POST, "/", Map(), body)
+  def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
+  def makeGetRequest(params: Map[String, Any]) = new DummyRequest(GET, "/", params, null)
 
 
   val json = """

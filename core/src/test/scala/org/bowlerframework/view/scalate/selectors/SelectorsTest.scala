@@ -1,10 +1,10 @@
 package org.bowlerframework.view.scalate.selectors
 
 import org.scalatest.FunSuite
-import org.bowlerframework.HTTP
 import org.bowlerframework.jvm.DummyRequest
 import org.bowlerframework.view.scalate.Layout
 import util.matching.Regex
+import org.bowlerframework.{POST, GET, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,16 +41,16 @@ class SelectorsTest extends FunSuite{
     val selector = new UriLayoutSelector(Layout("default"), new Regex("^.*/hello/.*$"))
     assert(selector.find(makeRequest(Map())) == None)
 
-    assert(selector.find(new DummyRequest(HTTP.POST, "/hello/world", Map(), null)).get.name == "default")
+    assert(selector.find(new DummyRequest(POST, "/hello/world", Map(), null)).get.name == "default")
   }
 
   test("uri & method matcher selector"){
-    val selector = new UriAndMethodLayoutSelector(Layout("default"), HTTP.GET, new Regex("^.*/hello/.*$"))
-    assert(selector.find(new DummyRequest(HTTP.POST, "/hello/world", Map(), null)) == None)
+    val selector = new UriAndMethodLayoutSelector(Layout("default"), GET, new Regex("^.*/hello/.*$"))
+    assert(selector.find(new DummyRequest(POST, "/hello/world", Map(), null)) == None)
 
-    assert(selector.find(new DummyRequest(HTTP.GET, "/hello/world", Map(), null)).get.name == "default")
+    assert(selector.find(new DummyRequest(GET, "/hello/world", Map(), null)).get.name == "default")
   }
 
-  def makeRequest(params: Map[String, Any]) = new DummyRequest(HTTP.POST, "/", params, null)
+  def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
 
 }

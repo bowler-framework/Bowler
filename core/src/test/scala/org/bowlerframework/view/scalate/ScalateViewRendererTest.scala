@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import selectors.DefaultLayoutSelector
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import org.bowlerframework.view.ViewModel
-import org.bowlerframework.{Request, MappedPath, HTTP}
+import org.bowlerframework.{GET, Request, MappedPath, HTTP}
 
 /**
  * Created by IntelliJ IDEA.
@@ -63,7 +63,7 @@ class ScalateViewRendererTest extends FunSuite{
     assert("<html><head><title>/simple</title></head><body><div>Hello Wille</div></body></html>" == response.toString)
   }
 
-  def makeRequest(path: String) = new DummyRequest(HTTP.GET, path, Map(), null)
+  def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
 }
 
 class TestLayoutModel extends LayoutModel{
