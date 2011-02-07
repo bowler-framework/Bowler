@@ -2,7 +2,7 @@ package org.bowlerframework.squeryl
 
 import org.squeryl.{KeyedEntity, Table}
 import org.squeryl.PrimitiveTypeMode._
-import com.recursivity.commons.bean.{GenericsParser}
+import com.recursivity.commons.bean.{GenericTypeDefinition}
 import org.squeryl.dsl.QueryYield
 
 /**
@@ -16,8 +16,8 @@ import org.squeryl.dsl.QueryYield
 abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]){
   private val typeString = m.toString.replace("[", "<").replace("]", ">")
   private val keyString = k.toString.replace("[", "<").replace("]", ">")
-  private val typeDef = GenericsParser.parseDefinition(typeString)
-  private val keyDef = GenericsParser.parseDefinition(keyString)
+  private val typeDef = GenericTypeDefinition(typeString)
+  private val keyDef = GenericTypeDefinition(keyString)
   def entityType = Class.forName(typeDef.clazz)
 
 

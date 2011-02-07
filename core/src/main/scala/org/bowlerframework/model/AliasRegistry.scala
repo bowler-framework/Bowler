@@ -2,7 +2,7 @@ package org.bowlerframework.model
 
 import collection.mutable.HashMap
 import collection.TraversableLike
-import com.recursivity.commons.bean.{GenericsParser, GenericTypeDefinition}
+import com.recursivity.commons.bean.{GenericTypeDefinition}
 
 /**
  * Used to work out aliases for objects to use in templates. Defaults to className for a class of com.mycompany.ClassName if no other name is registered.
@@ -56,7 +56,7 @@ object AliasRegistry{
     }else if(classOf[scala.collection.Map[_,_]].isAssignableFrom(cls) || classOf[java.util.Map[_,_]].isAssignableFrom(cls))
       return None
     else{
-      val name = GenericsParser.parseDefinition(cls.getName).toSimpleString(true)
+      val name = GenericTypeDefinition(cls.getName).toSimpleString(true)
       try{
         return Some(responseAliases(name))
       }catch{
@@ -69,7 +69,7 @@ object AliasRegistry{
   def registerModelAlias[T](alias: String)(implicit m: Manifest[T]){
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
-    val typeDef = GenericsParser.parseDefinition(typeString)
+    val typeDef = GenericTypeDefinition(typeString)
     val key = getModelAliasKey(typeDef)
     if(key != None)
       responseAliases.put(key.get, alias)
@@ -97,6 +97,6 @@ object AliasRegistry{
   def getTypeDefinition[T]()(implicit m: Manifest[T]): GenericTypeDefinition = {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
-    return GenericsParser.parseDefinition(typeString)
+    return GenericTypeDefinition(typeString)
   }
 }

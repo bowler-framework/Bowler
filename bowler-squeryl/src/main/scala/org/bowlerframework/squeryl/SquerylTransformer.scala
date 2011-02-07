@@ -7,7 +7,7 @@ import com.recursivity.commons.bean.{TransformerRegistry, StringValueTransformer
 class SquerylTransformer[T <: KeyedEntity[K], K](dao: SquerylDao[T,K]) extends StringValueTransformer[T]{
 
   def toValue(from: String): Option[T] = {
-    val key = TransformerRegistry.resolveTransformer(dao.keyType).
+    val key = TransformerRegistry(dao.keyType).
       getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(from)
     if(key == None)
       throw new IllegalArgumentException("cannot transform value " + from  + " with StringValueTransformer registered for type " + dao.keyType.getName)

@@ -95,7 +95,7 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
 
 
   def parseId(request: Request, idName: String): K = {
-    return TransformerRegistry.resolveTransformer(dao.keyType).
+    return TransformerRegistry(dao.keyType).
       getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(request.getStringParameter(idName)).getOrElse(throw new IllegalArgumentException("Cannot convert key to correct key type")).asInstanceOf[K]
   }
 

@@ -1,6 +1,6 @@
 package org.bowlerframework.model
 
-import com.recursivity.commons.bean.{BeanUtils, GenericsParser, GenericTypeDefinition, TransformerRegistry}
+import com.recursivity.commons.bean.{BeanUtils, GenericTypeDefinition, TransformerRegistry}
 import org.apache.commons.fileupload.FileItem
 import util.DynamicVariable
 import org.bowlerframework.{HTTP, Request}
@@ -30,7 +30,7 @@ class DefaultRequestMapper extends RequestMapper {
   private def getValue[T](request: HashMap[String, Any], nameHint: String, m: Manifest[T]): T = {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
-    val typeDef = GenericsParser.parseDefinition(typeString)
+    val typeDef = GenericTypeDefinition(typeString)
     return getValue[T](request, nameHint, typeDef)
   }
 
@@ -59,11 +59,11 @@ class DefaultRequestMapper extends RequestMapper {
       }
 
       val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
-      if (response == null && !TransformerRegistry.resolveTransformer(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))) {
+      if (response == null && !TransformerRegistry(cls).equals(None) && (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
       } else if (response == null && (!httpRequest.getMethod.equals(HTTP.POST) || !httpRequest.getMethod.equals(HTTP.PUT))) {
         return None.asInstanceOf[T]
-      } else if (response != None || !TransformerRegistry.resolveTransformer(cls).equals(None)) {
+      } else if (response != None || !TransformerRegistry(cls).equals(None)) {
         if (httpRequest.getMethod.equals(HTTP.POST) || httpRequest.getMethod.equals(HTTP.PUT))
           return BeanUtils.setProperties[T](response, dealiasedRequest.toMap)
         else
@@ -190,7 +190,7 @@ class DefaultRequestMapper extends RequestMapper {
 
   private def getValueForTransformer[T](request: HashMap[String, Any], nameHint: String, cls: Class[_]): T = {
     if (nameHint != null) {
-      val response = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).getOrElse(null).asInstanceOf[T]
+      val response = TransformerRegistry(cls).getOrElse(return None.asInstanceOf[T]).toValue(request(nameHint).toString).getOrElse(null).asInstanceOf[T]
       if (response != null && response != None) {
         request.remove(nameHint)
         return response
@@ -199,7 +199,7 @@ class DefaultRequestMapper extends RequestMapper {
     }
     else {
       var response: T = None.asInstanceOf[T]
-      val transformer = TransformerRegistry.resolveTransformer(cls).getOrElse(return None.asInstanceOf[T])
+      val transformer = TransformerRegistry(cls).getOrElse(return None.asInstanceOf[T])
       request.iterator.find(f => {
         try {
           response = transformer.toValue(f._2.toString).getOrElse(null).asInstanceOf[T]

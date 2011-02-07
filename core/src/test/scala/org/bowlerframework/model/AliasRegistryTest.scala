@@ -1,7 +1,7 @@
 package org.bowlerframework.model
 
 import org.scalatest.FunSuite
-import com.recursivity.commons.bean.{GenericsParser, GenericTypeDefinition}
+import com.recursivity.commons.bean.{GenericTypeDefinition}
 import collection.TraversableLike
 
 /**
@@ -69,7 +69,7 @@ class AliasRegistryTest extends FunSuite{
   private def getValue[T]()(implicit m: Manifest[T]): GenericTypeDefinition = {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
-    return GenericsParser.parseDefinition(typeString)
+    return GenericTypeDefinition(typeString)
   }
 }
 
