@@ -66,6 +66,7 @@ class AliasRegistryTest extends FunSuite{
   }
 
 
+
   private def getValue[T]()(implicit m: Manifest[T]): GenericTypeDefinition = {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")

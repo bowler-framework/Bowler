@@ -97,9 +97,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
     return list.toList
   }
 
-  def getAccepts: ContentTypeResolver.ContentType = {
-    ContentTypeResolver.contentType(request.getHeader("accept"))
-  }
+  def getAccept = request.getHeader("accept")
 
   def getMethod: HttpMethod = {
     request.getMethod match {

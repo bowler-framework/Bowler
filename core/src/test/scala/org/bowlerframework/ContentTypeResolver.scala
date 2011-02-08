@@ -3,9 +3,9 @@ package org.bowlerframework
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
- * Date: 12/12/2010
- * Time: 19:27
- * To change this layout use File | Settings | File Templates.
+ * Date: 08/02/2011
+ * Time: 23:51
+ * To change this template use File | Settings | File Templates.
  */
 
 object ContentTypeResolver extends Enumeration{
@@ -26,14 +26,12 @@ object ContentTypeResolver extends Enumeration{
   }
 
   def contentString(contentType: ContentType): String = {
-    if(contentType.equals(HTML))
-      return "text/html"
-    else if(contentType.equals(JSON))
-      return "application/json"
-    else if(contentType.equals(XML))
-      return "application/xml"
-    else
-      return "text/html"
+    contentType match{
+      case HTML => return "text/html"
+      case JSON => return "application/json"
+      case XML => return "application/xml"
+      case _ => return "text/html"
+    }
   }
 
 }

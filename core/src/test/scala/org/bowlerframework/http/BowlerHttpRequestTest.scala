@@ -215,7 +215,7 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
     BowlerConfigurator.post("/getRequestBodyAsString", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
         requestBody = scope.request.getRequestBodyAsString
-        content = scope.request.getAccepts
+        content = ContentTypeResolver.contentType(scope.request.getAccept)
       }
     })
     val headers = Map("accept" -> "application/json")

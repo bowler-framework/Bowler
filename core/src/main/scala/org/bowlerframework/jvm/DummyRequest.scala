@@ -65,7 +65,7 @@ class DummyRequest(method: HttpMethod, path: String, params: Map[String, Any], b
 
   def setLocales(locales: List[String]) = {this.locales = locales}
 
-  def getAccepts = ContentTypeResolver.contentType(headers("accept"))
+  def getAccept = headers("accept")
 
   def getMethod = method
 

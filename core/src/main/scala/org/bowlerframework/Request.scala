@@ -25,7 +25,7 @@ trait Request{
   def getHeader(name: String): String
   def getHeaders(name: String): List[String]
   def getHeaderNames: List[String]
-  def getAccepts: ContentTypeResolver.ContentType
+  def getAccept: String
   def getContentType: Option[String]
   def getLocales: List[String]
 
