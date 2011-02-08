@@ -15,16 +15,16 @@ import collection.TraversableLike
 class AliasRegistryTest extends FunSuite{
 
   test("Simple Alias"){
-    assert("int" == AliasRegistry.getRequestAlias(getValue[Int]))
-    assert("string" == AliasRegistry.getRequestAlias(getValue[String]))
+    assert("int" == AliasRegistry(getValue[Int]))
+    assert("string" == AliasRegistry(getValue[String]))
   }
 
   test("Generified Aliases"){
-    assert("list[int]" == AliasRegistry.getRequestAlias(getValue[List[Int]]))
-    assert("list[integer]" == AliasRegistry.getRequestAlias(getValue[List[java.lang.Integer]]))
-    assert("set[string]" == AliasRegistry.getRequestAlias(getValue[Set[String]]))
-    assert("option[int]" == AliasRegistry.getRequestAlias(getValue[Option[Int]]))
-    assert("collection[string]" == AliasRegistry.getRequestAlias(getValue[java.util.Collection[String]]))
+    assert("list[int]" == AliasRegistry(getValue[List[Int]]))
+    assert("list[integer]" == AliasRegistry(getValue[List[java.lang.Integer]]))
+    assert("set[string]" == AliasRegistry(getValue[Set[String]]))
+    assert("option[int]" == AliasRegistry(getValue[Option[Int]]))
+    assert("collection[string]" == AliasRegistry(getValue[java.util.Collection[String]]))
   }
 
   test("alias for Any"){
@@ -44,25 +44,25 @@ class AliasRegistryTest extends FunSuite{
   }
 
   test("alias for value without registered"){
-    assert("aliasBean".equals(AliasRegistry.getModelAlias(AliasBean("someName", 24)).get))
+    assert("aliasBean".equals(AliasRegistry(AliasBean("someName", 24)).get))
   }
 
   test("alias for traversable without registrered"){
-    assert("aliasBeans".equals(AliasRegistry.getModelAlias(List(AliasBean("someName", 24))).get))
+    assert("aliasBeans".equals(AliasRegistry(List(AliasBean("someName", 24))).get))
   }
 
   test("registered alias for TraversableLike"){
     AliasRegistry.registerModelAlias[List[BeanWithAlias]]("aliasBeansFTW")
-    assert("aliasBeansFTW".equals(AliasRegistry.getModelAlias(List(BeanWithAlias())).get))
+    assert("aliasBeansFTW".equals(AliasRegistry(List(BeanWithAlias())).get))
   }
 
   test("register alias for bean"){
     AliasRegistry.registerModelAlias[BeanWithAlias]("abean")
-    assert("abean".equals(AliasRegistry.getModelAlias(BeanWithAlias()).get))
+    assert("abean".equals(AliasRegistry(BeanWithAlias()).get))
   }
 
   test("alias for primitive without registered"){
-    assert("long".equals(AliasRegistry.getModelAlias(23l).get))
+    assert("long".equals(AliasRegistry(23l).get))
   }
 
 

@@ -22,7 +22,7 @@ class ViewModelBuilderTest extends FunSuite{
     println(model)
   }
 
-  def vararg(model: Any*) = ViewModelBuilder.buildModel(model.toSeq)
+  def vararg(model: Any*) = ViewModelBuilder(model.toSeq)
 
 }
 

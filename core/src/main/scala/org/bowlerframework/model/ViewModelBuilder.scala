@@ -8,7 +8,7 @@ import collection.mutable.{WrappedArray, HashMap}
  */
 
 object ViewModelBuilder{
-  def buildModel(models: Seq[Any]): HashMap[String,Any] ={
+  def apply(models: Seq[Any]): HashMap[String,Any] ={
     val model = new HashMap[String, Any]
     models.foreach(f =>{
 
@@ -37,7 +37,7 @@ object ViewModelBuilder{
       return model.asInstanceOf[Tuple2[String, _]]._1
     else{
       if(model != None){
-        val alias = AliasRegistry.getModelAlias(model)
+        val alias = AliasRegistry(model)
         if(alias != None)
           return alias.get
         else return ""

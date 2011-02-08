@@ -39,7 +39,7 @@ class ScalateViewRenderer extends ViewRenderer{
     if(validated != None && validated.get.size > 0)
       tempModel = tempModel ++ validated.get
 
-    val model = ViewModelBuilder.buildModel(tempModel)
+    val model = ViewModelBuilder(tempModel)
     if(request.getSession.getErrors != None){
       val list = new MutableList[String]
       request.getSession.getErrors.get.foreach(f => list += f._2)

@@ -56,8 +56,8 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
     this.mapRequest[T](request)(bean => {
       validate(bean){
         var validator: ModelValidator = new DefaultModelValidator(dao.entityType)
-        if(DefaultValidationRegistry.getValidatorBuilder(dao.entityType) != None){
-          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
+        if(ModelValidatorBuilder(dao.entityType) != None){
+          validator = ModelValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
         validator.add(new SquerylUniqueValidator[T, K]("id", dao, {bean.id}))
         validator.validate
@@ -75,8 +75,8 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
       val id = parseId(request, "id")
       validate(bean) {
         var validator: ModelValidator = new DefaultModelValidator(dao.entityType)
-        if(DefaultValidationRegistry.getValidatorBuilder(dao.entityType) != None){
-          validator = DefaultValidationRegistry.getValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
+        if(ModelValidatorBuilder(dao.entityType) != None){
+          validator = ModelValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
         validator.add(Equals("id", {id}, {bean.id}))
         validator.validate

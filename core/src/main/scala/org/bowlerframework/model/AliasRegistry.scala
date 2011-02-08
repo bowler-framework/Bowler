@@ -14,7 +14,7 @@ object AliasRegistry{
   val responseAliases = new HashMap[String, String]
 
 
-  def getRequestAlias(cls: GenericTypeDefinition): String = {
+  def apply(cls: GenericTypeDefinition): String = {
     try{
       return map(cls)
     }catch{
@@ -26,13 +26,13 @@ object AliasRegistry{
     }
   }
 
-  def getModelAlias(param: Any): Option[String] = {
+  def apply(param: Any): Option[String] = {
     val cls = param.asInstanceOf[AnyRef].getClass
     if(classOf[TraversableLike[_,_]].isAssignableFrom(cls)){
       val traversable = param.asInstanceOf[TraversableLike[_,_]]
       if(traversable.size > 0){
         val head = param.asInstanceOf[TraversableLike[_,_]].head
-        val name = getModelAlias(head).get + "s"
+        val name = AliasRegistry(head).get + "s"
         try{
           return Some(responseAliases(name))
         }catch{
@@ -45,7 +45,7 @@ object AliasRegistry{
       val col = param.asInstanceOf[java.util.Collection[_]]
       if(col.size > 0){
         val head = col.iterator.next
-        val name = getModelAlias(head).get + "s"
+        val name = AliasRegistry(head).get + "s"
         try{
           return Some(responseAliases(name))
         }catch{
@@ -75,6 +75,9 @@ object AliasRegistry{
       responseAliases.put(key.get, alias)
   }
 
+  /**
+   *
+   */
   def getModelAliasKey(typeDef: GenericTypeDefinition): Option[String] = {
     try{
       val cls = Class.forName(typeDef.clazz)
@@ -94,7 +97,7 @@ object AliasRegistry{
 
   def registerRequestAlias(cls: GenericTypeDefinition, alias: String) = map.put(cls, alias)
 
-  def getTypeDefinition[T]()(implicit m: Manifest[T]): GenericTypeDefinition = {
+  private def getTypeDefinition[T]()(implicit m: Manifest[T]): GenericTypeDefinition = {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
     return GenericTypeDefinition(typeString)

@@ -5,7 +5,7 @@ import org.scalatra.test.scalatest.ScalatraFunSuite
 import org.squeryl.PrimitiveTypeMode._
 import org.bowlerframework.http.BowlerFilter
 import com.recursivity.commons.validator.MinLength
-import org.bowlerframework.model.{ModelValidator, DefaultValidationRegistry, DefaultModelValidator, ModelValidatorBuilder}
+import org.bowlerframework.model.{ModelValidator, DefaultModelValidator, ModelValidatorBuilder}
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +18,7 @@ import org.bowlerframework.model.{ModelValidator, DefaultValidationRegistry, Def
 class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     import Library._
 
-  DefaultValidationRegistry.registerValidatorBuilder(classOf[Author], new AuthorValidatorBuilder)
+  ModelValidatorBuilder.registerValidatorBuilder(classOf[Author], new AuthorValidatorBuilder)
 
   val dao = new LongKeyedDao[Author](authors)
   val holder = this.addFilter(classOf[BowlerFilter], "/*")

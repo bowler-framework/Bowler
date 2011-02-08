@@ -50,6 +50,8 @@ object TemplateRegistry{
     pathTemplateOverrides = new HashMap[String, String]
   }
 
+
+
   def getLayout(request: Request): Option[Layout] = {
     val selector = layoutSelectors.find(p => {p.find(request) != None})
     if(selector == None) return None

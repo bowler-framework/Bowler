@@ -17,11 +17,11 @@ import org.bowlerframework.model.ViewModelBuilder
 trait ComponentRenderSupport {
 
   def render(models: Any*): String = {
-    renderMap(ViewModelBuilder.buildModel(models.toSeq).toMap)
+    renderMap(ViewModelBuilder(models.toSeq).toMap)
   }
 
   def renderWithNamed(action: String, models: Any*){
-    render(ViewModelBuilder.buildModel(models.toSeq), action)
+    render(ViewModelBuilder(models.toSeq), action)
   }
 
   def renderMap(model: Map[String, Any], action: String = "index"): String = {

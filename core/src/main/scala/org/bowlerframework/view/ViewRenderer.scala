@@ -26,7 +26,7 @@ trait ViewRenderer{
     else if(model.isInstanceOf[Tuple2[String, _]])
       return model.asInstanceOf[Tuple2[String, _]]._1
     else
-      return AliasRegistry.getModelAlias(model).get
+      return AliasRegistry(model).get
   }
 
   def getModelValue(model: Any): Any = {

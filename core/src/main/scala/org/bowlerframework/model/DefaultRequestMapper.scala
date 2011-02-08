@@ -47,7 +47,7 @@ class DefaultRequestMapper extends RequestMapper {
 
     if (typeDef.genericTypes == None) {
       // deal with non-generics, non-files, non-primitives
-      val alias = AliasRegistry.getRequestAlias(typeDef)
+      val alias = AliasRegistry(typeDef)
       var hintOfName: String = nameHint
       var dealiasedRequest = getDealiasedRequest(alias, request)
       println("DefaultRequestMapper " + alias + " " + dealiasedRequest)
@@ -124,7 +124,7 @@ class DefaultRequestMapper extends RequestMapper {
     if (nameHint != null)
       list = request(nameHint).asInstanceOf[List[_]]
     else {
-      val alias = AliasRegistry.getRequestAlias(parent)
+      val alias = AliasRegistry(parent)
 
       request.iterator.foreach(f => {
         if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias))
