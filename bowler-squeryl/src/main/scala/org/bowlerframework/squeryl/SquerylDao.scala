@@ -4,6 +4,7 @@ import org.squeryl.{KeyedEntity, Table}
 import org.squeryl.PrimitiveTypeMode._
 import com.recursivity.commons.bean.{GenericTypeDefinition}
 import org.squeryl.dsl.QueryYield
+import org.bowlerframework.persistence.Dao
 
 /**
  * Created by IntelliJ IDEA.

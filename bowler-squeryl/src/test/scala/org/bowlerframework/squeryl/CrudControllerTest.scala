@@ -6,6 +6,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.bowlerframework.http.BowlerFilter
 import com.recursivity.commons.validator.MinLength
 import org.bowlerframework.model.{ModelValidator, DefaultModelValidator, ModelValidatorBuilder}
+import org.bowlerframework.persistence._
 
 /**
  * Created by IntelliJ IDEA.

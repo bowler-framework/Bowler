@@ -4,6 +4,7 @@ package org.bowlerframework.squeryl
 import dao.{StringKeyedDao, LongKeyedDao}
 import org.scalatest.FunSuite
 import org.squeryl.PrimitiveTypeMode._
+import org.bowlerframework.persistence._
 
 
 
