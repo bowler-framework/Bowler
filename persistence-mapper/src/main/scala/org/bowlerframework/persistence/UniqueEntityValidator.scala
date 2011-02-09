@@ -10,7 +10,7 @@ import com.recursivity.commons.validator.Validator
  * To change this template use File | Settings | File Templates.
  */
 
-class PersistedUniqueValidator[T <: {def id: K}, K](key: String, dao: Dao[T,K], value: => K) extends Validator{
+class UniqueEntityValidator[T <: {def id: K}, K](key: String, dao: Dao[T,K], value: => K) extends Validator{
   def getKey = key
 
   def getReplaceModel = List[(String, Any)]()

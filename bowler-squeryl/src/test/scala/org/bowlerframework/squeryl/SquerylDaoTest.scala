@@ -132,7 +132,7 @@ class SquerylDaoTest extends FunSuite with InMemoryDbTest{
   test("test uniqueValidator"){
     startTx
     val person = new Person("wille", "faler")
-    val validator = new PersistedUniqueValidator[Person, String]("id", personDao, {person.id})
+    val validator = new UniqueEntityValidator[Person, String]("id", personDao, {person.id})
 
     transaction{
       assert(validator.isValid)
@@ -152,7 +152,7 @@ class SquerylDaoTest extends FunSuite with InMemoryDbTest{
       dao.create(author)
       val id = author.id
       val stringId = "" + id
-      val transformer = new PersistenceTransformer[Author, Long](dao)
+      val transformer = new EntityTransformer[Author, Long](dao)
 
       val res = transformer.toValue(stringId)
       assert(res != None)

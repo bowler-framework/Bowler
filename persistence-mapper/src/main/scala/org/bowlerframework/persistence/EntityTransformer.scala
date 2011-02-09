@@ -2,8 +2,8 @@ package org.bowlerframework.persistence
 
 import com.recursivity.commons.bean.{TransformerRegistry, StringValueTransformer}
 
-// add more keyed dao's here
-class PersistenceTransformer[T <: {def id: K}, K](dao: Dao[T,K]) extends StringValueTransformer[T]{
+
+class EntityTransformer[T <: {def id: K}, K](dao: Dao[T,K]) extends StringValueTransformer[T]{
 
   def toValue(from: String): Option[T] = {
     val key = TransformerRegistry(dao.keyType).

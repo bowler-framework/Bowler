@@ -26,7 +26,7 @@ import org.bowlerframework.controller.InterceptingController
 
 class CrudController[T <: {def id: K}, K](controller: InterceptingController, dao: Dao[T, K], resourceName: String)
                                             (implicit m: scala.Predef.Manifest[T]) extends Renderable with ParameterMapper with Validations {
-  val transformer = new PersistenceTransformer[T, K](dao)
+  val transformer = new EntityTransformer[T, K](dao)
   TransformerRegistry.registerSingletonTransformer(dao.entityType, transformer)
 
   controller.get("/" + resourceName + "/")((req, resp) => {
@@ -60,7 +60,7 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
           validator = ModelValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
 
-        validator.add(new PersistedUniqueValidator[T, K]("id", dao, {bean.id}))
+        validator.add(new UniqueEntityValidator[T, K]("id", dao, {bean.id}))
         validator.validate
       }
       dao.create(bean)
