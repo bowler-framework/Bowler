@@ -13,12 +13,12 @@ import org.squeryl.dsl.QueryYield
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]){
+abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]) extends Dao[T,K]{
   private val typeString = m.toString.replace("[", "<").replace("]", ">")
   private val keyString = k.toString.replace("[", "<").replace("]", ">")
   private val typeDef = GenericTypeDefinition(typeString)
   private val keyDef = GenericTypeDefinition(keyString)
-  def entityType = Class.forName(typeDef.clazz)
+  def entityType = Class.forName(typeDef.clazz).asInstanceOf[Class[T]]
 
 
   var fieldCls: Class[_] = null
@@ -32,7 +32,7 @@ abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : 
       case _ => fieldCls = Class.forName(keyDef.clazz)
     }
 
-  def keyType = fieldCls
+  def keyType = fieldCls.asInstanceOf[Class[K]]
 
   def create(entity: T) = table.insert(entity)
 
@@ -40,9 +40,6 @@ abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : 
 
   def findAll(offset: Int = 0, results: Int = Integer.MAX_VALUE) = from(table)(a => select(a)).page(offset, results).toList
 
-  //def orderByClause: QueryYield[_]
-
-  def findById(id: K): Option[T]
 
   def delete(entity: T) = table.delete(entity.id)
 }

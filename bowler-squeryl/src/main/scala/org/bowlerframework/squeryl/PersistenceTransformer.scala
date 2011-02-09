@@ -1,10 +1,9 @@
 package org.bowlerframework.squeryl
 
-import org.squeryl.KeyedEntity
 import com.recursivity.commons.bean.{TransformerRegistry, StringValueTransformer}
 
 // add more keyed dao's here
-class SquerylTransformer[T <: KeyedEntity[K], K](dao: SquerylDao[T,K]) extends StringValueTransformer[T]{
+class PersistenceTransformer[T <: {def id: K}, K](dao: Dao[T,K]) extends StringValueTransformer[T]{
 
   def toValue(from: String): Option[T] = {
     val key = TransformerRegistry(dao.keyType).

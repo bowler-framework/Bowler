@@ -24,7 +24,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
 
   test("get /"){
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
 
     startTx
 
@@ -122,7 +122,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   }
 
   test("get /:id"){
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
 
     startTx
     var id: Long = 1
@@ -155,7 +155,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
 
   test("get /:id/edit"){
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
 
     startTx
     var id: Long = 1
@@ -188,7 +188,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
 
   test("create"){
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
     var result: String = null
     val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
@@ -233,7 +233,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     }
     commit
 
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
     var result: Int = 200
     val list = List[Tuple2[String, String]](("author.id", "" + id), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
@@ -241,6 +241,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
       result = this.status
     }
 
+    println("RESULT: " + result)
     assert(400 == result)
 
     startTx
@@ -253,12 +254,13 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   }
 
   test("create with ModelValidatorBuilder (name to short)"){
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
     var result: Int = 200
     val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "w"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
     this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       result = this.status
+      println(this.body)
     }
 
     assert(400 == result)
@@ -276,7 +278,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     commit
 
 
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
     var result: Int = 200
 
     println("AUTHOR ID: " +  id)
@@ -319,7 +321,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     commit
 
 
-    val controller = new CrudController[Author, Long](dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
     var result: Int = 200
 
     println("AUTHOR ID: " +  id)

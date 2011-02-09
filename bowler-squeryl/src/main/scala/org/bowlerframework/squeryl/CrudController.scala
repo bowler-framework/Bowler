@@ -6,6 +6,7 @@ import com.recursivity.commons.bean.{TransformerRegistry, BeanUtils}
 import org.bowlerframework.{Response, Request}
 import com.recursivity.commons.validator.Equals
 import org.bowlerframework.model._
+import org.bowlerframework.controller.InterceptingController
 
 /**
  * Squeryl based CRUD Controller that allows for the following actions:
@@ -24,26 +25,26 @@ import org.bowlerframework.model._
  * Further default validations for T should be registered with the DefaultValidationRegistry.
  */
 
-class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName: String)
-                                            (implicit m: scala.Predef.Manifest[T]) extends SquerylController with Validations with ParameterMapper with Renderable {
-  val transformer = new SquerylTransformer[T, K](dao)
+class CrudController[T <: {def id: K}, K](controller: InterceptingController, dao: Dao[T, K], resourceName: String)
+                                            (implicit m: scala.Predef.Manifest[T]) extends Renderable with ParameterMapper with Validations {
+  val transformer = new PersistenceTransformer[T, K](dao)
   TransformerRegistry.registerSingletonTransformer(dao.entityType, transformer)
 
-  get("/" + resourceName + "/")((req, resp) => {
+  controller.get("/" + resourceName + "/")((req, resp) => {
     listResources(1, req, resp)
   })
-  get("/" + resourceName)((req, resp) => {
+  controller.get("/" + resourceName)((req, resp) => {
     listResources(1, req, resp)
   })
-  get("/" + resourceName + "/page/:number")((req, resp) => {
+  controller.get("/" + resourceName + "/page/:number")((req, resp) => {
     listResources(req.getIntParameter("number"), req, resp)
   })
 
-  get("/" + resourceName + "/new")((req, resp) => render(BeanUtils.instantiate[T](dao.entityType)))
-  get("/" + resourceName + "/:id")((req, resp) => renderBean(req, resp))
-  get("/" + resourceName + "/:id/edit")((req, resp) => renderBean(req, resp))
+  controller.get("/" + resourceName + "/new")((req, resp) => render(BeanUtils.instantiate[T](dao.entityType)))
+  controller.get("/" + resourceName + "/:id")((req, resp) => renderBean(req, resp))
+  controller.get("/" + resourceName + "/:id/edit")((req, resp) => renderBean(req, resp))
 
-  delete("/" + resourceName + "/:id")((request, response) => {
+  controller.delete("/" + resourceName + "/:id")((request, response) => {
     this.mapRequest[T](request)(bean => {
       dao.delete(bean)
       response.setStatus(204)
@@ -52,14 +53,15 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
 
 
   // HTTP POST for creating new Widgets.
-  post("/" + resourceName + "/")((request, response) => {
+  controller.post("/" + resourceName + "/")((request, response) => {
     this.mapRequest[T](request)(bean => {
       validate(bean){
         var validator: ModelValidator = new DefaultModelValidator(dao.entityType)
         if(ModelValidatorBuilder(dao.entityType) != None){
           validator = ModelValidatorBuilder(dao.entityType).get.asInstanceOf[ModelValidatorBuilder[T]].initialize(bean)
         }
-        validator.add(new SquerylUniqueValidator[T, K]("id", dao, {bean.id}))
+
+        validator.add(new PersistedUniqueValidator[T, K]("id", dao, {bean.id}))
         validator.validate
       }
       dao.create(bean)
@@ -70,7 +72,7 @@ class CrudController[T <: KeyedEntity[K], K](dao: SquerylDao[T, K], resourceName
 
 
   // similar to the above POST, but for updating existing widgets.
-  post("/" + resourceName + "/:id")((request, response) => {
+  controller.post("/" + resourceName + "/:id")((request, response) => {
     this.mapRequest[T](request)(bean => {
       val id = parseId(request, "id")
       validate(bean) {
