@@ -10,11 +10,13 @@ class BowlerJpaProject(info: ProjectInfo) extends DefaultProject(info){
 	
 	val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.5.1-Final" % "provided"
 
+  val scalatest = "org.scalatest" % "scalatest" % "1.2" % "test"
+
       //val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
 	
 	  val jpa = "com.recursivity" % "recursivity-jpa_2.8.1" % "1.0"
 
-	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
+	  val h2database = "hsqldb" % "hsqldb" % "1.8.0.7" % "test"
 	
 		val jbossRepo = "JBoss repo" at "http://repository.jboss.com/maven2/"
 
