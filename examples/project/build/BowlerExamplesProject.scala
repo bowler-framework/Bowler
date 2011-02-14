@@ -2,7 +2,16 @@ import sbt._
 
 
 class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){
-  val bowler = "org.bowlerframework" % "bowler-core_2.8.1" % "0.1"
+  val bowlerJpa = "org.bowlerframework" % "jpa-mapper_2.8.1" % "0.2"
+  val bowlerSqueryl = "org.bowlerframework" % "squeryl-mapper_2.8.1" % "0.2"
+
+  val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.5.1-Final"
+
+  val hsqldb = "hsqldb" % "hsqldb" % "1.8.0.7" 
+
+  val h2database = "com.h2database" % "h2" % "1.2.144" 
+
+  val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
 	
   val slf4jVersion = "1.6.0"
 	
@@ -17,4 +26,6 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){
   val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
 
   val scalaToolsRepo = "Scala-Tools repo" at "http://scala-tools.org/repo-releases/"
+
+val jbossRepo = "JBoss repo" at "http://repository.jboss.com/maven2/"
 }

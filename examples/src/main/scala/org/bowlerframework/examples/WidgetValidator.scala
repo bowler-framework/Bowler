@@ -10,31 +10,31 @@ import org.bowlerframework.model.DefaultModelValidator
 class WidgetValidator(widget: Widget) extends DefaultModelValidator(classOf[WidgetValidator]) {
 
   // adding individual field validators. The string key is the key used to lookup the property name for the error message.
-  this.add(new NotNullOrNoneValidator("name", {
+  this.add(NotNullOrNone("name", {
     widget.name
   }))
-  this.add(new NotNullOrNoneValidator("id", {
+  this.add(NotNullOrNone("id", {
     widget.id
   }))
-  this.add(new NotNullOrNoneValidator("yearMade", {
+  this.add(NotNullOrNone("yearMade", {
     widget.yearMade
   }))
-  this.add(new StringLengthValidator("name", 5, 50, {
+  this.add(StringLength("name", 5, 50, {
     widget.name
   }))
-  add(new MaxIntValidator("yearMade", 2100, {
+  add(MaxInt("yearMade", 2100, {
     if (widget.yearMade != null)
       widget.yearMade.intValue
     else
       -500
   }))
-  add(new MinIntValidator("yearMade", 1900, {
+  add(MinInt("yearMade", 1900, {
     if (widget.yearMade != null)
       widget.yearMade.intValue
     else
       -500
   }))
-  add(new MinLongValidator("id", 1, {
+  add(MinLong("id", 1, {
     if (widget.id != null)
       widget.id.intValue
     else
