@@ -37,6 +37,7 @@ trait ComponentRenderSupport {
     val pw = new PrintWriter(writer)
     val template = ComponentRenderSupport.resolver.resolveTemplate(RequestScope.request, uri)
     val context = new DefaultRenderContext(template.uri, ComponentRenderSupport.engine, pw)
+    context.numberFormat = RenderEngine.numberFormat
     context.render(template.uri, model)
     return writer.toString
   }

@@ -3,6 +3,7 @@ package org.bowlerframework.view.scalate
 import java.io.PrintWriter
 import org.fusesource.scalate.{TemplateEngine, DefaultRenderContext}
 import util.DynamicVariable
+import java.text.{DecimalFormat, NumberFormat}
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,6 +14,8 @@ import util.DynamicVariable
  */
 
 class BowlerRenderContext(uri: String, engine: TemplateEngine, pw: PrintWriter) extends DefaultRenderContext(uri, engine, pw){
+
+  this.numberFormat = RenderEngine.numberFormat
 
   override def render(path: String, attributeMap: Map[String, Any]) = {
     BowlerRenderContext._modelContext.withValue(attributeMap){

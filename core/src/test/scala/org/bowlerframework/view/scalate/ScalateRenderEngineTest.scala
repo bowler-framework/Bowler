@@ -4,6 +4,8 @@ import org.fusesource.scalate.DefaultRenderContext
 import org.scalatest.FunSuite
 import org.fusesource.scalate.util.{FileResourceLoader, Resource}
 import java.io.{StringWriter, PrintWriter}
+import java.text.DecimalFormat
+
 //import org.bowlerframework.view.scalate.BowlerRenderContext._
 
 /**
@@ -15,6 +17,56 @@ import java.io.{StringWriter, PrintWriter}
  */
 
 class ScalateRenderEngineTest extends FunSuite{
+
+  test("default test numberformat"){
+    val model = Map("id" -> 2300)
+    val engine = RenderEngine.getEngine
+    val uri =  "ScalateRenderEngineNFTest.mustache"
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = {
+
+        Some(Resource.fromText(uri, "Number is: {{id}}"))
+      }
+    }
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new DefaultRenderContext(uri, engine, pw)
+
+    context.render(uri, model)
+
+    assert(writer.toString.equals("Number is: 2,300"))
+    RenderEngine.reset
+
+  }
+
+
+ /* test("default test numberformat - decimal"){
+    var df = new DecimalFormat("000000")
+    df.setGroupingUsed(false)
+    println("FORMAT: " + df.format(2300))
+
+    val model = Map("id" -> 2300)
+    val engine = RenderEngine.getEngine
+    val uri =  "ScalateRenderEngineNFTest.mustache"
+    engine.resourceLoader = new FileResourceLoader {
+      override def resource(uri: String): Option[Resource] = {
+
+        Some(Resource.fromText(uri, "Number is: {{id}}"))
+      }
+    }
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val context = new BowlerRenderContext(uri, engine, pw)
+    context.numberFormat = RenderEngine.numberFormat
+    context.render(uri, model)
+
+    println(writer.toString)
+    println(context.numberFormat + " " + RenderEngine.numberFormat)
+
+    assert(writer.toString.equals("Number is: 2300"))
+    RenderEngine.reset
+  }*/
+
 
   test("multiple Mustache id's with same id"){
     val model = Map("id" -> "someId")

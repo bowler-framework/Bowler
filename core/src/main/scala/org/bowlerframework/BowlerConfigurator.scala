@@ -4,6 +4,7 @@ package org.bowlerframework
 import util.matching.Regex
 import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
 import reflect.BeanProperty
+import java.text.NumberFormat
 
 /**
  * Kind of the "hub"/centre point for all things configuration within Bowler.
