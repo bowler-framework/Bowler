@@ -120,6 +120,8 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
+
+
   test("get /:id"){
     val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
 

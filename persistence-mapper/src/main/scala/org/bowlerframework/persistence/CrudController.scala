@@ -39,8 +39,13 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
     listResources(req.getIntParameter("number"), req, resp)
   })
 
-  controller.get("/" + resourceName + "/new")((req, resp) => render(BeanUtils.instantiate[T](dao.entityType)))
   controller.get("/" + resourceName + "/:id")((req, resp) => renderBean(req, resp))
+
+  controller.get("/" + resourceName + "/new")((req, resp) => {
+    render(BeanUtils.instantiate[T](dao.entityType))
+  })
+
+
   controller.get("/" + resourceName + "/:id/edit")((req, resp) => renderBean(req, resp))
 
   controller.delete("/" + resourceName + "/:id")((request, response) => {
