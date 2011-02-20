@@ -32,6 +32,34 @@
         });
      }
 
+
+     function deletePerson(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/people/" + id,
+        success: function(data){
+            window.location.href = "/people/";
+        }
+        });
+     }
+
+
+     function deleteCar(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/cars/" + id,
+        success: function(data){
+            window.location.href = "/cars/";
+        }
+        });
+     }
+
  </script>
 
 

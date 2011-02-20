@@ -1,0 +1,18 @@
+<h3>Person</h3>
+        {{#person}}
+        <form>
+<a href="/people/">Back to People listing</a> <br/>
+        <input type="button" value="Show This View as JSON" onclick="asJson('/people/{{id}}')" />
+</form>
+            <b>Id</b><br/>
+            {{id}}<br/>
+            <b>First Name</b><br/>
+            {{firstName}}<br/>
+            <b>Last Name</b><br/>
+            {{lastName}}<br/>
+        {{/person}}
+
+        {{^person}}
+  No Person :( <br/>
+<a href="/people/">Back to People listing</a>
+{{/person}}

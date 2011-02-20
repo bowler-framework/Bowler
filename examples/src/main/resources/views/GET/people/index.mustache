@@ -1,0 +1,21 @@
+<form>
+<input type="button" value="Show This View as JSON" onclick="asJson('/people/')" />
+</form>
+<a href="/people/new">Create New Person</a>
+
+<table>
+<thead>
+<tr>
+    <th>Id</th>  <th>Fist Name</th>   <th>Last Name</th> <th>&nbsp;</th><th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+{{#persons}}
+<tr>
+   <td><a href="/people/{{id}}">{{id}}</a></td> <td><a href="/people/{{id}}">{{firstName}}</a></td><td><a href="/people/{{id}}">{{lastName}}</a></td><td><a href="/people/{{id}}/edit">EDIT</a></td><td><form>
+<input type="button" value="Delete Person" onclick="deletePerson('{{id}}')" />
+</form></td>
+</tr>
+{{/persons}}
+</tbody>
+</table>

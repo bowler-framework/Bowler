@@ -1,0 +1,27 @@
+
+
+<h3>Create new Person</h3>
+
+<ul>
+    {{#validationErrors}}
+    <li>{{.}}</li>
+    {{/validationErrors}}
+</ul>
+{{#person}}
+<form method="POST" action="/people/">
+
+<input name="person.id" value="0" type="hidden"/><br/>
+First Name<br/>
+<input name="person.firstName" value="{{firstName}}"/><br/>
+
+Last Name<br/>
+<input name="person.lastName" value="{{lastName}}"/><br/>
+
+<input type="submit" value="Create!"/>
+</form>
+{{/person}}
+
+{{^person}}
+  No person :( <br/>
+        <a href="/people/">Go back</a>
+{{/person}}
