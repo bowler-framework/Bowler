@@ -5,8 +5,8 @@
 	<persistence-unit name="bowlerJpaExamples">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-		<class>org.bowlerframework.examples.jpa.Cars</class>
-
+		<class>org.bowlerframework.examples.jpa.Car</class>
+        <class>org.bowlerframework.examples.jpa.Make</class>
 
 
 	<properties>

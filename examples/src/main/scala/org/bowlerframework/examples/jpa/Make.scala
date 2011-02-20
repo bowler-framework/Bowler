@@ -7,27 +7,24 @@ import javax.persistence._
  * Created by IntelliJ IDEA.
  * User: wfaler
  * Date: 20/02/2011
- * Time: 20:08
+ * Time: 22:35
  * To change this template use File | Settings | File Templates.
  */
 
 @Entity
 @Table
-case class Car{
+class Make(make: String){
+
+  def this() = this(null)
 
   @Id
   @Column
-  @GeneratedValue
   @BeanProperty
-  var id: Long = 0
+  var name: String = make
 
   @BeanProperty
-  @ManyToOne
-  @JoinColumn(name="make_id", nullable=false)
-  var make: Make = null
+  @OneToMany(mappedBy="make")
+  var models: java.util.Set[Car] = new java.util.HashSet[Car]
 
-  @Column
-  @BeanProperty
-  var model: String = null
-
+  override def toString = name
 }

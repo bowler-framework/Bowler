@@ -1,0 +1,21 @@
+<form>
+<input type="button" value="Show This View as JSON" onclick="asJson('/cars/')" />
+</form>
+<a href="/cars/new">Create New Car</a>
+
+<table>
+<thead>
+<tr>
+    <th>Id</th>  <th>Make</th>   <th>Model</th> <th>&nbsp;</th><th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+{{#cars}}
+<tr>
+   <td><a href="/cars/{{id}}">{{id}}</a></td> <td><a href="/cars/{{id}}">{{make}}</a></td><td><a href="/cars/{{id}}">{{model}}</a></td><td><a href="/cars/{{id}}/edit">EDIT</a></td><td><form>
+<input type="button" value="Delete Car" onclick="deleteCar('{{id}}')" />
+</form></td>
+</tr>
+{{/cars}}
+</tbody>
+</table>

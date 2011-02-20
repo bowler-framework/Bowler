@@ -1,6 +1,6 @@
 package org.bowlerframework.examples
 
-import jpa.Car
+import jpa.{Make, Car}
 import org.bowlerframework.view.scalate._
 import org.bowlerframework.view.scalate.selectors._
 
@@ -17,6 +17,7 @@ import org.bowlerframework.squeryl.SquerylController
 import org.bowlerframework.squeryl.dao.LongKeyedDao
 import org.bowlerframework.jpa.{JpaDao, JpaController}
 import com.recursivity.jpa.PersistenceUnit
+import com.recursivity.jpa.Jpa._
 
 /**
  * This class acts as the starting point and bootstrap point for our application
@@ -88,6 +89,29 @@ class Bootstrap {
     session.close
     session.unbindFromCurrentThread
   }
+
+  // lets set up a few car makes for the JPA Example
+ transaction{
+   // val ford = new Make
+    //ford.name = "Ford"
+    entityManager.persist(new Make("Ford"))
+    //val volvo = new Make
+   // volvo.name = "Volvo"
+    entityManager.persist(new Make("Volvo"))
+    //val porsche = new Make
+    //porsche.name = "Porsche"
+    val porsche = new Make("Porsche")
+    entityManager.persist(porsche)
+
+   val nineEleven = new Car
+    nineEleven.make = porsche
+    nineEleven.model = "911"
+    entityManager.persist(nineEleven)
+  }
+
+  // allow template reload during development - remove these lines in production for better performance
+	org.bowlerframework.view.scalate.RenderEngine.getEngine.allowCaching = false
+	org.bowlerframework.view.scalate.RenderEngine.getEngine.allowReload = true
 
 }
 

@@ -1,0 +1,17 @@
+<h3>Created Car</h3>
+        {{#car}}
+        <form>
+<a href="/cars/">Back to Cars listing</a>
+</form>
+            <b>Id</b><br/>
+            {{id}}<br/>
+            <b>Make</b><br/>
+            {{make}}<br/>
+            <b>Model</b><br/>
+            {{model}}<br/>
+        {{/car}}
+
+        {{^car}}
+  No Car :( <br/>
+<a href="/cars/">Back to Cars listing</a>
+{{/car}}
