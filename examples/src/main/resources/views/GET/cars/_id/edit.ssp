@@ -1,0 +1,15 @@
+<%@ val car: org.bowlerframework.examples.jpa.Car %>
+<% import org.bowlerframework.examples.jpa.MakeDropdownComponent._ %>
+
+<h3>Updare Car</h3>
+
+
+<form method="POST" action="/cars/${car.id}">
+<input name="car.id" value="${car.id}" type="hidden"/>
+Make<br/>
+${unescape(show(car.make))} <br/>
+Year Made<br/>
+<input name="car.model" value="${car.model}"/><br/>
+
+<input type="submit" value="Update!"/>
+</form>

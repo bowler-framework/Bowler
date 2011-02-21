@@ -12,12 +12,12 @@ import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.{SessionFactory, Session}
 import java.io.{StringWriter, PrintWriter}
-import org.bowlerframework.persistence.CrudController
 import org.bowlerframework.squeryl.SquerylController
 import org.bowlerframework.squeryl.dao.LongKeyedDao
 import org.bowlerframework.jpa.{JpaDao, JpaController}
 import com.recursivity.jpa.PersistenceUnit
 import com.recursivity.jpa.Jpa._
+import org.bowlerframework.persistence.{EntityTransformer, CrudController}
 
 /**
  * This class acts as the starting point and bootstrap point for our application
@@ -52,6 +52,10 @@ class Bootstrap {
   val peopleController = new CrudController[Person, Long](new SquerylController, new LongKeyedDao[Person](ApplicationSchema.people), "people")
   // This controller is a JPA Crud Controller that deals with simple Crud operations on a "Car" entity object
   val carsController = new CrudController[Car, Long](new JpaController, new JpaDao[Car, Long], "cars")
+
+  val makeDao = new JpaDao[Make, String]
+  val transformer = new EntityTransformer[Make, String](makeDao)
+  TransformerRegistry.registerSingletonTransformer(makeDao.entityType, transformer)
 
 
   //// SECTION TO SETUP CONNECTION POOLING & DB FOR SQUERYL

@@ -20,11 +20,11 @@ class Make(make: String){
   @Id
   @Column
   @BeanProperty
-  var name: String = make
+  var id: String = make
 
   @BeanProperty
   @OneToMany(mappedBy="make")
   var models: java.util.Set[Car] = new java.util.HashSet[Car]
 
-  override def toString = name
+  override def toString = id
 }

@@ -1,0 +1,12 @@
+<%@ val makes: List[org.bowlerframework.examples.jpa.Make] %>
+<%@ val make: org.bowlerframework.examples.jpa.Make %>
+
+<select name="car.make">
+<%
+  makes.foreach(m => {
+%>
+  <option <% if(make.id == m.id){%>SELECTED<%}%> id="${m.id}">${m}</option>
+<%
+ })
+%>
+</select>
