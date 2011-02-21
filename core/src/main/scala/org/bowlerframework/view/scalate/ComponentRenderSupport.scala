@@ -27,8 +27,6 @@ trait ComponentRenderSupport {
   def renderMap(model: Map[String, Any], action: String = "index"): String = {
     var uri = "/" + this.getClass.getName.replace(".", "/")
     uri = uri.replace("$", "") + "_" + action
-    println(this.getClass.getName)
-    println(uri)
     render(uri, model)
   }
 
