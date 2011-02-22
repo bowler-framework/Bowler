@@ -10,7 +10,6 @@ import org.bowlerframework.{GET, HTTP, Response, Request}
 /**
  * A ViewRenderer that uses Scalate templates to render views
  */
-
 class ScalateViewRenderer extends ViewRenderer{
 
   def onError(request: Request, response: Response, exception: Exception) = {

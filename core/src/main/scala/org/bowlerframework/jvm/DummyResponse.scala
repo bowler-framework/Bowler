@@ -4,13 +4,7 @@ import org.bowlerframework.Response
 import java.util.HashMap
 import java.io.{OutputStream, PrintWriter, StringWriter}
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/12/2010
- * Time: 00:15
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends Response{
   private var status = 200

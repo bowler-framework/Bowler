@@ -4,13 +4,7 @@ import javax.servlet.http.HttpSession
 import collection.mutable.MutableList
 import org.bowlerframework.Session
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 00:09
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class BowlerHttpSession(session: HttpSession) extends Session{
   def getId = session.getId

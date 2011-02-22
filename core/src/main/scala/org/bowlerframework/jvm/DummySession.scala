@@ -4,13 +4,7 @@ import org.bowlerframework.Session
 import com.recursivity.commons.UUIDGenerator
 import collection.mutable.{MutableList, HashMap}
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/12/2010
- * Time: 00:14
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class DummySession extends Session{
   private var creationTime = System.currentTimeMillis

@@ -15,31 +15,12 @@ class FunctionReflectionTest extends FunSuite{
 
 
   test("reflect"){
-    //add(3)(b => intAdd(b))
-
     add(List("String"))(b => {
       println(b)
     })
   }
 
 
-
-  /*test("implied type"){
-    println(add(3)(intAdd(_)))
-
-    println(add("Hello")(println(_)))
-
-    println(add(3, 4)(multiAdd(_, _)))
-
-    println(add(3, "Hello: ")(multiAdd(_,_)))
-
-    println(add(List("hello", "world"), "Wille")((b,c) => multiAdd(b,c)))
-
-    println(add(List("hello", "world"), "Wille")((b,c) => {
-      println(b)
-      println(c)
-    }))
-  } */
 
   def intAdd(v: Int) = v + 4
 
@@ -54,8 +35,7 @@ class FunctionReflectionTest extends FunSuite{
   def add[R](l: R)(func: R => Any)(implicit m: Manifest[R]): Any ={
 
     println(func.getClass.getName)
-    //println(fields(0).getName)
-    //println(field.)
+
     func(l)
   }
 
@@ -63,9 +43,6 @@ class FunctionReflectionTest extends FunSuite{
     println("implicit: " + m.toString + ", " + t.toString)
     m.typeArguments.foreach(p => println("generics: " + p))
 
-    //m.
-    //println(fields(0).getName)
-    //println(field.)
     func(l,k)
   }
 

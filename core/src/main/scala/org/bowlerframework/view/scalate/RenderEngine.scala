@@ -7,7 +7,6 @@ import java.text.{DecimalFormat, NumberFormat}
 /**
  * Singleton Object that holds reference to a Scalate TemplateEngine
  */
-
 object RenderEngine{
   private var engine: TemplateEngine = null
   reset

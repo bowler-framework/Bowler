@@ -5,5 +5,4 @@ package org.bowlerframework.view
  * For instance, a property name for a JSON object where there are more than one model object in the view, OR<br/>
  * The Map key for a Scalate Map View Model
  */
-
 case class ViewModel(alias: String, value: Any)

@@ -6,13 +6,6 @@ import org.scalatra.util.{MultiMapHeadView, MapWithIndifferentAccess}
 import org.apache.commons.fileupload.FileItem
 import collection.mutable.HashMap
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 01:28
- * To change this layout use File | Settings | File Templates.
- */
 
 trait BowlerHttpApplicationRouter extends ApplicationRouter{
   def flattenParameters(request: HttpServletRequest, params: MultiMapHeadView[String, String] with MapWithIndifferentAccess[String],

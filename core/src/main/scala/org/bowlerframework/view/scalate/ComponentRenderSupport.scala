@@ -6,13 +6,6 @@ import org.fusesource.scalate.{DefaultRenderContext, TemplateEngine}
 import org.bowlerframework.RequestScope
 import org.bowlerframework.model.ViewModelBuilder
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 23/01/2011
- * Time: 02:09
- * To change this template use File | Settings | File Templates.
- */
 
 trait ComponentRenderSupport {
 

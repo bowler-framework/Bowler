@@ -4,13 +4,7 @@ import com.recursivity.commons.bean.{JavaIntegerTransformer, LongTransformer, Ja
 import collection.mutable.MutableList
 import org.bowlerframework._
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/12/2010
- * Time: 00:14
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class DummyRequest(method: HttpMethod, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{
   private val intTransformer = new JavaIntegerTransformer

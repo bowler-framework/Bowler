@@ -8,7 +8,7 @@ import collection.mutable.{MutableList, HashMap}
 import org.bowlerframework.{PUT, POST, HTTP, Request}
 
 /**
- * Mapps a single value from a request, for instance a bean from a request.
+ * Maps a single value from a request, for instance a bean from a request.
  */
 
 class DefaultRequestMapper extends RequestMapper {

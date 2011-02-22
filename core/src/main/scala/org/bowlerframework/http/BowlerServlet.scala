@@ -4,16 +4,9 @@ import org.scalatra.ScalatraServlet
 import org.scalatra.fileupload.FileUploadSupport
 import util.matching.Regex
 import javax.servlet.ServletConfig
-import org.bowlerframework.controller.Controller
 import org.bowlerframework._
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 04/01/2011
- * Time: 23:51
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{
   var bootstrap: AnyRef = null

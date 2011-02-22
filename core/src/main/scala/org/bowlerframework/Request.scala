@@ -1,15 +1,5 @@
 package org.bowlerframework
 
-import java.io.InputStream
-import org.apache.commons.fileupload.FileItem
-
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 21:52
- * To change this layout use File | Settings | File Templates.
- */
 
 trait Request{
   def getPath: String

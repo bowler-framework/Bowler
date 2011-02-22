@@ -17,7 +17,6 @@ trait ModelValidatorBuilder[T]{
 /**
  * Holds default validations for beans that have registered ModelValidatorBuilders with the registry.
  */
-
 object ModelValidatorBuilder{
   private val registry = new HashMap[Class[_], ModelValidatorBuilder[_]]
 

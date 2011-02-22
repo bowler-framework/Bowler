@@ -300,7 +300,6 @@ class DefaultRequestMapperTest extends FunSuite {
   def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
   def makeRequest(method: HttpMethod, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
 
-  //def make
 
 }
 

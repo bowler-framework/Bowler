@@ -5,7 +5,6 @@ import javax.servlet.FilterConfig
 import org.scalatra.fileupload.FileUploadSupport
 import util.matching.Regex
 import org.bowlerframework._
-import controller.Controller
 
 class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter{
 

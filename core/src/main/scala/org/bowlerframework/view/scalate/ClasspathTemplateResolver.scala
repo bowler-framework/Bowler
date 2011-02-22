@@ -1,16 +1,8 @@
 package org.bowlerframework.view.scalate
 
-import org.bowlerframework.Request
 import com.recursivity.commons.{StringInputStreamReader, ClasspathResourceResolver}
-import java.io.{IOException, InputStream}
+import java.io.{InputStream}
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 07/01/2011
- * Time: 23:58
- * To change this template use File | Settings | File Templates.
- */
 
 class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamReader {
 

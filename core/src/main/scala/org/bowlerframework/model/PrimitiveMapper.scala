@@ -1,12 +1,6 @@
 package org.bowlerframework.model
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 28/12/2010
- * Time: 17:02
- * To change this layout use File | Settings | File Templates.
- */
+
 
 object PrimitiveMapper{
   def getClassForPrimitive(m: String): Class[_] = {

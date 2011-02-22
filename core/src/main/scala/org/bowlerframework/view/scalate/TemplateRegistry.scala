@@ -11,7 +11,6 @@ import org.bowlerframework.{MappedPath, Request, HTTP}
  * the order of layouts and templates added matters, as the selectors are held in order and the first match will return a result. <br/>
  * Also holds Scalate configurations, such as TemplateResolver, preference order of Scalate template types (ssp, jade, mustache etc), root packages/folders for views and layouts etc.
  */
-
 object TemplateRegistry{
 
   @BeanProperty

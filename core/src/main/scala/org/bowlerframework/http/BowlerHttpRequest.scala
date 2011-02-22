@@ -4,16 +4,9 @@ import javax.servlet.http.HttpServletRequest
 import collection.mutable.MutableList
 import com.recursivity.commons.bean._
 import com.recursivity.commons.StringInputStreamReader
-import org.apache.commons.fileupload.FileItem
 import org.bowlerframework._
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 13/12/2010
- * Time: 21:57
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader{
   val session = new BowlerHttpSession(request.getSession(true))

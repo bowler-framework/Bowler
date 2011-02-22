@@ -9,7 +9,6 @@ import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
  * Time: 20:49
  * To change this layout use File | Settings | File Templates.
  */
-
 trait Renderable{
 
   def render: Unit = render(RequestScope.request,RequestScope.response)

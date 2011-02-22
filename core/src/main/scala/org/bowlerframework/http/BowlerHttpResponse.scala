@@ -3,13 +3,7 @@ package org.bowlerframework.http
 import org.bowlerframework.Response
 import javax.servlet.http.HttpServletResponse
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 14/12/2010
- * Time: 00:02
- * To change this layout use File | Settings | File Templates.
- */
+
 
 class BowlerHttpResponse(response: HttpServletResponse) extends Response{
   var status: Int = 200

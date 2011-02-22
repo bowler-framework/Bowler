@@ -4,14 +4,12 @@ import org.bowlerframework.{Response, Request}
 import net.liftweb.json.JsonAST._
 import net.liftweb.json.Extraction._
 import net.liftweb.json.Printer._
-import org.bowlerframework.model.AliasRegistry
 import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.MutableList
 
 /**
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
  */
-
 class JsonViewRenderer extends ViewRenderer{
   implicit val formats = net.liftweb.json.DefaultFormats
 

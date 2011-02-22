@@ -3,13 +3,7 @@ package org.bowlerframework.view.scalate.selectors
 import util.matching.Regex
 import org.bowlerframework.Request
 
-/**
- * Created by IntelliJ IDEA.
- * User: wfaler
- * Date: 07/01/2011
- * Time: 18:35
- * To change this template use File | Settings | File Templates.
- */
+
 
 class HeaderSelector[T](item: T, headerSelectors: Map[String, Regex]) extends RequestSelector[T]{
 
