@@ -1,6 +1,6 @@
 package org.bowlerframework.examples
 
-import jpa.{Make, Car}
+import jpa.{CarValidatorBuilder, Make, Car}
 import org.bowlerframework.view.scalate._
 import org.bowlerframework.view.scalate.selectors._
 
@@ -18,6 +18,7 @@ import org.bowlerframework.jpa.{JpaDao, JpaController}
 import com.recursivity.jpa.PersistenceUnit
 import com.recursivity.jpa.Jpa._
 import org.bowlerframework.persistence.{EntityTransformer, CrudController}
+import org.bowlerframework.model.{ModelValidatorBuilder, DefaultModelValidator}
 
 /**
  * This class acts as the starting point and bootstrap point for our application
@@ -53,9 +54,13 @@ class Bootstrap {
   // This controller is a JPA Crud Controller that deals with simple Crud operations on a "Car" entity object
   val carsController = new CrudController[Car, Long](new JpaController, new JpaDao[Car, Long], "cars")
 
+  // Lets register a StringValueTransformer for the Make domain object, so the dropdown in the Cars forms work.
   val makeDao = new JpaDao[Make, String]
   val transformer = new EntityTransformer[Make, String](makeDao)
   TransformerRegistry.registerSingletonTransformer(makeDao.entityType, transformer)
+
+  // register a default validator for "Car" model objects
+  ModelValidatorBuilder.registerValidatorBuilder(classOf[Car], new CarValidatorBuilder)
 
 
   //// SECTION TO SETUP CONNECTION POOLING & DB FOR SQUERYL

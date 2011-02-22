@@ -1,7 +1,18 @@
 <%@ val car: org.bowlerframework.examples.jpa.Car %>
 <% import org.bowlerframework.examples.jpa.MakeDropdownComponent._ %>
 
-<h3>Updare Car</h3>
+<%@ val validationErrors: List[String] = List[String]() %>
+
+<h3>Update Car</h3>
+
+<%if(validationErrors.size > 0){%>
+        <ul>
+        <%validationErrors.foreach(e => { %>
+            <li>${e}</li>
+        <%})%>
+
+        </ul>
+<%}%>
 
 
 <form method="POST" action="/cars/${car.id}">

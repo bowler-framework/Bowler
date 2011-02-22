@@ -13,7 +13,7 @@ import collection.mutable.MutableList
  */
 
 object MakeDropdownComponent extends ComponentRenderSupport{
-  def show(make: Make) = {
+  def show(make: Make): String = {
     transaction{
       val makes = entityManager.createQuery("from Make as m").getResultList.asInstanceOf[java.util.List[Make]]
       val list = new MutableList[Make]
@@ -24,18 +24,9 @@ object MakeDropdownComponent extends ComponentRenderSupport{
       if(make != null)
         render(make, list.toList)
       else render(list.toList, new Make("Yibberish that will never be selected"))
-    }
+    }.asInstanceOf[String]
   }
 
-  def show = {
-    transaction{
-      val makes = entityManager.createQuery("from Make as m").getResultList.asInstanceOf[java.util.List[Make]]
-      val list = new MutableList[Make]
-      val iterator = makes.iterator
-      while(iterator.hasNext)
-        list += iterator.next
+  def show: String = show(new Make("Yibberish that will never be selected"))
 
-      render(list.toList, new Make("Yibberish that will never be selected"))
-    }
-  }
 }
