@@ -23,6 +23,7 @@ class SquerylController extends InterceptingController {
       }
     }finally{
       session.close
+	  session.unbindFromCurrentThread
     }
   }
 }
