@@ -2,5 +2,4 @@
 <%@ val bean: org.bowlerframework.view.scalate.Widget %>
 <%@ val bean2: org.bowlerframework.view.scalate.Widget %>
 <%@ val tuple: scala.Tuple2[String, String] %>
-
 ${bean.name} ${bean.price} - ${unescape(show(tuple))} ${bean2.name} ${bean2.price}

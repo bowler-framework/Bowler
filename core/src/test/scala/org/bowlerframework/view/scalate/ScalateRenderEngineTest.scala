@@ -165,6 +165,21 @@ class ScalateRenderEngineTest extends FunSuite{
 
   }
 
+
+  test("test bug in Jade/Scaml rendering"){
+    val model = Map("pageTitle" -> "myTitle")
+    val engine = RenderEngine.getEngine
+    val writer = new StringWriter
+    val pw = new PrintWriter(writer)
+    val uri = "/views/jadeTest.jade"
+    val context = new BowlerRenderContext(uri, engine, pw)
+    context.render(uri, model)
+    val result = writer.toString
+
+    assert(result.contains("Jade - node template engine"))
+
+  }
+
 }
 
 case class ScalateBean(name: String)
