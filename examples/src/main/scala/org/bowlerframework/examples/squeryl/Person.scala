@@ -12,5 +12,4 @@ import org.squeryl.KeyedEntity
 
 case class Person(val id: Long, var firstName: String, var lastName: String) extends KeyedEntity[Long]{
   def this() = this(0, "","")
-
 }
