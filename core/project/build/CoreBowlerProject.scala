@@ -19,11 +19,14 @@ class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info){//} with
   
   val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M2"
 
-	val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.4.1" // will be upgraded to 0.4 when next version is published in sync with recurisivity-commons
-  val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.0"
+	val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.4.1"
+  val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.1"
 
 
-  val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.2"
+ // val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.2"
+  // this dependency is a temporarily published dependency with a forked lift-json to fix a serious bug
+  // that we have fixed in this pull request: https://github.com/lift/lift/pull/3
+  val liftJson = "com.recursivity" % "lift-json_2.8.0" % "2.3-SNAPSHOT"
 
   	val sfl4japi = "org.slf4j" % "slf4j-api" % slf4jVersion
   	val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"

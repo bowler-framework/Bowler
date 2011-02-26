@@ -6,6 +6,7 @@ import net.liftweb.json.Extraction._
 import net.liftweb.json.Printer._
 import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.MutableList
+import net.liftweb.json.Formats
 
 /**
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
@@ -23,7 +24,7 @@ class JsonViewRenderer extends ViewRenderer{
       }
       val http = exception.asInstanceOf[HttpException]
       response.sendError(http.code)
-    }else{                                                                      4
+    }else{                                                                      
       throw exception
     }
   }
@@ -47,12 +48,21 @@ class JsonViewRenderer extends ViewRenderer{
     }
   }
 
+
   /**
    * renders a no model view, in the case of JSON, this simply returns a HTTP 204 - No Content response.
    */
   def renderView(request: Request, response: Response) = response.setStatus(204)
 
   private def getValue(any: Any): JValue = decompose(getModelValue(any))
+
+
+
+
 }
+
+
+
+
 
 case class ValidationError(key: String, message: String)
