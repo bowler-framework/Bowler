@@ -99,10 +99,3 @@ case class Person(val id: String,
   def this() = this("","")
 }
 
-case class Author(val id: Long,
-             val firstName: String,
-             val lastName: String,
-             val email: Option[String]) extends KeyedEntity[Long]{
-
-  def this() = this(0,"","",Some(""))
-}
