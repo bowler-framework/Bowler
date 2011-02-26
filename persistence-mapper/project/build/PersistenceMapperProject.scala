@@ -1,7 +1,7 @@
 import sbt._
 
 
-class PersistenceMapperProject(info: ProjectInfo) extends DefaultProject(info) with ChecksumPlugin{
+class PersistenceMapperProject(info: ProjectInfo) extends DefaultProject(info) {//with ChecksumPlugin{
 	  val bowler = "org.bowlerframework" % "bowler-core_2.8.1" % "0.2.1"
 
 	  val slf4jVersion = "1.6.0"
