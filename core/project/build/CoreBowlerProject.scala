@@ -1,7 +1,7 @@
 import sbt._
 
 
-class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info) with ChecksumPlugin{
+class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
 	
 	//override def scanDirectories = Nil
 
@@ -20,7 +20,7 @@ class CoreBowlerProject(info: ProjectInfo) extends DefaultProject(info) with Che
   val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M2"
 
 	val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.4.1" // will be upgraded to 0.4 when next version is published in sync with recurisivity-commons
-  	val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.0"
+  val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.0"
 
 
   val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.2"

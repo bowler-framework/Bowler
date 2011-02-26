@@ -1,7 +1,6 @@
 package org.bowlerframework.view
 
 import org.scalatest.FunSuite
-import com.recursivity.commons.bean.BeanCopyer
 import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyRequest, DummyResponse}
 import collection.mutable.{MutableList}
