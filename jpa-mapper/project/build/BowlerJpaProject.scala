@@ -1,8 +1,8 @@
 import sbt._
 
 
-class BowlerJpaProject(info: ProjectInfo) extends DefaultProject(info){//with ChecksumPlugin{
-	  val bowler = "org.bowlerframework" % "persistence-mapper_2.8.1" % "0.2"
+class BowlerJpaProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
+	  val bowler = "org.bowlerframework" % "persistence-mapper_2.8.1" % "0.2.1"
 
 	  val slf4jVersion = "1.6.0"
 

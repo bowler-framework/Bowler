@@ -1,8 +1,8 @@
 import sbt._
 
 
-class PersistenceMapperProject(info: ProjectInfo) extends DefaultProject(info){///with ChecksumPlugin{
-	  val bowler = "org.bowlerframework" % "bowler-core_2.8.1" % "0.2"
+class PersistenceMapperProject(info: ProjectInfo) extends DefaultProject(info) with ChecksumPlugin{
+	  val bowler = "org.bowlerframework" % "bowler-core_2.8.1" % "0.2.1"
 
 	  val slf4jVersion = "1.6.0"
 
@@ -11,6 +11,7 @@ class PersistenceMapperProject(info: ProjectInfo) extends DefaultProject(info){/
 	val scalaLang = "org.scala-lang" % "scala-library" % "2.8.1"
 
   	  val c3p0 = "c3p0" % "c3p0" % "0.9.1.2" % "test"
+
 
 	// allows you to use an embedded/in-JVM jetty-server to run unit-tests.
 	  val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M2" % "test"
