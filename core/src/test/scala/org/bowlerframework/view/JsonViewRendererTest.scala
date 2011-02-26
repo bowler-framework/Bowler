@@ -1,11 +1,13 @@
 package org.bowlerframework.view
 
 import org.scalatest.FunSuite
+import com.recursivity.commons.bean.BeanCopyer
 import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyRequest, DummyResponse}
 import collection.mutable.{MutableList}
 import org.bowlerframework.exception.ValidationException
 import org.bowlerframework.{GET, HTTP}
+import org.bowlerframework.model.Transient
 
 /**
  * Created by IntelliJ IDEA.
@@ -112,6 +114,17 @@ class JsonViewRendererTest extends FunSuite{
 
   }
 
+  test("render with trait"){
+    val writer = new StringWriter
+    val resp = new DummyResponse(writer)
+    renderer.renderView(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(new Author))
+    println("render with trait: " + resp.toString)
+  }
+
 }
 case class Group(name: String, biggestWinner: Winner, winners: List[Winner])
 case class Winner(id: Long, numbers: List[Int])
+
+case class Author(val id: Long, firstName: String, lastName: String, email: Option[String]) extends Transient{
+  def this() = this(0,"John","Doe",Some("johndoe@gmail.com"))
+}

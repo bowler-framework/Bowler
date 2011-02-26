@@ -23,7 +23,7 @@ class JsonViewRenderer extends ViewRenderer{
       }
       val http = exception.asInstanceOf[HttpException]
       response.sendError(http.code)
-    }else{
+    }else{                                                                      4
       throw exception
     }
   }
