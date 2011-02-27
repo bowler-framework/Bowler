@@ -4,8 +4,8 @@ import templemore.sbt.CucumberProject
 
 
 class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info) with CucumberProject {//with SeleniumPlugin{
-  val bowlerJpa = "org.bowlerframework" % "jpa-mapper_2.8.1" % "0.2"
-  val bowlerSqueryl = "org.bowlerframework" % "squeryl-mapper_2.8.1" % "0.2"
+  val bowlerJpa = "org.bowlerframework" % "jpa-mapper_2.8.1" % "0.2.2-SNAPSHOT"
+  val bowlerSqueryl = "org.bowlerframework" % "squeryl-mapper_2.8.1" % "0.2.2-SNAPSHOT"
   val scalatest = "org.scalatest" % "scalatest" %  "1.2" % "test"
   val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.5.1-Final"
 
