@@ -9,17 +9,17 @@ import http.BowlerHttpRequest
 object HTTP{
 
   def basePath: String = {
-    if(RequestScope.request.isInstanceOf[BowlerHttpRequest] && BowlerConfigurator.isServletApp){
-      val request = RequestScope.request.asInstanceOf[BowlerHttpRequest]
-      var path = request.request.getContextPath + request.request.getServletPath
-      if(!path.endsWith("/")) path = path + "/"
-      return path
-    }else if(RequestScope.request.isInstanceOf[BowlerHttpRequest] ){
-      val request = RequestScope.request.asInstanceOf[BowlerHttpRequest]
-      return request.request.getContextPath + "/"
-    }else
-      return "/"
+  	RequestScope.request match {
+      case request:BowlerHttpRequest =>
+        BowlerConfigurator.isServletApp match {
+          case true  => appendSlash(request.request.getContextPath + request.request.getServletPath)
+          case _ => request.request.getContextPath + "/"
+        }
+      case _ => "/"
+    }
   }
+
+  private def appendSlash(path: String): String = if(!path.endsWith("/"))  path + "/" else path
 
   /**
    * maps an app uri to a perfect relative URI, for instance if the app and/or servlet context is /app, and the uri within the app is
