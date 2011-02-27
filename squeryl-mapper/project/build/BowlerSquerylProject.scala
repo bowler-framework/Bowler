@@ -2,7 +2,7 @@ import sbt._
 
 
 class BowlerSquerylProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
-	  val bowler = "org.bowlerframework" % "persistence-mapper_2.8.1" % "0.2.1"
+	  val bowler = "org.bowlerframework" % "persistence-mapper_2.8.1" % "0.2.2-SNAPSHOT"
 
 	  val slf4jVersion = "1.6.0"
 
@@ -18,7 +18,7 @@ class BowlerSquerylProject(info: ProjectInfo) extends DefaultProject(info){//} w
 
 	  val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
 	
-	  val squeryl = "org.squeryl" % "squeryl_2.8.0" % "0.9.4-RC3"
+	  val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC5"
 
 	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
 

@@ -120,9 +120,7 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
       request.getSession.setAttribute("_bowlerListItems", 10)
     val offset = (page - 1) * items.getOrElse(10)
     val maxItems = items.getOrElse(10)
-	val renderItems = dao.findAll(offset, maxItems)
-	println("RENDER ITEMS: " + renderItems)
-    render(renderItems)
+    render(dao.findAll(offset, maxItems))
   }
 
 }
