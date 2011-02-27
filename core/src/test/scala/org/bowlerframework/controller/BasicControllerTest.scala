@@ -28,6 +28,18 @@ class BasicControllerTest extends ScalatraFunSuite{
     }
   }
 
+  test("json validation exception"){
+    val controller = new MyController
+    var status = 200
+    val list = List[Tuple2[String, String]](("author.id", "" + (1)), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
+    this.post("/jsonValidationException", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+      status = this.response.getStatus
+    }
+
+    println(status)
+    assert(status == 400)
+  }
+
   test("regex toString"){
     val regex: Regex = """^\/f(.*)/b(.*)""".r
     assert("""^\/f(.*)/b(.*)""".equals(regex.toString))

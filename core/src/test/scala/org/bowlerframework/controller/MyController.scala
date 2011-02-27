@@ -20,6 +20,14 @@ class MyController extends Controller with Validations{
     })
   })
 
+  post("/jsonValidationException")((request, response) => {
+    validate(None){
+      // errors defined as list of key/message pairs
+      val error = ("name", "Name is a required parameter!")
+      Some(List(error))  // execution of the post() should stop after this and go to onValidationErrors
+    }
+  })
+
 
   // handles HTTP POST to "/somePost"
   post("/somePost")((request, response) => {

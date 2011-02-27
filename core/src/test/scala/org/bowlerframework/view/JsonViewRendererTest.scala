@@ -107,9 +107,15 @@ class JsonViewRendererTest extends FunSuite{
 
     val writer = new StringWriter
     val resp = new DummyResponse(writer)
-    renderer.onError(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), resp, new ValidationException(list.toList))
+    try{
+      renderer.onError(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), resp, new ValidationException(list.toList))
+    }catch{
+      case e: ValidationException => {
+        assert(e.errors.size == 2)
+      }
+    }
 
-    assert("[{\"key\":\"name\",\"message\":\"name is mandatory!\"},{\"key\":\"age\",\"message\":\"age must be over 18!\"}]" == resp.toString)
+
 
   }
 
