@@ -1,6 +1,6 @@
 import sbt._
 
-class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {//} with ChecksumPlugin{
+class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} with ChecksumPlugin{
   def toolConfigurationFile = path("config")
 
   lazy val core = project("core", "core", new CoreProject(_))

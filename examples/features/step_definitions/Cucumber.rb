@@ -24,5 +24,6 @@ When /^I run the cucumber goal$/ do
 end
 
 Then /^Cucumber is executed against my features and step definitions$/ do
+  @browser.goto("http://localhost:8080/cars/new")
   @hello.should == "Hello World"
 end

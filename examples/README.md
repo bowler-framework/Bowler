@@ -17,4 +17,5 @@ We could have used Scala or Java-bindings with Cuke4Duke and and Selenium2, but 
 	sudo gem install watir
 	sudo gem install firewatir
 	sudo gem install watir-webdriver
-
+#### Running the suite
+After this, simply run "cucumber" from the root of the project (but outside sbt). We will look to find ways of improving this going forward.
