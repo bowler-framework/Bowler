@@ -95,11 +95,11 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {//} wi
 
 		(
 		    <name>{name}</name>
-		    <description>Bowler Framework Persistence Mapper  Project POM</description>
+		    <description>Bowler Framework Project POM</description>
 		    <url>http://bowlerframework.org</url>
 		    <inceptionYear>2010</inceptionYear>
 		    <organization>
-		      <name>Bowler Framework Core Project</name>
+		      <name>Bowler Framework Project</name>
 		      <url>http://bowlerframework.org</url>
 		    </organization>
 		    <licenses>
