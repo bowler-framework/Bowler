@@ -1,7 +1,7 @@
 
 import sbt._
 import templemore.sbt.CucumberProject
-//import bryanjswift.selenium.SeleniumPlugin
+//import org.bowlerframework.test.SeleniumUtils
 
 
 class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info) with CucumberProject {//with SeleniumPlugin{
@@ -38,7 +38,7 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info) w
   //val openQaRepo = "Open QA repo" at "http://nexus.openqa.org/content/repositories/releases/"
 
 
- /* override def afterCucumberSuite = {
-    CucumberSuiteUtils.stop
-  } */
+  override def afterCucumberSuite = {
+    //SeleniumUtils.stop
+  }
 }

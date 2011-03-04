@@ -4,14 +4,14 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info)
 {
    def toolConfigurationFile = path("config")
 
-   def subProject(path: Path, name: String) =
-      project(path, name, new ExampleSubProject(_))
+  // def subProject(path: Path, name: String) =
+    //  project(path, name, new ExampleSubProject(_))
 
-   lazy val core = subProject("core", "BowlerCoreProject")
-   lazy val testing = subProject("testing", "TestingProject")
-   lazy val persistence = subProject("persistence-mapper", "PersistenceProject")
-   lazy val squeryl = subProject("squeryl-mapper", "SquerylProject")
-   lazy val jpa = subProject("jpa-mapper", "JpaProject")
+   lazy val core = project("core", "core", new ExampleSubProject(_))
+   lazy val testing = project("testing", "testing",new ExampleSubProject(_))
+   lazy val persistence = project("persistence-mapper", "persistence-mapper",new ExampleSubProject(_), core)
+   lazy val squeryl = project("squeryl-mapper", "squeryl-mapper",new ExampleSubProject(_), persistence)
+   lazy val jpa = project("jpa-mapper", "jpa-mapper",new ExampleSubProject(_), persistence)
    //lazy val subB = subProject("subB", "Sub Project B")
 
    class ExampleSubProject(info: ProjectInfo) extends DefaultProject(info){}
