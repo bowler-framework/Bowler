@@ -1,6 +1,6 @@
 import sbt._
 
-class TestingBowlerProject(info: ProjectInfo) extends DefaultWebProject(info){
+class TestingBowlerProject(info: ProjectInfo) extends DefaultProject(info){
   	val scalatest = "org.scalatest" % "scalatest" %  "1.2"
 
   val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M2"
