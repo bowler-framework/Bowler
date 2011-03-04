@@ -11,6 +11,7 @@ We could have used Scala or Java-bindings with Cuke4Duke and and Selenium2, but 
 * run the embedded jetty from sbt with "jetty-run"
 * Install the following gems:
 
+#### Required Ruby Gems
 	sudo gem install rspec
 	sudo gem install cucumber
 	sudo gem install watir
