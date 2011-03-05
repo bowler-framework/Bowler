@@ -11,7 +11,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
 
   class BaseProject(info: ProjectInfo) extends DefaultProject(info) {
     val slf4jVersion = "1.6.0"
-    val scalatest = "org.scalatest" % "scalatest" % "1.2" % "test"
+    val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test"
     val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M2" % "test"
     val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
     val scalaCompiler = "org.scala-lang" % "scala-compiler" % "2.8.1"
@@ -45,14 +45,14 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info){
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2" % "test"
 		val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-	  val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC5" % "test"
+	  val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6" % "test"
 	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
   }
 
   class SquerylProject(info: ProjectInfo) extends BaseProject(info){
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-    val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC5"
+    val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6"
 
 	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
 
