@@ -23,7 +23,7 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){/
   val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
 
 
-  //val selenium = "org.seleniumhq.selenium" % "selenium" % "2.0a4" % "test"
+  val selenium = "org.seleniumhq.selenium" % "selenium" % "2.0a4" % "test"
 
   val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots" 
   val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
