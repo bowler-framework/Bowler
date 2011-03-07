@@ -5,6 +5,7 @@ import org.scalatra.fileupload.FileUploadSupport
 import util.matching.Regex
 import javax.servlet.ServletConfig
 import org.bowlerframework._
+import org.apache.commons.fileupload.FileItem
 
 
 
@@ -41,7 +42,22 @@ class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHt
   }
 
   private def mapExecutor(routeExecutor: RouteExecutor): Any = {
-    val bowlerRequest = new BowlerHttpRequest(this.requestPath, this.request, this.flattenParameters(this.request, this.params, this.multiParams, this.fileParams, this.fileMultiParams))
+    var files: collection.Map[String, FileItem] = Map[String, FileItem]()
+    var listFiles: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()
+
+    try{
+      files = this.fileParams
+    }catch{
+      case e: Exception => {}
+    }
+
+    try{
+      listFiles = this.fileMultiParams
+    }catch{
+      case e: Exception => {}
+    }
+
+    val bowlerRequest = new BowlerHttpRequest(this.requestPath, this.request, this.flattenParameters(this.request, this.params, this.multiParams, files, listFiles))
     val scope = RequestScope(bowlerRequest, new BowlerHttpResponse(this.response))
     routeExecutor.executeRoute(scope)
   }
