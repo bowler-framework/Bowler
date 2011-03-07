@@ -1,6 +1,6 @@
 import sbt._
 
-class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} with ChecksumPlugin{
+class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){
   def toolConfigurationFile = path("config")
 
   lazy val core = project("core", "core", new CoreProject(_))
@@ -9,7 +9,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   lazy val jpa = project("jpa-mapper", "jpa-mapper", new JpaProject(_), persistence)
 
 
-  class BaseProject(info: ProjectInfo) extends DefaultProject(info) {
+  class BaseProject(info: ProjectInfo) extends DefaultProject(info){//}  with ChecksumPlugin{
     val slf4jVersion = "1.6.0"
     val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test"
     val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
@@ -25,10 +25,56 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   	val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
     val scalaToolsRepo = "Scala-Tools repo" at "http://scala-tools.org/repo-releases/"
 
-
+	  lazy val sourceArtifact = Artifact.sources(artifactID)
+	  lazy val docsArtifact = Artifact.javadoc(artifactID)
     override def packageDocsJar = defaultJarPath("-javadoc.jar")
 	  override def packageSrcJar= defaultJarPath("-sources.jar")
     override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageDocs, packageSrc)
+
+	  override def managedStyle = ManagedStyle.Maven
+
+	  override def deliverProjectDependencies = Nil
+
+	 override def pomExtra = {
+	    // If these aren't lazy, then the build crashes looking for
+	    // ${moduleName}/project/build.properties.
+		(
+		    <name>{name}</name>
+		    <description>Bowler Framework Project POM</description>
+		    <url>http://bowlerframework.org</url>
+		    <inceptionYear>2010</inceptionYear>
+		    <organization>
+		      <name>Bowler Framework Project</name>
+		      <url>http://bowlerframework.org</url>
+		    </organization>
+		    <licenses>
+		      <license>
+		        <name>BSD</name>
+		        <url>http://github.com/wfaler/Bowler/LICENSE</url>
+		        <distribution>repo</distribution>
+		      </license>
+		    </licenses>
+			<mailingLists>
+			    <mailingList>
+			      <name>Bowler user group</name>
+			      <archive>http://groups.google.com/group/bowler-users</archive>
+			      <post>bowler-users@googlegroups.com</post>
+			      <subscribe>bowler-users+subscribe@googlegroups.com</subscribe>
+			      <unsubscribe>bowler-users+unsubscribe@googlegroups.com</unsubscribe>
+			    </mailingList>
+			  </mailingLists>
+		    <scm>
+		      <connection>scm:git:git://github.com/wfaler/Bowler.git</connection>
+		      <url>http://github.com/wfaler/Bowler</url>
+		    </scm>
+		    <developers>
+		      <developer>
+		        <id>wfaler</id>
+		        <name>Wille Faler</name>
+		        <url>http://blog.recursivity.com</url>
+		      </developer>
+		    </developers>)
+	  }
   }
 
   class CoreProject(info: ProjectInfo) extends BaseProject(info){
@@ -76,58 +122,5 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
 		else "Sonatype Nexus Staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 	  }
 
-	  override def managedStyle = ManagedStyle.Maven
 
-	  //override def deliverProjectDependencies = Nil
-
-
-	  override def deliverProjectDependencies = Nil
-
-	  lazy val sourceArtifact = Artifact.sources(artifactID)
-	  lazy val docsArtifact = Artifact.javadoc(artifactID)
-
-
-	 override def pomExtra = {
-
-	    // If these aren't lazy, then the build crashes looking for
-	    // ${moduleName}/project/build.properties.
-
-
-		(
-		    <name>{name}</name>
-		    <description>Bowler Framework Project POM</description>
-		    <url>http://bowlerframework.org</url>
-		    <inceptionYear>2010</inceptionYear>
-		    <organization>
-		      <name>Bowler Framework Project</name>
-		      <url>http://bowlerframework.org</url>
-		    </organization>
-		    <licenses>
-		      <license>
-		        <name>BSD</name>
-		        <url>http://github.com/wfaler/Bowler/LICENSE</url>
-		        <distribution>repo</distribution>
-		      </license>
-		    </licenses>
-			<mailingLists>
-			    <mailingList>
-			      <name>Bowler user group</name>
-			      <archive>http://groups.google.com/group/bowler-users</archive>
-			      <post>bowler-users@googlegroups.com</post>
-			      <subscribe>bowler-users+subscribe@googlegroups.com</subscribe>
-			      <unsubscribe>bowler-users+unsubscribe@googlegroups.com</unsubscribe>
-			    </mailingList>
-			  </mailingLists>
-		    <scm>
-		      <connection>scm:git:git://github.com/wfaler/Bowler.git</connection>
-		      <url>http://github.com/wfaler/Bowler</url>
-		    </scm>
-		    <developers>
-		      <developer>
-		        <id>wfaler</id>
-		        <name>Wille Faler</name>
-		        <url>http://blog.recursivity.com</url>
-		      </developer>
-		    </developers>)
-	  }
 }

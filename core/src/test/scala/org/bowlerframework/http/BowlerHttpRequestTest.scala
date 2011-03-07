@@ -188,7 +188,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
     post("/getParameterNames/foo/bar", ("param", "baz")) {
       println("CONTENT-TYPE: " + ctype)
-      assert(ctype.get.contains("application/x-www-form-urlencoded"))  //multipart/form-data
+      assert(ctype.get.contains("application/x-www-form-urlencoded"))
     }
   }
 
