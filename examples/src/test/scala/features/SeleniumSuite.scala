@@ -8,11 +8,12 @@ import support.SeleniumUtils._
 class SeleniumSuite extends Suite with BeforeAndAfterAll{
 	
 	override def nestedSuites =
-	     List(new ExampleSpec)
-	
-	override def afterAll(configMap: Map[String, Any]) {
-		println("ALL DONE!")
-		quit
-	}
+	     List(new StartPageSpec, new WidgetSpec)
+
+
+  override protected def afterAll() = {
+    quit
+  }
+
 	
 }
