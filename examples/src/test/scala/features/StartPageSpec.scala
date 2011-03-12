@@ -18,7 +18,7 @@ class StartPageSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
   //evaluating { emptyStack.pop() } must produce [NoSuchElementException]
 
   feature("The user uses the homepage") {
-    info("As a browser")
+    info("As a user")
     info("I want to be able to navigate from the startpage")
     info("So that I can navigate around the examples app")
 

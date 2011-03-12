@@ -16,7 +16,7 @@ import org.openqa.selenium.By
 class WidgetSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
 
     feature("The user uses the homepage") {
-      info("As a browser")
+      info("As a user")
       info("I want to be able to navigate from the startpage")
       info("So that I can navigate around the examples app")
 
@@ -39,7 +39,16 @@ class WidgetSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
         val tr = tableBody.findElements(By.tagName("tr"))
         tr.size must be === 1
       }
-
     }
+
+  feature("The user creates/updates/deletes widgets"){
+    info("As a user")
+    info("I want to be able to create, update and delete widgets")
+    info("So that I can have only the widgets I want")
+    pending
+
+  }
+
+
 
 }
