@@ -9,7 +9,7 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
   /**
    * Gets a resource with no fallback to default if localised file does not exist
    */
-   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template = {
+  def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template = {
     var is: InputStream = null
     try {
       var realPath: String = null
@@ -25,8 +25,6 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
       is.close
     }
   }
-
-
 
   def getAbsoluteResource(uri: String): String = {
     val obj = this

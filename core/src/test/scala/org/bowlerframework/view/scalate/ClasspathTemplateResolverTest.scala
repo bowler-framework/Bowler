@@ -45,7 +45,8 @@ class ClasspathTemplateResolverTest extends FunSuite{
       val template = resolver.resolveLayout(request, Layout("overflow-baby"))
     }catch{
       case e: IOException => {
-        val message = "Could not find a template of type .mustache, .ssp, .jade or .scaml with path: classpath:///layouts/overflow-baby"
+        println(e.getMessage)
+        val message = "Could not find a template of type .html, .xhtml, .xml, .mustache, .ssp, .jade or .scaml  with path: classpath:///layouts/overflow-baby"
         assert(e.getMessage == message)
       }
     }

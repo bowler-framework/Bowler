@@ -19,7 +19,7 @@ trait Renderable{
 
   def render(request: Request, response: Response, models: Any*): Unit = renderSeq(request,response, models.toSeq)
 
-  def renderSeq(request: Request, response: Response, models: Seq[Any]): Unit = {
+  private def renderSeq(request: Request, response: Response, models: Seq[Any]): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
     renderer.renderView(request, response, models)
   }

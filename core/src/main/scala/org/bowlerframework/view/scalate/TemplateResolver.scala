@@ -103,14 +103,14 @@ trait TemplateResolver{
   /**
    * get potentially localised file, fallback to default if not present
    */
-  private def resolveResource(path: String, fileTypes: List[String], locale: List[String] = List()): Template = {
-    //println(fileTypes)
+  def resolveResource(path: String, fileTypes: List[String], locale: List[String] = List()): Template = {
+    println(path + " " + fileTypes + " " + locale)
     if (fileTypes == Nil) {
       var locales = locale
       if (locale != Nil) {
         locales = locale.drop(1)
       } else
-        throw new IOException("Could not find a template of type .mustache, .ssp, .jade or .scaml with path: classpath://" + path)
+        throw new IOException("Could not find a template of type .html, .xhtml, .xml, .mustache, .ssp, .jade or .scaml  with path: classpath://" + path)
       return resolveResource(path, TemplateRegistry.templateTypePreference, locales)
     } else {
       try {
