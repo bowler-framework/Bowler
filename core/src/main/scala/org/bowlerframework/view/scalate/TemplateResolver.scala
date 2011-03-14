@@ -104,7 +104,6 @@ trait TemplateResolver{
    * get potentially localised file, fallback to default if not present
    */
   def resolveResource(path: String, fileTypes: List[String], locale: List[String] = List()): Template = {
-    println(path + " " + fileTypes + " " + locale)
     if (fileTypes == Nil) {
       var locales = locale
       if (locale != Nil) {

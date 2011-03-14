@@ -1,7 +1,7 @@
 package org.bowlerframework.view.squery
 
 import org.scalatest.FunSuite
-import stub.MySimpleComponent
+import stub.{ExtendingComponent, MySimpleComponent}
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +14,13 @@ import stub.MySimpleComponent
 class ComponentTest extends FunSuite{
 
   test("get classpath resource"){
-    println((new MySimpleComponent).render)
+    val result = (new MySimpleComponent).render
+    println(result)
+    assert("A Title" == (result \\ "title").text)
+  }
 
+  test("get inherited markup"){
+    val result = (new ExtendingComponent).render
+    assert("A Title" == (result \\ "title").text)
   }
 }

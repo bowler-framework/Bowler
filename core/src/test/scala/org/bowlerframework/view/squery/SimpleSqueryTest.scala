@@ -26,8 +26,8 @@ class SimpleSqueryTest extends FunSuite {
 
   test("surround") {
     val page = new PageTransformer(new ChildTransformer(seq))
-    println(page.apply(around))
-
+    val result = page.apply(around)
+    assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
 
   }
 

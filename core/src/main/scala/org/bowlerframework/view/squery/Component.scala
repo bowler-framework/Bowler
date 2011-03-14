@@ -2,8 +2,8 @@ package org.bowlerframework.view.squery
 
 import org.bowlerframework.view.scalate.ClasspathTemplateResolver
 import org.bowlerframework.RequestScope
-import java.io.StringReader
 import xml.{XML, NodeSeq}
+import java.io.{IOException, StringReader}
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,10 +15,22 @@ import xml.{XML, NodeSeq}
 
 trait Component{
   val templateResolver = new ClasspathTemplateResolver
-  val uri = "/" + this.getClass.getName.replace(".", "/")
 
-  def render: NodeSeq = {
-    XML.load(new StringReader(templateResolver.resolveResource(uri, Component.types, Component.locales).template)).asInstanceOf[NodeSeq]
+  def render: NodeSeq = getTemplate(this.getClass)
+
+  private def uri(cls: Class[_]): String = "/" + cls.getName.replace(".", "/")
+
+  private def getTemplate(cls: Class[_]): NodeSeq = {
+    try{
+      XML.load(new StringReader(templateResolver.resolveResource(uri(cls), Component.types, Component.locales).template)).asInstanceOf[NodeSeq]
+    }catch{
+      case e: IOException => {
+        if(cls.getSuperclass != null && classOf[Component].isAssignableFrom(cls.getSuperclass))
+          getTemplate(cls.getSuperclass)
+        else
+          throw new IOException("Can't find any markup for Component of type " + cls.getName)
+      }
+    }
   }
 }
 
