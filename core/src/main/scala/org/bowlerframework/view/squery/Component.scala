@@ -4,6 +4,8 @@ import org.bowlerframework.view.scalate.ClasspathTemplateResolver
 import org.bowlerframework.RequestScope
 import xml.{XML, NodeSeq}
 import java.io.{IOException, StringReader}
+import collection.mutable.HashMap
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,32 +16,59 @@ import java.io.{IOException, StringReader}
  */
 
 trait Component{
-  val templateResolver = new ClasspathTemplateResolver
+  def render: NodeSeq = Component.getTemplate(this.getClass, Component.localisationPreferences)
+}
 
-  def render: NodeSeq = getTemplate(this.getClass)
+object Component{
+  val templateCache = new ConcurrentHashMap[Class[_], HashMap[String, Option[NodeSeq]]]
+  val templateResolver = new ClasspathTemplateResolver
+  val types = List(".html", ".xhtml", ".xml")
 
   private def uri(cls: Class[_]): String = "/" + cls.getName.replace(".", "/")
 
-  private def getTemplate(cls: Class[_]): NodeSeq = {
+  def localisationPreferences: List[String] = {
+    if(RequestScope.request != null && RequestScope.request.getLocales != null)
+      return RequestScope.request.getLocales
+    else return Nil
+  }
+
+
+  private def getTemplate(cls: Class[_], locales: List[String]): NodeSeq = {
+    if(templateCache.get(cls) == null)
+      templateCache.put(cls, new HashMap[String, Option[NodeSeq]])
+    val map = templateCache.get(cls)
     try{
-      XML.load(new StringReader(templateResolver.resolveResource(uri(cls), Component.types, Component.locales).template)).asInstanceOf[NodeSeq]
+      if(locales == Nil){
+        val option = map("default")
+        if(option == None)
+          return getTemplate(cls.getSuperclass, localisationPreferences)
+        else return option.get
+      }else{
+        val option = map(locales.head)
+        if(option == None){
+          val newLocales = locales.drop(1)
+          return getTemplate(cls, newLocales)
+        }else return option.get
+      }
+    }catch{
+      case e: NoSuchElementException => {}// do nothing
+    }
+    try{
+      val nodeSeq = XML.load(new StringReader(templateResolver.resolveResource(uri(cls), Component.types, {if(locales != Nil) List(locales.head); else Nil}).template)).asInstanceOf[NodeSeq]
+      map.put({if(locales != Nil) locales.head; else "default"}, Some(nodeSeq))
+      return nodeSeq
     }catch{
       case e: IOException => {
-        if(cls.getSuperclass != null && classOf[Component].isAssignableFrom(cls.getSuperclass))
-          getTemplate(cls.getSuperclass)
+        map.put({if(locales != Nil) locales.head; else "default"}, None)
+        if(locales != Nil){
+          val newLocales = locales.drop(1)
+          getTemplate(cls, newLocales)
+        }else if(cls.getSuperclass != null && classOf[Component].isAssignableFrom(cls.getSuperclass) && locales == Nil){
+          getTemplate(cls.getSuperclass, localisationPreferences)
+        }
         else
           throw new IOException("Can't find any markup for Component of type " + cls.getName)
       }
     }
-  }
-}
-
-object Component{
-  val types = List(".html", ".xhtml", ".xml")
-
-  def locales: List[String] = {
-    if(RequestScope.request != null && RequestScope.request.getLocales != null)
-      return RequestScope.request.getLocales
-    else return List[String]()
   }
 }

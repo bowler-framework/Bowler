@@ -15,7 +15,6 @@ class ComponentTest extends FunSuite{
 
   test("get classpath resource"){
     val result = (new MySimpleComponent).render
-    println(result)
     assert("A Title" == (result \\ "title").text)
   }
 
