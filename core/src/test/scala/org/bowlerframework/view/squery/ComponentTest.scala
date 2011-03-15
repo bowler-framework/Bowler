@@ -1,7 +1,9 @@
 package org.bowlerframework.view.squery
 
 import org.scalatest.FunSuite
-import stub.{ExtendingComponent, MySimpleComponent}
+import org.bowlerframework.jvm.DummyRequest
+import stub.{LocalizedComponent, ExtendingComponent, MySimpleComponent}
+import org.bowlerframework.{RequestResolver, POST}
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +24,27 @@ class ComponentTest extends FunSuite{
     val result = (new ExtendingComponent).render
     assert("A Title" == (result \\ "title").text)
   }
+
+  test("test localization"){
+    val resolver = new DummyRequestResolver(List("es", "se"))
+    Component.requestResolver = resolver
+
+    val result = (new LocalizedComponent).render
+    assert("Svenska!" == (result \\ "body").text)
+    resolver.newRequest(List[String]("es", "fi"))
+    assert("English" == ((new LocalizedComponent).render \\ "body").text)
+  }
+}
+
+class DummyRequestResolver(locales: List[String]) extends RequestResolver{
+  var req = new DummyRequest(POST, "/", Map[String, String](), null)
+  req.setLocales(locales)
+
+  def request = this.req
+
+  def newRequest(locales: List[String]){
+    req = new DummyRequest(POST, "/", Map[String, String](), null)
+    req.setLocales(locales)
+  }
+
 }

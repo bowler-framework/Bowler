@@ -1,11 +1,11 @@
 package org.bowlerframework.view.squery
 
 import org.bowlerframework.view.scalate.ClasspathTemplateResolver
-import org.bowlerframework.RequestScope
 import xml.{XML, NodeSeq}
 import java.io.{IOException, StringReader}
 import collection.mutable.HashMap
 import java.util.concurrent.ConcurrentHashMap
+import org.bowlerframework.{RequestResolver, RequestScope}
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,11 +24,15 @@ object Component {
   val templateResolver = new ClasspathTemplateResolver
   val types = List(".html", ".xhtml", ".xml")
 
+  var requestResolver : RequestResolver = new RequestResolver{
+    def request = RequestScope.request
+  }
+
   private def uri(cls: Class[_]): String = "/" + cls.getName.replace(".", "/")
 
   def localisationPreferences: List[String] = {
-    if (RequestScope.request != null && RequestScope.request.getLocales != null)
-      return RequestScope.request.getLocales
+    if (requestResolver.request != null && requestResolver.request.getLocales != null)
+      return requestResolver.request.getLocales
     else return Nil
   }
 
