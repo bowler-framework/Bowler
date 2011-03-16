@@ -11,35 +11,20 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
    * Gets a resource with no fallback to default if localised file does not exist
    */
   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template = {
+    var is: InputStream = null
     var realPath: String = null
+    try {
       if (locale == null)
         realPath = path + fileType
       else
         realPath = path + "_" + locale + fileType
-      try{
-        val template = ClasspathTemplateResolver.templates(realPath)
-        return template.getOrElse(throw new IOException("No Template with path " + realPath))
-      }catch{
-        case e: NoSuchElementException => {
-          var is: InputStream = null
-          try {
-            val obj = new ClasspathResourceResolver
-            is = obj.getClass.getResourceAsStream(realPath)
-            val templateString = this.load(is)
-            val tmpl = Template(realPath, templateString)
-            if(fileType != ".html" && fileType != ".xml" && fileType != ".xhtml")
-              ClasspathTemplateResolver.templates.put(realPath, Some(tmpl))
-            return tmpl
-          }catch{
-            case ie: IOException => {
-              ClasspathTemplateResolver.templates.put(realPath, None)
-              throw ie
-            }
-          }finally {
-            is.close
-          }
-        }
-      }
+      val obj = new ClasspathResourceResolver
+      is = obj.getClass.getResourceAsStream(realPath)
+      val templateString = this.load(is)
+      return Template(realPath, templateString)
+    } finally {
+      is.close
+    }
   }
 
   def getAbsoluteResource(uri: String): String = {
@@ -53,8 +38,4 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
     }
   }
 
-}
-
-object ClasspathTemplateResolver{
-  private val templates = new HashMap[String, Option[Template]]
 }

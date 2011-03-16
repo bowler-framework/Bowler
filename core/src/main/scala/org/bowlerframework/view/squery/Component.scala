@@ -20,7 +20,7 @@ trait Component {
 }
 
 object Component {
-  val templateCache = new ConcurrentHashMap[Class[_], HashMap[String, Option[NodeSeq]]]
+  val templateCache = new ConcurrentHashMap[Class[_], ConcurrentHashMap[String, Option[NodeSeq]]]
   val templateResolver = new ClasspathTemplateResolver
   val types = List(".html", ".xhtml", ".xml")
 
@@ -39,16 +39,18 @@ object Component {
 
   private def getTemplate(cls: Class[_], locales: List[String]): NodeSeq = {
     if (templateCache.get(cls) == null)
-      templateCache.put(cls, new HashMap[String, Option[NodeSeq]])
+      templateCache.put(cls, new ConcurrentHashMap[String, Option[NodeSeq]])
     val map = templateCache.get(cls)
     try {
       if (locales == Nil) {
-        val option = map("default")
+        val option = map.get("default")
+        if(option == null) throw new NoSuchElementException
         if (option == None)
           return getTemplate(cls.getSuperclass, localisationPreferences)
         else return option.get
       } else {
-        val option = map(locales.head)
+        val option = map.get(locales.head)
+        if(option == null) throw new NoSuchElementException
         if (option == None) {
           val newLocales = locales.drop(1)
           return getTemplate(cls, newLocales)
