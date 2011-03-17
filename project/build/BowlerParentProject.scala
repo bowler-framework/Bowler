@@ -33,7 +33,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){
 
 	  override def managedStyle = ManagedStyle.Maven
 
-	  override def deliverProjectDependencies = Nil
+	//  override def deliverProjectDependencies = Nil
 
 	 override def pomExtra = {
 	    // If these aren't lazy, then the build crashes looking for
@@ -90,9 +90,10 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info){
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2" % "test"
-		val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-	  val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6" % "test"
-	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
+	val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
+	val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6" % "test"
+	val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
+//	val bowlerCore = "org.bowlerframework" % "core_2.8.1" % projectVersion
   }
 
   class SquerylProject(info: ProjectInfo) extends BaseProject(info){
@@ -100,13 +101,15 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
     val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6"
 
-	  val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
+    lazy val bowlerDep = persistence
+
+	val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
 
   }
 
   class JpaProject(info: ProjectInfo) extends BaseProject(info){
 	  val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.6.1.Final" % "provided"
-
+	lazy val bowlerDep = persistence
       //val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
 	  val jpa = "com.recursivity" % "recursivity-jpa_2.8.1" % "1.0"
 	  val h2database = "hsqldb" % "hsqldb" % "1.8.0.7" % "test"
