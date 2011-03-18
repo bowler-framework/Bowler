@@ -21,16 +21,6 @@ trait TemplateResolver{
    * </ol>
    */
   def resolveViewTemplate(request: Request): Template = {
-    val overridePath = TemplateRegistry.getOverrideTemplate(request.getMappedPath)
-    if (None != overridePath) {
-      try {
-        println(TemplateRegistry.getSuffixes(request))
-        return resolveResourceWithSuffix(overridePath.get, TemplateRegistry.templateTypePreference, TemplateRegistry.getSuffixes(request), request.getLocales)
-      } catch {
-        case e: IOException => {} // do nothing, continue to normal execution path
-      }
-    }
-
     if (!TemplateRegistry.rootViewPackageOrFolder.endsWith("/"))
       TemplateRegistry.rootViewPackageOrFolder = TemplateRegistry.rootViewPackageOrFolder + "/"
     val requestPath = request.getMappedPath.path.replaceAll(":", "_")

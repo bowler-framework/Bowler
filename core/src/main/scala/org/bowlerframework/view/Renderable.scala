@@ -13,6 +13,26 @@ trait Renderable{
 
   def render: Unit = render(RequestScope.request,RequestScope.response)
 
+  def renderWith(viewPath: ViewPath): Unit = renderWith(viewPath, RequestScope.request, RequestScope.response)
+
+  def renderWith(viewPath: ViewPath, request: Request, response: Response): Unit = {
+    request.setMappedPath(viewPath.path)
+    request.setMethod(viewPath.method)
+    render(request, response)
+  }
+
+  def renderWith(viewPath: ViewPath, models: Any*): Unit = {
+    RequestScope.request.setMappedPath(viewPath.path)
+    RequestScope.request.setMethod(viewPath.method)
+    renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
+  }
+
+  def renderWith(viewPath: ViewPath, request: Request, response: Response, models: Any*): Unit = {
+    request.setMappedPath(viewPath.path)
+    request.setMethod(viewPath.method)
+    renderSeq(request,response, models.toSeq)
+  }
+
   def render(models: Any*):Unit ={
     renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
   }

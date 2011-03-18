@@ -20,8 +20,8 @@ trait Component {
 }
 
 object Component {
-  val templateCache = new ConcurrentHashMap[Class[_], ConcurrentHashMap[String, Option[NodeSeq]]]
-  val templateResolver = new ClasspathTemplateResolver
+  private val templateCache = new ConcurrentHashMap[Class[_], ConcurrentHashMap[String, Option[NodeSeq]]]
+  private val templateResolver = new ClasspathTemplateResolver
   val types = List(".html", ".xhtml", ".xml")
 
   var requestResolver : RequestResolver = new RequestResolver{
@@ -30,7 +30,7 @@ object Component {
 
   private def uri(cls: Class[_]): String = "/" + cls.getName.replace(".", "/")
 
-  def localisationPreferences: List[String] = {
+  private def localisationPreferences: List[String] = {
     if (requestResolver.request != null && requestResolver.request.getLocales != null)
       return requestResolver.request.getLocales
     else return Nil
