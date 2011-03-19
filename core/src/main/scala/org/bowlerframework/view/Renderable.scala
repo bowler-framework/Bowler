@@ -1,6 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
+import squery.{SqueryRenderer, Component}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,6 +11,25 @@ import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
  * To change this layout use File | Settings | File Templates.
  */
 trait Renderable{
+  def renderWith(component: Component): Unit = renderWith(component, RequestScope.request, RequestScope.response)
+
+  def renderWith(component: Component, request: Request, response: Response): Unit = {
+    Accept.matchAccept(request.getHeader("accept")) match{
+      case JSON => render(request, response)
+      case _ => SqueryRenderer.render(component, response)
+    }
+  }
+
+  def renderWith(component: Component, models: Any*): Unit = {
+    renderWith(component, RequestScope.request,RequestScope.response, models.toSeq)
+  }
+
+  def renderWith(component: Component, request: Request, response: Response, models: Any*): Unit = {
+    Accept.matchAccept(request.getHeader("accept")) match{
+      case JSON => renderSeq(request,response, models.toSeq)
+      case _ => SqueryRenderer.render(component, response)
+    }
+  }
 
   def renderWith(viewPath: ViewPath): Unit = renderWith(viewPath, RequestScope.request, RequestScope.response)
 
@@ -48,6 +68,5 @@ trait Renderable{
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
     renderer.renderView(request, response, models)
   }
-
 
 }
