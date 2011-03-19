@@ -11,8 +11,6 @@ import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
  */
 trait Renderable{
 
-  def render: Unit = render(RequestScope.request,RequestScope.response)
-
   def renderWith(viewPath: ViewPath): Unit = renderWith(viewPath, RequestScope.request, RequestScope.response)
 
   def renderWith(viewPath: ViewPath, request: Request, response: Response): Unit = {
@@ -33,6 +31,13 @@ trait Renderable{
     renderSeq(request,response, models.toSeq)
   }
 
+  def render: Unit = render(RequestScope.request,RequestScope.response)
+
+  def render(request: Request, response: Response): Unit = {
+    val renderer = BowlerConfigurator.resolveViewRenderer(request)
+    renderer.renderView(request, response, List[Any]())
+  }
+
   def render(models: Any*):Unit ={
     renderSeq(RequestScope.request,RequestScope.response, models.toSeq)
   }
@@ -44,8 +49,5 @@ trait Renderable{
     renderer.renderView(request, response, models)
   }
 
-  def render(request: Request, response: Response): Unit = {
-    val renderer = BowlerConfigurator.resolveViewRenderer(request)
-    renderer.renderView(request, response, List[Any]())
-  }
+
 }

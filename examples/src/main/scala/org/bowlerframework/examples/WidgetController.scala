@@ -2,7 +2,8 @@ package org.bowlerframework.examples
 
 import org.bowlerframework.controller.Controller
 import org.bowlerframework.model.{ ParameterMapper, Validations}
-import org.bowlerframework.view.{Renderable}
+import org.bowlerframework.view.{Renderable, ViewPath}
+import org.bowlerframework._
 
 /**
  * Our main application controller, showing a simple CRUD interface.
@@ -28,11 +29,15 @@ class WidgetController extends Controller with ParameterMapper with Validations 
       render(widgets)
   }
 
+  def renderComposable = {
+  	renderWith(ViewPath(GET, MappedPath("/widgets/")), Widgets.findAll)	
+  }
+
   // renders the base routes
   get("/widgets")((request, response) => renderWidgets)
   get("/widgets/")((request, response) => renderWidgets)
-  get("/composable")((request, response) => renderWidgets)
-  get("/composable/")((request, response) => renderWidgets)
+  get("/composable")((request, response) => {renderComposable})
+  get("/composable/")((request, response) => {renderComposable})
 
 
   // responds to GET with a named parameter (:id becomes named to id)

@@ -37,10 +37,6 @@ class Bootstrap {
     new UriLayoutSelector(composableLayout, new Regex("^.*/composable/.*$")),
     new DefaultLayoutSelector(parentLayout)))
 
-  // Example of overriding view template URI's, in this case we make the path of /composable/ point
-  // to the same template as for /widgets/
-  TemplateRegistry.overridePath("/composable/", "/views/GET/widgets/index")
-
   // Register the WidgetTransformer so that we can look up Widgets for pages by ID
   TransformerRegistry.registerTransformer(classOf[Widget], classOf[WidgetTransformer])
 
