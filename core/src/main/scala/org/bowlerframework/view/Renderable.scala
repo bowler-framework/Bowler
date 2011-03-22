@@ -16,7 +16,7 @@ trait Renderable{
   def renderWith(component: Component, request: Request, response: Response): Unit = {
     Accept.matchAccept(request.getHeader("accept")) match{
       case JSON => render(request, response)
-      case _ => SqueryRenderer.render(component, response)
+      case _ => SqueryRenderer.render(component, request, response)
     }
   }
 
@@ -27,7 +27,7 @@ trait Renderable{
   def renderWith(component: Component, request: Request, response: Response, models: Any*): Unit = {
     Accept.matchAccept(request.getHeader("accept")) match{
       case JSON => renderSeq(request,response, models.toSeq)
-      case _ => SqueryRenderer.render(component, response)
+      case _ => SqueryRenderer.render(component, request, response)
     }
   }
 

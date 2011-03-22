@@ -1,6 +1,6 @@
 package org.bowlerframework.view.squery
 
-import org.bowlerframework.{RequestScope, Response}
+import org.bowlerframework.{Request, RequestScope, Response}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +11,10 @@ import org.bowlerframework.{RequestScope, Response}
  */
 
 object SqueryRenderer{
-  def render(component: Component): Unit = render(component, RequestScope.response)
+  def render(component: Component): Unit = render(component, RequestScope.request, RequestScope.response)
 
-  def render(component: Component, response: Response): Unit = response.getWriter.write(component.render.toString)
+  def render(component: Component, request: Request, response: Response): Unit = {
+    response.getWriter.write(component.render.toString)
+    request.getSession.resetValidations
+  }
 }

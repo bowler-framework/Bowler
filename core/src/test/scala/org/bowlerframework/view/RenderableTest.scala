@@ -1,11 +1,12 @@
 package org.bowlerframework.view
 
 import org.scalatest.FunSuite
-import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import scalate.selectors.DefaultLayoutSelector
 import scalate.{Layout, TemplateRegistry}
 import org.bowlerframework.{GET, Response, MappedPath, HTTP}
+import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
+import java.io.{StringReader, StringWriter}
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,6 +53,55 @@ class RenderableTest extends FunSuite with Renderable{
     val resp = makeResponse
     this.renderWith(ViewPath(GET, MappedPath("/simple")),request, resp, ViewModel("name", "Wille"))
     assert(resp.toString.contains("Where's the list? Hello"))
+  }
+
+
+  test("renderWith Squery (empty)"){
+    val resp = makeResponse
+    val request = makeRequest("/somePath")
+
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp)
+
+    val result = scala.xml.XML.load(new StringReader(resp.toString))
+    assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
+    assert("Mells" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(1).text)
+
+    assert("Hiram" == ((result \ "body" \ "div" \ "table" \\ "tr")(1) \ "td")(0).text)
+    assert("Tampa" == ((result \ "body" \ "div" \ "table" \\ "tr")(1) \ "td")(1).text)
+    assert("A Title" == (result \ "head" \ "title").text)
+  }
+
+  test("renderWith Squery (model"){
+    val resp = makeResponse
+    val request = makeRequest("/somePath")
+
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp,ViewModel("name", "Wille"),ViewModel("name", "Wille"))
+
+    val result = scala.xml.XML.load(new StringReader(resp.toString))
+    assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
+    assert("Mells" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(1).text)
+
+    assert("Hiram" == ((result \ "body" \ "div" \ "table" \\ "tr")(1) \ "td")(0).text)
+    assert("Tampa" == ((result \ "body" \ "div" \ "table" \\ "tr")(1) \ "td")(1).text)
+    assert("A Title" == (result \ "head" \ "title").text)
+
+  }
+
+  test("renderWith Squery (json)"){
+    val resp = makeResponse
+    val request = makeJsonRequest("/somePath")
+
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp,ViewModel("name", "Wille"),ViewModel("name", "Wille"))
+
+    assert("{\"name\":\"Wille\",\"name\":\"Wille\"}" == resp.toString)
+  }
+
+  test("renderWith Squery (json no model)"){
+    val resp = makeResponse
+    val request = makeJsonRequest("/somePath")
+
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp)
+    assert(resp.getStatus == 204)
   }
 
   test("empty seq HTML"){

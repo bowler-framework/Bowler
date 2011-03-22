@@ -8,7 +8,6 @@ import org.bowlerframework._
 import org.apache.commons.fileupload.FileItem
 
 
-
 class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{
   var bootstrap: AnyRef = null
 
@@ -61,4 +60,5 @@ class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHt
     val scope = RequestScope(bowlerRequest, new BowlerHttpResponse(this.response))
     routeExecutor.executeRoute(scope)
   }
+
 }

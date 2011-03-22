@@ -64,4 +64,5 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     routeExecutor.executeRoute(scope)
   }
 
+
 }

@@ -11,8 +11,20 @@ import org.bowlerframework.view.squery.{Person, TransformerComponent}
  */
 
 class SimpleTransformingComponent extends TransformerComponent {
+
+  //massive repeating list to test performance
   val people = List(Person("James", "Mells"),
-    Person("Hiram", "Tampa"))
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"))
 
   $(".people").contents(
     node => {
