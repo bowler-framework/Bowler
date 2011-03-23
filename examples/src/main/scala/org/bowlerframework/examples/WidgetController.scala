@@ -69,7 +69,11 @@ class WidgetController extends Controller with ParameterMapper with Validations 
   })
 
   // form for creating a new Widget - passes in a new, empty widget to be filled out.
-  get ("/widgets/new")((request, response) => {render(Widget(0, null, null, null))})
+  get("/widgets/new")((request, response) => {render(Widget(0, null, null, null))})
+
+
+    // form for creating a new Widget - passes in a new, empty widget to be filled out.
+  get("/widgets/new/squery")((request, response) => {renderWith(new SqueryWidgetPage(new NewWidgetForm),Widget(0, null, null, null))})
 
   // HTTP POST for creating new Widgets.
   post("/widgets")((request, response) =>{

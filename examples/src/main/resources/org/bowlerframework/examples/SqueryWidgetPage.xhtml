@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+    <title>Bowler Framework Sample Application</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+ <script type="text/javascript">
+
+     function asJson(url){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"GET",
+        url: url,
+        success: function(data){
+            alert("JSON View=" + data);
+        }
+        });
+     }
+
+     function deleteWidget(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/widgets/" + id,
+        success: function(data){
+            window.location.href = "/widgets";
+        }
+        });
+     }
+
+
+     function deletePerson(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/people/" + id,
+        success: function(data){
+            window.location.href = "/people/";
+        }
+        });
+     }
+
+
+     function deleteCar(id){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"DELETE",
+        url: "/cars/" + id,
+        success: function(data){
+            window.location.href = "/cars/";
+        }
+        });
+     }
+
+ </script>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+<div id="container">
+<span ><!-- header panel here --></span>
+<div id="header">
+
+<h1 >Bowler Framework</h1>
+<p >RESTful Scala Web Framework</p>
+</div>
+
+<div>
+
+
+    </div>
+<div class="tabs-container">
+
+
+
+
+
+</div>
+
+        <div id="footer">
+<p>
+<span >Copyright  Recursivity limited, 2010- </span>
+</p>
+</div>
+
+
+</div>
+</body>
+</html>

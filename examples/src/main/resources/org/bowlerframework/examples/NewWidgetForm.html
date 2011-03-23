@@ -1,0 +1,20 @@
+<span>
+    <h3>Create new Widget</h3>
+
+<ul id="errorPanel">
+    <li id="errors"><span id="error"></span></li>
+</ul>
+<form method="POST" action="/widgets">
+
+Id<br/>
+<input name="widget.id" value="{{id}}"/><br/>
+Name<br/>
+<input name="widget.name" value="{{name}}"/><br/>
+
+Year Made<br/>
+<input name="widget.yearMade" value="{{yearMade}}"/><br/>
+Description<br/>
+<input name="widget.description" value="{{description}}"/><br/>
+<input type="submit" value="Create!"/>
+</form>
+</span>
