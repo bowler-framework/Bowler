@@ -1,6 +1,6 @@
 package org.bowlerframework.view.squery.stub
 
-import org.bowlerframework.view.squery.{Component, TransformerComponent}
+import org.bowlerframework.view.squery.{MarkupContainer, Component}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,6 +10,6 @@ import org.bowlerframework.view.squery.{Component, TransformerComponent}
  * To change this template use File | Settings | File Templates.
  */
 
-class ComposedPageComponent(child: Component) extends TransformerComponent{
+class ComposedPageComponent(child: MarkupContainer) extends Component{
   $("body").contents = child.render
 }

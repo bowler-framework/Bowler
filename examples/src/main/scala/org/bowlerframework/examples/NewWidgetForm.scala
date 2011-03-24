@@ -1,6 +1,6 @@
 package org.bowlerframework.examples
 
-import org.bowlerframework.view.squery.TransformerComponent
+import org.bowlerframework.view.squery.Component
 import org.bowlerframework.RequestScope
 
 /**
@@ -11,7 +11,7 @@ import org.bowlerframework.RequestScope
  * To change this template use File | Settings | File Templates.
  */
 
-class NewWidgetForm extends TransformerComponent{
+class NewWidgetForm extends Component{
   val request = RequestScope.request
 
   request.getSession.getErrors match{

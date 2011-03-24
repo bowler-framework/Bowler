@@ -27,7 +27,7 @@ class ComponentTest extends FunSuite{
 
   test("test localization"){
     val resolver = new DummyRequestResolver(List("es", "se"))
-    Component.requestResolver = resolver
+    MarkupContainer.requestResolver = resolver
 
     val result = (new LocalizedComponent).render
     assert("Svenska!" == (result \\ "body").text)

@@ -1,7 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
-import squery.{SqueryRenderer, Component}
+import squery.{SqueryRenderer, MarkupContainer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,20 +11,20 @@ import squery.{SqueryRenderer, Component}
  * To change this layout use File | Settings | File Templates.
  */
 trait Renderable{
-  def renderWith(component: Component): Unit = renderWith(component, RequestScope.request, RequestScope.response)
+  def renderWith(component: MarkupContainer): Unit = renderWith(component, RequestScope.request, RequestScope.response)
 
-  def renderWith(component: Component, request: Request, response: Response): Unit = {
+  def renderWith(component: MarkupContainer, request: Request, response: Response): Unit = {
     Accept.matchAccept(request.getHeader("accept")) match{
       case JSON => render(request, response)
       case _ => SqueryRenderer.render(component, request, response)
     }
   }
 
-  def renderWith(component: Component, models: Any*): Unit = {
+  def renderWith(component: MarkupContainer, models: Any*): Unit = {
     renderWith(component, RequestScope.request,RequestScope.response, models.toSeq)
   }
 
-  def renderWith(component: Component, request: Request, response: Response, models: Any*): Unit = {
+  def renderWith(component: MarkupContainer, request: Request, response: Response, models: Any*): Unit = {
     Accept.matchAccept(request.getHeader("accept")) match{
       case JSON => renderSeq(request,response, models.toSeq)
       case _ => SqueryRenderer.render(component, request, response)

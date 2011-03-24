@@ -1,6 +1,6 @@
 package org.bowlerframework.examples
 
-import org.bowlerframework.view.squery.{Component, TransformerComponent}
+import org.bowlerframework.view.squery.{Component,MarkupContainer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@ import org.bowlerframework.view.squery.{Component, TransformerComponent}
  * To change this template use File | Settings | File Templates.
  */
 
-class SqueryWidgetPage(component: Component) extends TransformerComponent{
+class SqueryWidgetPage(component: MarkupContainer) extends Component{
 
   $(".tabs-container").contents = component.render
 

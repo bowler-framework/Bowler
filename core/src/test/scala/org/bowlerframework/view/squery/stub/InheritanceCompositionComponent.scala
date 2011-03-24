@@ -1,6 +1,6 @@
 package org.bowlerframework.view.squery.stub
 
-import org.bowlerframework.view.squery.{Component, TransformerComponent}
+import org.bowlerframework.view.squery.{Component, MarkupContainer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@ import org.bowlerframework.view.squery.{Component, TransformerComponent}
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class InheritanceCompositionComponent extends TransformerComponent{
+abstract class InheritanceCompositionComponent extends Component{
   $("body").contents = child.render
 
   def child: Component

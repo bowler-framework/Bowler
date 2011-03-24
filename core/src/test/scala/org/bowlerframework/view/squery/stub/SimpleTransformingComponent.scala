@@ -1,6 +1,6 @@
 package org.bowlerframework.view.squery.stub
 
-import org.bowlerframework.view.squery.{Person, TransformerComponent}
+import org.bowlerframework.view.squery.{Person, Component}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@ import org.bowlerframework.view.squery.{Person, TransformerComponent}
  * To change this template use File | Settings | File Templates.
  */
 
-class SimpleTransformingComponent extends TransformerComponent {
+class SimpleTransformingComponent extends Component {
 
   //massive repeating list to test performance
   val people = List(Person("James", "Mells"),
