@@ -14,6 +14,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
+  private var method: HttpMethod = null
 
   private var body: String = null
 
@@ -93,14 +94,19 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getAccept = request.getHeader("accept")
 
   def getMethod: HttpMethod = {
-    request.getMethod match {
-      case "GET" => return GET
-      case "PUT" => return PUT
-      case "POST" => return POST
-      case "DELETE" => return DELETE
-    }
-
+    if(method == null){
+      request.getMethod match {
+        case "GET" => return GET
+        case "PUT" => return PUT
+        case "POST" => return POST
+        case "DELETE" => return DELETE
+      }
+    }else
+      return method
   }
+
+
+  def setMethod(method: HttpMethod) = {this.method = method}
 
   def getContentType: Option[String]= {
     val string = request.getContentType

@@ -9,7 +9,7 @@ import collection.mutable.HashMap
 
 trait BowlerHttpApplicationRouter extends ApplicationRouter{
   def flattenParameters(request: HttpServletRequest, params: MultiMapHeadView[String, String] with MapWithIndifferentAccess[String],
-        multiParams: Map[String, Seq[String]], fileParams: collection.Map[String, FileItem], fileMultiParams: collection.Map[String, Seq[FileItem]]): Map[String, Any] ={
+        multiParams: Map[String, Seq[String]], fileParams: collection.Map[String, FileItem] = Map[String, FileItem](), fileMultiParams: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()): Map[String, Any] ={
 
     val map = new HashMap[String, Any]
 
@@ -30,8 +30,20 @@ trait BowlerHttpApplicationRouter extends ApplicationRouter{
     if(multiParams("captures") != null)
       map += "captures" -> multiParams("captures").toList
 
-    fileParams.foreach(f => {map += f._1 -> f._2})
-    fileMultiParams.foreach(f => {map += f._1 -> f._2.toList})
+    try{
+      fileParams.foreach(f => {map += f._1 -> f._2})
+    }catch{
+      case e: Exception => {}
+    }
+
+    try{
+      fileMultiParams.foreach(f => {map += f._1 -> f._2.toList})
+    }catch{
+      case e: Exception => {}
+    }
+
+
+
     return map.toMap
   }
 }

@@ -45,7 +45,8 @@ class ClasspathTemplateResolverTest extends FunSuite{
       val template = resolver.resolveLayout(request, Layout("overflow-baby"))
     }catch{
       case e: IOException => {
-        val message = "Could not find a template of type .mustache, .ssp, .jade or .scaml with path: classpath:///layouts/overflow-baby"
+        println(e.getMessage)
+        val message = "Could not find a template of type .html, .xhtml, .xml, .mustache, .ssp, .jade or .scaml  with path: classpath:///layouts/overflow-baby"
         assert(e.getMessage == message)
       }
     }
@@ -161,27 +162,6 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.uri == "/views/GET/widgets/index_ipad.ssp")
     assert(template.template == "ipad widgets")
   }
-
-  test("wild cards (override)"){
-    TemplateRegistry.overridePath("/say/*/to/*", "/views/GET/index")
-    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
-    request.setLocales(List("es", "se"))
-    request.setMappedPath(MappedPath("/say/*/to/*", false))
-    val template = resolver.resolveViewTemplate(request)
-    assert(template.uri == "/views/GET/index_ipad_se.ssp")
-    assert(template.template == "svenskt ipad index")
-  }
-
-  test("regex (using override)"){
-    TemplateRegistry.regexPath(new Regex("^.*/hello/.*$"), "/views/GET/index")
-    val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
-    request.setLocales(List("es", "se"))
-    request.setMappedPath(MappedPath("^.*/hello/.*$", true))
-    val template = resolver.resolveViewTemplate(request)
-    assert(template.uri == "/views/GET/index_ipad_se.ssp")
-    assert(template.template == "svenskt ipad index")
-  }
-
 
   def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
   def makeRequest(path: String, headers: Map[String, String]) = new DummyRequest(GET, path, Map(), null, headers)

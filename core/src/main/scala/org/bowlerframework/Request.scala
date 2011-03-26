@@ -4,6 +4,7 @@ package org.bowlerframework
 trait Request{
   def getPath: String
   def getMethod: HttpMethod
+  def setMethod(method: HttpMethod)
   def getServerName: String
   def isSecure: Boolean
 

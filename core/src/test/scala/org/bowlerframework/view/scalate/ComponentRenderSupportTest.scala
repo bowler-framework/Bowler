@@ -17,7 +17,7 @@ class ComponentRenderSupportTest extends FunSuite{
     assert("A Foo is a bar" == SimpleComponent.show)
   }
 
-  test("complext nexted renderable with model around"){
+  test("complex nexted renderable with model around"){
     RenderEngine.reset
     val uri =  "/org/bowlerframework/view/scalate/complex.ssp"
     val model = Map("bean" -> Widget("hello", 50), "bean2" -> Widget("bye", 100), "tuple" -> Tuple2("foo", "bar"))

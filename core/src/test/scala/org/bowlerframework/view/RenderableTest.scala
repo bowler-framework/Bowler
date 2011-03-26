@@ -34,6 +34,26 @@ class RenderableTest extends FunSuite with Renderable{
     assert("[\"hello\"]" == resp.toString)
   }
 
+  test("renderWith (empty)"){
+    TemplateRegistry.reset
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+    val request = makeRequest("/index")
+    request.setMappedPath(new MappedPath("/index", false))
+    val resp = makeResponse
+    this.renderWith(ViewPath(GET, MappedPath("/simple")),request, resp, List[Any]())
+    assert(resp.toString.contains("Where's the list? Hello"))
+  }
+
+  test("renderWith model"){
+    TemplateRegistry.reset
+    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+    val request = makeRequest("/index")
+    request.setMappedPath(new MappedPath("/index", false))
+    val resp = makeResponse
+    this.renderWith(ViewPath(GET, MappedPath("/simple")),request, resp, ViewModel("name", "Wille"))
+    assert(resp.toString.contains("Where's the list? Hello"))
+  }
+
   test("empty seq HTML"){
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))

@@ -7,6 +7,8 @@ import com.recursivity.commons.validator.Equals
 import org.bowlerframework.model._
 import org.bowlerframework.controller.InterceptingController
 
+
+
 /**
  * Persistence/Dao based CRUD Controller that allows for the following actions:
  * <ul>
@@ -118,7 +120,6 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
       request.getSession.setAttribute("_bowlerListItems", 10)
     val offset = (page - 1) * items.getOrElse(10)
     val maxItems = items.getOrElse(10)
-
     render(dao.findAll(offset, maxItems))
   }
 

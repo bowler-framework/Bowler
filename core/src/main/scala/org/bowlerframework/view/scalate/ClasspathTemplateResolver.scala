@@ -1,7 +1,8 @@
 package org.bowlerframework.view.scalate
 
 import com.recursivity.commons.{StringInputStreamReader, ClasspathResourceResolver}
-import java.io.{InputStream}
+import collection.mutable.HashMap
+import java.io.{IOException, InputStream}
 
 
 class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamReader {
@@ -9,10 +10,10 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
   /**
    * Gets a resource with no fallback to default if localised file does not exist
    */
-   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template = {
+  def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template = {
     var is: InputStream = null
+    var realPath: String = null
     try {
-      var realPath: String = null
       if (locale == null)
         realPath = path + fileType
       else
@@ -25,8 +26,6 @@ class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamR
       is.close
     }
   }
-
-
 
   def getAbsoluteResource(uri: String): String = {
     val obj = this

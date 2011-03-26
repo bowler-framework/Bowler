@@ -15,7 +15,7 @@ import org.bowlerframework._
  * To change this layout use File | Settings | File Templates.
  */
 
-class BowlerHttpRequestTest extends ScalatraFunSuite{
+class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite{
 
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
   holder.setInitParameter("applicationClass", "org.bowlerframework.stub.SimpleApp")
@@ -179,15 +179,16 @@ class BowlerHttpRequestTest extends ScalatraFunSuite{
   }
 
   test("POST ContentType"){
-    var contentType: Option[String] = null
+    var ctype: Option[String] = null
     BowlerConfigurator.post("/getParameterNames/:name/:value", new RouteExecutor{
       def executeRoute(scope: RequestScope) = {
-        contentType = scope.request.getContentType
+        ctype = scope.request.getContentType
       }
     })
 
     post("/getParameterNames/foo/bar", ("param", "baz")) {
-      assert(contentType.get.equals("application/x-www-form-urlencoded"))  //multipart/form-data
+      println("CONTENT-TYPE: " + ctype)
+      assert(ctype.get.contains("application/x-www-form-urlencoded"))
     }
   }
 

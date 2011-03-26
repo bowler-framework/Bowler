@@ -6,6 +6,12 @@ import org.bowlerframework.http.BowlerFilter
 import com.recursivity.commons.validator.MinLength
 import org.bowlerframework.model.{ModelValidator, DefaultModelValidator, ModelValidatorBuilder}
 
+import java.io.StringWriter
+import org.bowlerframework.jvm.{DummyRequest, DummyResponse}
+import collection.mutable.{MutableList}
+import org.bowlerframework.{GET, HTTP}
+import org.bowlerframework.view.JsonViewRenderer
+
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
@@ -22,9 +28,8 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   val dao = new LongKeyedDao[Author](authors)
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
 
-  test("get /"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
 
+  def create = {
     startTx
 
     transaction{
@@ -63,7 +68,13 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
       //all.foreach(f => dao.delete(f))
     }
 
-    commit
+    commit	
+  }
+
+  test("get /"){
+    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+
+	create
     var someBody: String = null
     this.get("/authors/", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       someBody = this.body
@@ -82,8 +93,9 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     secondBody = "{\"list\":" + secondBody + "}"
 
     assert(secondBody == someBody)
-
+		println("BODY + " + secondBody)
     assert(10 == results.list.size)
+	println(results.list(0).firstName)
     assert(results.list(0).firstName == "1")
     assert(results.list(9).firstName == "10")
 
@@ -93,7 +105,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
     secondBody = "{\"list\":" + secondBody + "}"
     val page2 = this.getValue[ListHolder](secondBody, null)
-
+	println(secondBody)
     println(page2.list.size)
     println(page2)
     assert(5 == page2.list.size)
@@ -120,6 +132,29 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
+  test("test json bug"){
+	val writer = new StringWriter
+	val resp = new DummyResponse(writer)
+	startTx
+
+    transaction{
+	    val writer = new StringWriter
+	    val resp = new DummyResponse(writer)
+		val w = new StringWriter
+		val r = new DummyResponse(w)
+		val renderer = new JsonViewRenderer
+		val results = dao.findAll()
+		renderer.renderView(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(results))
+		print("JSON: "+ resp.toString)
+		results.foreach(f => dao.delete(f))
+		
+		renderer.renderView(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), r, toSeq(List(new Author, new Author, new Author2)))
+		print("JSON by hand: "+ r.toString)
+	}
+	commit	
+  }
+
+  def toSeq(models: Any*): Seq[Any] = models.toSeq
 
 
   test("get /:id"){
@@ -171,6 +206,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     this.get("/authors/" + id + "/edit", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       someBody = this.body
     }
+	println(someBody)
 
     val auth = this.getValue[Author](someBody, null)
 
@@ -261,7 +297,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
     this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       result = this.status
-      println(this.body)
+      //println(this.body)
     }
 
     assert(400 == result)
@@ -344,7 +380,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
 }
 
-case class ListHolder(list: List[Author])
+case class ListHolder(val list: List[Author])
 
 class AuthorValidatorBuilder extends DefaultModelValidator(classOf[Author]) with ModelValidatorBuilder[Author]{
 

@@ -6,7 +6,7 @@ import org.bowlerframework._
 
 
 
-class DummyRequest(method: HttpMethod, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{
+class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
@@ -62,6 +62,8 @@ class DummyRequest(method: HttpMethod, path: String, params: Map[String, Any], b
   def getAccept = headers("accept")
 
   def getMethod = method
+
+  def setMethod(method: HttpMethod) = (this.method = method)
 
   def getContentType: Option[String] = {
     try{

@@ -20,7 +20,7 @@
 Make<br/>
 ${unescape(show)} <br/>
 Year Made<br/>
-<input name="car.model" value="${car.model}"/><br/>
+<input id="model" name="car.model" value="${car.model}"/><br/>
 
 <input type="submit" value="Create!"/>
 </form>

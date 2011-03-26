@@ -55,15 +55,4 @@ class TemplateRegistryTest extends FunSuite{
     assert("^.*/hello/.*$" == new Regex("^.*/hello/.*$").toString)
   }
 
-  test("get/set View Template Override"){
-    TemplateRegistry.regexPath(new Regex("^.*/hello/.*$"), "/views/GET/index.ssp")
-    TemplateRegistry.overridePath("/say/*/hello/*", "/views/GET/index_se.ssp")
-
-    assert(None == TemplateRegistry.getOverrideTemplate(new MappedPath("hello", false)))
-    assert(None == TemplateRegistry.getOverrideTemplate(new MappedPath("hello", true)))
-
-    //
-    assert("/views/GET/index_se.ssp" == TemplateRegistry.getOverrideTemplate(new MappedPath("/say/*/hello/*", false)).get)
-    assert("/views/GET/index.ssp" == TemplateRegistry.getOverrideTemplate(new MappedPath("^.*/hello/.*$", true)).get)
-  }
 }
