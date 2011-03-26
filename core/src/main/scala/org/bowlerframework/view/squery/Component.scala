@@ -12,4 +12,10 @@ import org.fusesource.scalate.scuery.Transformer
 
 abstract class Component extends Transformer with MarkupContainer{
   override def render = this.apply(super.render)
+
+  def valueOrEmpty(any: Any): String = {
+    if(any == null)
+      return ""
+    else return any.toString
+  }
 }

@@ -1,5 +1,6 @@
 package org.bowlerframework.examples
 
+import org.bowlerframework.view.squery.component.ValidationFeedbackPanel._
 import org.bowlerframework.view.squery.Component
 import org.bowlerframework.RequestScope
 
@@ -13,23 +14,8 @@ import org.bowlerframework.RequestScope
 
 class NewWidgetForm extends Component{
   val request = RequestScope.request
-
-  request.getSession.getErrors match{
-    case None => {$("#errorPanel").contents = ""}
-    case Some(list) => {
-      $("#errorPanel").contents(
-          node => {
-            list.flatMap {
-              p =>
-                transform(node.$("#errors")) {
-                  $ =>
-                    $("#error").contents = p._2
-                }
-            }
-          }
-        )
-    }
-  }
+	
+  $("#errorPanel").contents = showErrorMessages
 
   request.getSession.getValidatedModel match{
     case None => bindModel(Widget(0, null, null, null))
@@ -41,13 +27,6 @@ class NewWidgetForm extends Component{
     $("form input[name='widget.name']").attribute("value", valueOrEmpty(widget.name))
     $("form input[name='widget.yearMade']").attribute("value", valueOrEmpty(widget.yearMade))
     $("form input[name='widget.description']").attribute("value", valueOrEmpty(widget.description))
-  }
-
-  def valueOrEmpty(any: Any): String = {
-    if(any == null)
-      return ""
-    else return any.toString
-
   }
 
 }
