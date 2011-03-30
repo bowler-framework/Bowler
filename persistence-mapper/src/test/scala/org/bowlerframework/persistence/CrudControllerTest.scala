@@ -8,8 +8,7 @@ import org.bowlerframework.model.{ModelValidator, DefaultModelValidator, ModelVa
 
 import java.io.StringWriter
 import org.bowlerframework.jvm.{DummyRequest, DummyResponse}
-import collection.mutable.{MutableList}
-import org.bowlerframework.{GET, HTTP}
+import org.bowlerframework.GET
 import org.bowlerframework.view.JsonViewRenderer
 
 /**
@@ -20,8 +19,9 @@ import org.bowlerframework.view.JsonViewRenderer
  * To change this template use File | Settings | File Templates.
  */
 
-class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
-    import Library._
+class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest {
+
+  import Library._
 
   ModelValidatorBuilder.registerValidatorBuilder(classOf[Author], new AuthorValidatorBuilder)
 
@@ -32,22 +32,22 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   def create = {
     startTx
 
-    transaction{
-      dao.create(new Author(0, "1","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "2","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "3","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "4","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "5","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "6","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "7","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "8","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "9","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "10","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "11","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "12","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "13","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "14","Doe", Some("johndoe@gmail.com")))
-      dao.create(new Author(0, "15","Doe", Some("johndoe@gmail.com")))
+    transaction {
+      dao.create(new Author(0, "1", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "2", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "3", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "4", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "5", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "6", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "7", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "8", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "9", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "10", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "11", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "12", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "13", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "14", "Doe", Some("johndoe@gmail.com")))
+      dao.create(new Author(0, "15", "Doe", Some("johndoe@gmail.com")))
 
       val all = dao.findAll()
       assert(all.size == 15)
@@ -68,15 +68,49 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
       //all.foreach(f => dao.delete(f))
     }
 
-    commit	
+    commit
   }
 
-  test("get /"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+  test("get / with page"){
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
 
-	create
+    create
+
     var someBody: String = null
-    this.get("/authors/", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/") {
+      someBody = this.body
+    }
+    assert(someBody.contains("<li>6 Doe</li>"))
+
+    this.get("/authors/page/2") {
+      someBody = this.body
+    }
+    assert(someBody.contains("<li>11 Doe</li>"))
+
+    commit
+    var secondBody: String = null
+    this.get("/authors?itemsInList=100", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      secondBody = this.body
+    }
+
+    secondBody = "{\"list\":" + secondBody + "}"
+    val allPages = this.getValue[ListHolder](secondBody, null)
+
+
+
+    startTx
+    transaction {
+      allPages.list.foreach(f => dao.delete(f))
+    }
+    commitTx
+  }
+
+  test("get /") {
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
+
+    create
+    var someBody: String = null
+    this.get("/authors/", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       someBody = this.body
     }
 
@@ -86,26 +120,26 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
     var secondBody: String = null
 
-    this.get("/authors/page/1", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/page/1", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       secondBody = this.body
     }
 
     secondBody = "{\"list\":" + secondBody + "}"
 
     assert(secondBody == someBody)
-		println("BODY + " + secondBody)
+    println("BODY + " + secondBody)
     assert(10 == results.list.size)
-	println(results.list(0).firstName)
+    println(results.list(0).firstName)
     assert(results.list(0).firstName == "1")
     assert(results.list(9).firstName == "10")
 
-    this.get("/authors/page/2", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/page/2", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       secondBody = this.body
     }
 
     secondBody = "{\"list\":" + secondBody + "}"
     val page2 = this.getValue[ListHolder](secondBody, null)
-	println(secondBody)
+    println(secondBody)
     println(page2.list.size)
     println(page2)
     assert(5 == page2.list.size)
@@ -113,7 +147,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(page2.list(4).firstName == "15")
 
 
-    this.get("/authors?itemsInList=100", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors?itemsInList=100", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       secondBody = this.body
     }
 
@@ -125,52 +159,52 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(allPages.list(14).firstName == "15")
 
     startTx
-    transaction{
+    transaction {
       allPages.list.foreach(f => dao.delete(f))
     }
     commitTx
 
   }
 
-  test("test json bug"){
-	val writer = new StringWriter
-	val resp = new DummyResponse(writer)
-	startTx
+  test("test json bug") {
+    val writer = new StringWriter
+    val resp = new DummyResponse(writer)
+    startTx
 
-    transaction{
-	    val writer = new StringWriter
-	    val resp = new DummyResponse(writer)
-		val w = new StringWriter
-		val r = new DummyResponse(w)
-		val renderer = new JsonViewRenderer
-		val results = dao.findAll()
-		renderer.renderView(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(results))
-		print("JSON: "+ resp.toString)
-		results.foreach(f => dao.delete(f))
-		
-		renderer.renderView(new DummyRequest(GET,"/", Map(), null, Map("accept" -> "application/json")), r, toSeq(List(new Author, new Author, new Author2)))
-		print("JSON by hand: "+ r.toString)
-	}
-	commit	
+    transaction {
+      val writer = new StringWriter
+      val resp = new DummyResponse(writer)
+      val w = new StringWriter
+      val r = new DummyResponse(w)
+      val renderer = new JsonViewRenderer
+      val results = dao.findAll()
+      renderer.renderView(new DummyRequest(GET, "/", Map(), null, Map("accept" -> "application/json")), resp, toSeq(results))
+      print("JSON: " + resp.toString)
+      results.foreach(f => dao.delete(f))
+
+      renderer.renderView(new DummyRequest(GET, "/", Map(), null, Map("accept" -> "application/json")), r, toSeq(List(new Author, new Author, new Author2)))
+      print("JSON by hand: " + r.toString)
+    }
+    commit
   }
 
   def toSeq(models: Any*): Seq[Any] = models.toSeq
 
 
-  test("get /:id"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+  test("get /:id") {
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
 
     startTx
     var id: Long = 1
-    transaction{
-      val author = new Author(0, "1","Doe", Some("johndoe@gmail.com"))
+    transaction {
+      val author = new Author(0, "1", "Doe", Some("johndoe@gmail.com"))
       dao.create(author)
       id = author.id
     }
 
     commit
     var someBody: String = null
-    this.get("/authors/" + id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/" + id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       someBody = this.body
     }
 
@@ -181,7 +215,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(auth.lastName == "Doe")
 
     startTx
-    transaction{
+    transaction {
       dao.delete(auth)
     }
 
@@ -190,23 +224,23 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   }
 
 
-  test("get /:id/edit"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+  test("get /:id/edit") {
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
 
     startTx
     var id: Long = 1
-    transaction{
-      val author = new Author(0, "1","Doe", Some("johndoe@gmail.com"))
+    transaction {
+      val author = new Author(0, "1", "Doe", Some("johndoe@gmail.com"))
       dao.create(author)
       id = author.id
     }
 
     commit
     var someBody: String = null
-    this.get("/authors/" + id + "/edit", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/" + id + "/edit", Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       someBody = this.body
     }
-	println(someBody)
+    println(someBody)
 
     val auth = this.getValue[Author](someBody, null)
 
@@ -215,7 +249,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(auth.lastName == "Doe")
 
     startTx
-    transaction{
+    transaction {
       dao.delete(auth)
     }
 
@@ -224,12 +258,12 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
   }
 
 
-  test("create"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+  test("create") {
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
     var result: String = null
     val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
-    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.body
     }
 
@@ -240,7 +274,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(auth.lastName == "author")
     assert(auth.email.get == "some@email.com")
 
-    this.get("/authors/" + auth.id,  Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/" + auth.id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.body
     }
 
@@ -252,7 +286,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(auth.email.get == "some@email.com")
 
     startTx
-    transaction{
+    transaction {
       dao.delete(auth)
     }
 
@@ -260,21 +294,21 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
-  test("create with unique fail"){
+  test("create with unique fail") {
     startTx
     var id: Long = 1
-    transaction{
-      val author = new Author(0, "4qweqe5","Doe", Some("johndoe@gmail.com"))
+    transaction {
+      val author = new Author(0, "4qweqe5", "Doe", Some("johndoe@gmail.com"))
       dao.create(author)
       id = author.id
     }
     commit
 
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
     var result: Int = 200
     val list = List[Tuple2[String, String]](("author.id", "" + id), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
-    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.status
     }
 
@@ -282,7 +316,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(400 == result)
 
     startTx
-    transaction{
+    transaction {
       dao.delete(dao.findById(id).get)
     }
 
@@ -290,12 +324,12 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
-  test("create with ModelValidatorBuilder (name to short)"){
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+  test("create with ModelValidatorBuilder (name to short)") {
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
     var result: Int = 200
     val list = List[Tuple2[String, String]](("author.id", "0"), ("author.firstName", "w"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
-    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.post("/authors/", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.status
       //println(this.body)
     }
@@ -304,29 +338,29 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
-  test("update"){
+  test("update") {
     startTx
     var id: Long = 1
-    transaction{
-      val author = new Author(0, "45","Doe", Some("johndoe@gmail.com"))
+    transaction {
+      val author = new Author(0, "45", "Doe", Some("johndoe@gmail.com"))
       dao.create(author)
       id = author.id
     }
     commit
 
 
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
     var result: Int = 200
 
-    println("AUTHOR ID: " +  id)
+    println("AUTHOR ID: " + id)
     val list = List[Tuple2[String, String]](("author.id", "" + id), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
-    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.status
     }
 
     var someBody: String = null
-    this.get("/authors/" + id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.get("/authors/" + id, Seq.empty, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       someBody = this.body
     }
 
@@ -339,7 +373,7 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
     assert(auth.email.get == "some@email.com")
 
     startTx
-    transaction{
+    transaction {
       dao.delete(auth)
     }
 
@@ -347,31 +381,31 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
   }
 
-  test("update with id fail"){
+  test("update with id fail") {
     startTx
     var id: Long = 1
-    transaction{
-      val author = new Author(0, "45","Doe", Some("johndoe@gmail.com"))
+    transaction {
+      val author = new Author(0, "45", "Doe", Some("johndoe@gmail.com"))
       dao.create(author)
       id = author.id
     }
     commit
 
 
-    val controller = new CrudController[Author, Long](new SquerylController,dao, "authors")
+    val controller = new CrudController[Author, Long](new SquerylController, dao, "authors")
     var result: Int = 200
 
-    println("AUTHOR ID: " +  id)
+    println("AUTHOR ID: " + id)
     val list = List[Tuple2[String, String]](("author.id", "" + (id + 1)), ("author.firstName", "postAuthor"), ("author.lastName", "author"), ("author.email", "some@email.com"))
 
-    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+    this.post("/authors/" + id, list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
       result = this.status
     }
 
     assert(400 == result)
 
     startTx
-    transaction{
+    transaction {
       dao.delete(dao.findById(id).get)
     }
 
@@ -382,11 +416,13 @@ class CrudControllerTest extends ScalatraFunSuite with InMemoryDbTest{
 
 case class ListHolder(val list: List[Author])
 
-class AuthorValidatorBuilder extends DefaultModelValidator(classOf[Author]) with ModelValidatorBuilder[Author]{
+class AuthorValidatorBuilder extends DefaultModelValidator(classOf[Author]) with ModelValidatorBuilder[Author] {
 
   def initialize(author: Author): ModelValidator = {
     val validator: ModelValidator = new DefaultModelValidator(classOf[Author])
-    validator.add(MinLength("firstName", 3, {author.firstName}))
+    validator.add(MinLength("firstName", 3, {
+      author.firstName
+    }))
     return validator
   }
 }

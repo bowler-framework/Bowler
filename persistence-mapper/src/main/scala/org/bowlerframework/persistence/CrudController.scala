@@ -1,13 +1,11 @@
 package org.bowlerframework.persistence
 
-import org.bowlerframework.view.Renderable
 import com.recursivity.commons.bean.{TransformerRegistry, BeanUtils}
-import org.bowlerframework.{Response, Request}
 import com.recursivity.commons.validator.Equals
 import org.bowlerframework.model._
 import org.bowlerframework.controller.InterceptingController
-
-
+import org.bowlerframework.{GET, MappedPath, Response, Request}
+import org.bowlerframework.view.{ViewPath, Renderable}
 
 /**
  * Persistence/Dao based CRUD Controller that allows for the following actions:
@@ -120,7 +118,7 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
       request.getSession.setAttribute("_bowlerListItems", 10)
     val offset = (page - 1) * items.getOrElse(10)
     val maxItems = items.getOrElse(10)
-    render(dao.findAll(offset, maxItems))
+    renderWith(ViewPath(GET, MappedPath("/" + resourceName + "/")), dao.findAll(offset, maxItems))
   }
 
 }
