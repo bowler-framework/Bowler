@@ -13,13 +13,7 @@ object CONSTANTS {
   val MAINPACKAGE = "main"
 }
 
-trait DefaultBowlerTemplate extends Template with Create with Delete {
-  lazy val defaultMainPackage = searchForMainPackage match {
-    case Full(packageName) => Full(packageName)
-    case Empty => Empty
-    case Failure(msg,_,_) => Failure(msg)
-  }
-}
+trait DefaultBowlerTemplate extends Template with Create with Delete
 
 object BlankBowlerProject extends DefaultBowlerTemplate {
 
