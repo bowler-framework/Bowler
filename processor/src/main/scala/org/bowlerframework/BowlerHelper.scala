@@ -13,9 +13,9 @@ object BowlerHelper  {
 		"src/main/resources/views",
 		"src/main/resources/views/GET",
 		"src/main/scala",
-		"src/main/scala/bowlerquickstart",
+		"src/main/scala/${mainpackage}",
 		"src/main/webapp",
-		"src/main/WEB-INF")
+		"src/main/webapp/WEB-INF")
 		
 	def searchForMainPackage: Box[String] = {
 		val properties = new Properties()

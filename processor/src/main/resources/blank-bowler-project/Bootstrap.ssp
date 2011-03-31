@@ -1,4 +1,7 @@
-package bowlerquickstart
+<%@ var mainpackage:String %>
+<%@ var controllername:String %>
+
+package ${mainpackage}
 
 import org.bowlerframework.view.scalate._
 import org.bowlerframework.view.scalate.selectors._
@@ -17,7 +20,7 @@ class Bootstrap{
 
 
   // I think we're ready to start and instantiate our Controller.
-  val controller = new MyController
+  val controller = new ${controllername}
 	
 	
   // allow template reload during development - remove these lines in production for better performance
