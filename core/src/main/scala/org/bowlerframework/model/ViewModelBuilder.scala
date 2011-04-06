@@ -22,10 +22,7 @@ object ViewModelBuilder {
 
   private def unwrap(model: Any): Any = {
     if (model.isInstanceOf[Option[_]]) {
-      if (model != None)
-        return model.asInstanceOf[Option[_]].get
-      else
-        return ""
+      return model.asInstanceOf[Option[_]].getOrElse("")
     }
     return model
   }
@@ -38,10 +35,7 @@ object ViewModelBuilder {
     else {
       if (model != None) {
         val alias = AliasRegistry(model)
-        if (alias != None)
-          return alias.get
-        else return ""
-
+        return alias.getOrElse("")
       } else return ""
     }
   }

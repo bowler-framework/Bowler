@@ -22,11 +22,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
   get("/")((request, response) => render)
 
   def renderWidgets = {
-    val widgets = Widgets.findAll
-    if(widgets.size == 0)
-      render
-    else
-      render(widgets)
+     render(Widgets.findAll)
   }
 
   def renderComposable = {

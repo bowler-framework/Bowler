@@ -35,9 +35,7 @@ class JpaDao[T <: {def id: K}, K](persistenceUnit: String = PersistenceUnit.unit
   def findById(id: K): Option[T] = {
     try{
       val entity = entityManager(persistenceUnit).find(this.entityType, id)
-      if(entity == null)
-        return None
-      return Some(entity)
+      return Option(entity)
     }catch{
       case e: Exception => return None
     }

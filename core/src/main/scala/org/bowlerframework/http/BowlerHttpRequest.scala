@@ -113,8 +113,6 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
 
   def getContentType: Option[String] = {
     val string = request.getContentType
-    if (string == null)
-      return None
-    else return Some(string)
+    return Option(string)
   }
 }
