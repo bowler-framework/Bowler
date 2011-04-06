@@ -12,15 +12,15 @@ import org.scalatest.FunSuite
  * To change this layout use File | Settings | File Templates.
  */
 
-class BowlerConfiguratorTest extends FunSuite{
+class BowlerConfiguratorTest extends FunSuite {
 
-  test("getRequestMapper"){
+  test("getRequestMapper") {
     val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(GET, "/", null, null))
     assert(mapper != null)
     assert(mapper.getClass.equals(classOf[DefaultRequestMapper]))
   }
 
-  test("json request mapper"){
+  test("json request mapper") {
     val mapper = BowlerConfigurator.getRequestMapper(new DummyRequest(GET, "/", null, null, Map("Content-Type" -> "application/json")))
     assert(mapper != null)
     assert(mapper.getClass.equals(classOf[JsonRequestMapper]))

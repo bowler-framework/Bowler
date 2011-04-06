@@ -3,7 +3,7 @@ package org.bowlerframework.model
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import java.util.Date
-import org.bowlerframework.{GET, POST, HTTP}
+import org.bowlerframework.{GET, POST}
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,15 +13,15 @@ import org.bowlerframework.{GET, POST, HTTP}
  * To change this layout use File | Settings | File Templates.
  */
 
-class JsonRequestMapperTest extends FunSuite{
+class JsonRequestMapperTest extends FunSuite {
   val mapper = new JsonRequestMapper
 
-  test("GET or DELETE (should fallback on DefaultRequestMapper"){
+  test("GET or DELETE (should fallback on DefaultRequestMapper") {
     val integer = mapper.getValue[Int](makeGetRequest(Map("int" -> "43")))
     assert(integer == 43)
   }
 
-  test("unmarshall child with nameHint"){
+  test("unmarshall child with nameHint") {
     val address = mapper.getValue[Address](makeRequest(json), "address")
     assert(address != null)
     assert(address.isInstanceOf[Address])
@@ -30,7 +30,7 @@ class JsonRequestMapperTest extends FunSuite{
 
   }
 
-  test("without nameHint"){
+  test("without nameHint") {
     val person = mapper.getValue[Person](makeRequest(json))
     assert(person != null)
     assert(person.isInstanceOf[Person])
@@ -52,7 +52,9 @@ class JsonRequestMapperTest extends FunSuite{
   }
 
   def makeRequest(body: String) = new DummyRequest(POST, "/", Map(), body)
+
   def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
+
   def makeGetRequest(params: Map[String, Any]) = new DummyRequest(GET, "/", params, null)
 
 
@@ -79,7 +81,9 @@ class JsonRequestMapperTest extends FunSuite{
 }
 
 case class Child(name: String, age: Int, birthdate: Option[java.util.Date])
+
 case class Address(street: String, city: String)
+
 case class Person(name: String, address: Address, children: List[Child])
 
 case class Employer(name: String)

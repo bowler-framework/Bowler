@@ -4,8 +4,6 @@ package org.bowlerframework
 import util.matching.Regex
 import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
 import reflect.BeanProperty
-import java.text.NumberFormat
-
 /**
  * Kind of the "hub"/centre point for all things configuration within Bowler.
  */
@@ -23,13 +21,19 @@ object BowlerConfigurator extends ApplicationRouter {
 
   def getRequestMapper(request: Request) = requestMappingStrategy.getRequestMapper(request)
 
-  def setApplicationRouter(router: ApplicationRouter) = {this.router = router}
+  def setApplicationRouter(router: ApplicationRouter) = {
+    this.router = router
+  }
 
   def resolveViewRenderer(request: Request): ViewRenderer = renderStrategy.resolveViewRenderer(request)
 
-  def setRenderStrategy(renderStrategy: RenderStrategy) = {this.renderStrategy = renderStrategy}
+  def setRenderStrategy(renderStrategy: RenderStrategy) = {
+    this.renderStrategy = renderStrategy
+  }
 
-  def setRequestMappingStrategy(mappingStrategy: RequestMappingStrategy) = {this.requestMappingStrategy = mappingStrategy}
+  def setRequestMappingStrategy(mappingStrategy: RequestMappingStrategy) = {
+    this.requestMappingStrategy = mappingStrategy
+  }
 
 
   def addApplicationRoute(protocol: HttpMethod, routeMatchers: String, routeExecutor: RouteExecutor) = router.addApplicationRoute(protocol, routeMatchers, routeExecutor)

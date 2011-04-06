@@ -6,6 +6,6 @@ import model.RequestMapper
  * Choses a strategy for mapping Requests.
  */
 
-trait RequestMappingStrategy{
+trait RequestMappingStrategy {
   def getRequestMapper(request: Request): RequestMapper
 }

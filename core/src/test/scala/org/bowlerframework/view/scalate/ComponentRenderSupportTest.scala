@@ -11,15 +11,15 @@ import java.io.{PrintWriter, StringWriter}
  * To change this template use File | Settings | File Templates.
  */
 
-class ComponentRenderSupportTest extends FunSuite{
-  test("simple component"){
+class ComponentRenderSupportTest extends FunSuite {
+  test("simple component") {
     println(SimpleComponent.show)
     assert("A Foo is a bar" == SimpleComponent.show)
   }
 
-  test("complex nexted renderable with model around"){
+  test("complex nexted renderable with model around") {
     RenderEngine.reset
-    val uri =  "/org/bowlerframework/view/scalate/complex.ssp"
+    val uri = "/org/bowlerframework/view/scalate/complex.ssp"
     val model = Map("bean" -> Widget("hello", 50), "bean2" -> Widget("bye", 100), "tuple" -> Tuple2("foo", "bar"))
     val writer = new StringWriter
     val pw = new PrintWriter(writer)
@@ -32,12 +32,12 @@ class ComponentRenderSupportTest extends FunSuite{
   }
 
 
-  test("with varargs (a la renderable)"){
+  test("with varargs (a la renderable)") {
     assert("A Foo is a bar" == SimpleComponent.show(Tuple2("foo", "bar")))
   }
 }
 
-object SimpleComponent extends ComponentRenderSupport{
+object SimpleComponent extends ComponentRenderSupport {
 
   def show: String = {
     this.renderMap(Map("foo" -> "bar"))

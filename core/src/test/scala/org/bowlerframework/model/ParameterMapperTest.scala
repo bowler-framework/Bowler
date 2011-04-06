@@ -2,7 +2,7 @@ package org.bowlerframework.model
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{GET, HTTP}
+import org.bowlerframework.GET
 
 /**
  * Created by IntelliJ IDEA.
@@ -78,8 +78,8 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
   }
 
   test("test 5 params") {
-    val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true", "long.long" ->5))
-    mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long](request, List())((a, b, c, d,e) => {
+    val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true", "long.long" -> 5))
+    mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long](request, List())((a, b, c, d, e) => {
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -90,8 +90,8 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
 
   test("test 6 params") {
     val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true",
-      "long.long" ->5, "list[string].list" -> List("hello", "world")))
-    mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long, List[String]](request, List())((a, b, c, d,e, f) => {
+      "long.long" -> 5, "list[string].list" -> List("hello", "world")))
+    mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long, List[String]](request, List())((a, b, c, d, e, f) => {
       assert(a == 2)
       assert(b == "hello")
       assert(c == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -105,7 +105,7 @@ class ParameterMapperTest extends FunSuite with ParameterMapper {
 
   test("test 7 params") {
     val request = makeRequest(Map("string.string" -> "hello", "integer.int" -> "2", "bigDecimal.decimal" -> "3.14", "bool" -> "true",
-      "long.long" ->5, "list[string].list" -> List("hello", "world"), "set[string].set" -> List("hello")))
+      "long.long" -> 5, "list[string].list" -> List("hello", "world"), "set[string].set" -> List("hello")))
     mapRequest[java.lang.Integer, String, BigDecimal, Boolean, java.lang.Long, List[String], Set[String]](request, List())((a, b, c, d, e, f, g) => {
       assert(a == 2)
       assert(b == "hello")

@@ -5,8 +5,7 @@ import java.util.HashMap
 import java.io.{OutputStream, PrintWriter, StringWriter}
 
 
-
-class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends Response{
+class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends Response {
   private var status = 200
   private val headers = new HashMap[String, String]
 
@@ -15,19 +14,27 @@ class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends R
 
   private var outputSteam: OutputStream = null
 
-  def sendError(status: Int) = {this.status = status}
+  def sendError(status: Int) = {
+    this.status = status
+  }
 
-  def setStatus(status: Int) = {this.status = status}
+  def setStatus(status: Int) = {
+    this.status = status
+  }
 
   def setHeader(name: String, value: String) = headers.put(name, value)
 
   def getContentType = contentType
 
-  def setContentType(contentType: String) = {this.contentType = contentType}
+  def setContentType(contentType: String) = {
+    this.contentType = contentType
+  }
 
   def getOutputStream = outputSteam
 
-  def setOutPutStream(output: OutputStream) = {outputSteam = output}
+  def setOutPutStream(output: OutputStream) = {
+    outputSteam = output
+  }
 
   def getWriter = writer
 

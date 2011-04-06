@@ -5,8 +5,7 @@ import collection.mutable.MutableList
 import org.bowlerframework._
 
 
-
-class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request{
+class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any], body: String, headers: Map[String, String] = Map("accept" -> "text/html", "Content-Type" -> "multipart/form-data"), session: Session = new DummySession) extends Request {
   private val intTransformer = new JavaIntegerTransformer
   private val longTransformer = new LongTransformer
   private val booleanTransformer = new JavaBooleanTransformer
@@ -14,7 +13,9 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
 
   private var locales = List("en_US")
 
-  def setMappedPath(mappedPath: MappedPath) = {this.mappedPath = mappedPath}
+  def setMappedPath(mappedPath: MappedPath) = {
+    this.mappedPath = mappedPath
+  }
 
   def getMappedPath = mappedPath
 
@@ -57,7 +58,9 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
 
   def getLocales = locales
 
-  def setLocales(locales: List[String]) = {this.locales = locales}
+  def setLocales(locales: List[String]) = {
+    this.locales = locales
+  }
 
   def getAccept = headers("accept")
 
@@ -66,9 +69,9 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
   def setMethod(method: HttpMethod) = (this.method = method)
 
   def getContentType: Option[String] = {
-    try{
+    try {
       return Some(headers("Content-Type"))
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
 

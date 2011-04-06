@@ -7,7 +7,7 @@ import org.apache.commons.fileupload.FileItem
 import util.matching.Regex
 import org.bowlerframework._
 
-class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter{
+class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttpApplicationRouter {
 
   var bootstrap: AnyRef = null
 
@@ -17,28 +17,44 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     BowlerConfigurator.isServletApp = false
     println(config.getServletContext.getRealPath("WEB-INF"))
 
-    if(config.getInitParameter("bootstrapClass") != null) {
+    if (config.getInitParameter("bootstrapClass") != null) {
       bootstrap = Class.forName(config.getInitParameter("bootstrapClass")).newInstance.asInstanceOf[AnyRef]
     }
   }
 
   def addApplicationRoute(protocol: HttpMethod, routeMatchers: String, routeExecutor: RouteExecutor) = {
-      protocol match {
-        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+    protocol match {
+      case GET => this.get(routeMatchers) {
+        mapExecutor(routeExecutor)
       }
+      case PUT => this.put(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case POST => this.post(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case DELETE => this.delete(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+    }
   }
 
 
   def addApplicationRoute(protocol: HttpMethod, routeMatchers: Regex, routeExecutor: RouteExecutor) = {
-      protocol match {
-        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+    protocol match {
+      case GET => this.get(routeMatchers) {
+        mapExecutor(routeExecutor)
       }
+      case PUT => this.put(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case POST => this.post(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case DELETE => this.delete(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+    }
   }
 
   override def requestPath = if (request.getPathInfo != null) request.getPathInfo else request.getServletPath
@@ -47,15 +63,15 @@ class BowlerFilter extends ScalatraFilter with FileUploadSupport with BowlerHttp
     var files: collection.Map[String, FileItem] = Map[String, FileItem]()
     var listFiles: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()
 
-    try{
+    try {
       files = this.fileParams
-    }catch{
+    } catch {
       case e: Exception => {}
     }
 
-    try{
+    try {
       listFiles = this.fileMultiParams
-    }catch{
+    } catch {
       case e: Exception => {}
     }
 

@@ -5,8 +5,7 @@ import collection.mutable.MutableList
 import org.bowlerframework.Session
 
 
-
-class BowlerHttpSession(session: HttpSession) extends Session{
+class BowlerHttpSession(session: HttpSession) extends Session {
   def getId = session.getId
 
   private val errors = "_bowlerValidationErrors"
@@ -16,21 +15,23 @@ class BowlerHttpSession(session: HttpSession) extends Session{
   def getAttributeNames: List[String] = {
     val list = new MutableList[String]
     val enum = session.getAttributeNames
-    while(enum.hasMoreElements)
+    while (enum.hasMoreElements)
       list += enum.nextElement.toString
     return list.toList
   }
 
   def getCreationTime = session.getCreationTime
 
-  def invalidate = {session.invalidate}
+  def invalidate = {
+    session.invalidate
+  }
 
   def removeAttribute(name: String) = session.removeAttribute(name)
 
   def setAttribute[T](name: String, value: T) = session.setAttribute(name, value)
 
   def getAttribute[T](name: String): Option[T] = {
-    if(session.getAttribute(name) != null)
+    if (session.getAttribute(name) != null)
       return Some(session.getAttribute(name).asInstanceOf[T])
     else
       return None
@@ -43,13 +44,13 @@ class BowlerHttpSession(session: HttpSession) extends Session{
   }
 
   def getLastGetPath: Option[String] = {
-    try{
+    try {
       val lastGet = session.getAttribute(lastGetName).asInstanceOf[String]
-      if(lastGet == null || lastGet == None){
+      if (lastGet == null || lastGet == None) {
         return None
-      }else
+      } else
         return Some(lastGet)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }
@@ -60,13 +61,13 @@ class BowlerHttpSession(session: HttpSession) extends Session{
   }
 
   def getErrors: Option[List[Tuple2[String, String]]] = {
-    try{
+    try {
       val validationErrors = session.getAttribute(errors).asInstanceOf[List[Tuple2[String, String]]]
-      if(validationErrors == null || validationErrors == None){
+      if (validationErrors == null || validationErrors == None) {
         return None
-      }else
+      } else
         return Some(validationErrors)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }
@@ -76,13 +77,13 @@ class BowlerHttpSession(session: HttpSession) extends Session{
   }
 
   def getValidatedModel: Option[Seq[Any]] = {
-    try{
+    try {
       val models = session.getAttribute(validationModel).asInstanceOf[Seq[Any]]
-      if(models == null || models == None){
+      if (models == null || models == None) {
         return None
-      }else
+      } else
         return Some(models)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }

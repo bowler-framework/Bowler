@@ -11,7 +11,9 @@ object RequestScope {
   private val _mappedPath = new DynamicVariable[MappedPath](null)
 
   def response = _response value
+
   def request = _request value
+
   def mappedPath = _mappedPath value
 
   def executeRoute(mappedPath: MappedPath, requestScope: RequestScope, function: (Request, Response) => Unit) = {

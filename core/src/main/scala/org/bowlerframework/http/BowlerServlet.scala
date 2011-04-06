@@ -8,7 +8,7 @@ import org.bowlerframework._
 import org.apache.commons.fileupload.FileItem
 
 
-class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter{
+class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHttpApplicationRouter {
   var bootstrap: AnyRef = null
 
   override def init(config: ServletConfig): Unit = {
@@ -16,43 +16,59 @@ class BowlerServlet extends ScalatraServlet with FileUploadSupport with BowlerHt
     BowlerConfigurator.setApplicationRouter(this)
     BowlerConfigurator.isServletApp = true
 
-    if(config.getInitParameter("bootstrapClass") != null) {
+    if (config.getInitParameter("bootstrapClass") != null) {
       bootstrap = Class.forName(config.getInitParameter("bootstrapClass")).newInstance.asInstanceOf[AnyRef]
     }
   }
 
   def addApplicationRoute(protocol: HttpMethod, routeMatchers: String, routeExecutor: RouteExecutor) = {
-      protocol match {
-        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+    protocol match {
+      case GET => this.get(routeMatchers) {
+        mapExecutor(routeExecutor)
       }
+      case PUT => this.put(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case POST => this.post(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case DELETE => this.delete(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+    }
   }
 
 
   def addApplicationRoute(protocol: HttpMethod, routeMatchers: Regex, routeExecutor: RouteExecutor) = {
-      protocol match {
-        case GET => this.get(routeMatchers){mapExecutor(routeExecutor)}
-        case PUT => this.put(routeMatchers){mapExecutor(routeExecutor)}
-        case POST => this.post(routeMatchers){mapExecutor(routeExecutor)}
-        case DELETE => this.delete(routeMatchers){mapExecutor(routeExecutor)}
+    protocol match {
+      case GET => this.get(routeMatchers) {
+        mapExecutor(routeExecutor)
       }
+      case PUT => this.put(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case POST => this.post(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+      case DELETE => this.delete(routeMatchers) {
+        mapExecutor(routeExecutor)
+      }
+    }
   }
 
   private def mapExecutor(routeExecutor: RouteExecutor): Any = {
     var files: collection.Map[String, FileItem] = Map[String, FileItem]()
     var listFiles: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()
 
-    try{
+    try {
       files = this.fileParams
-    }catch{
+    } catch {
       case e: Exception => {}
     }
 
-    try{
+    try {
       listFiles = this.fileMultiParams
-    }catch{
+    } catch {
       case e: Exception => {}
     }
 

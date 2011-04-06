@@ -1,9 +1,5 @@
 package org.bowlerframework.http
 
-import org.scalatest.FunSuite
-import org.scalatra.test.scalatest.ScalatraFunSuite
-import java.io.InputStream
-import org.apache.commons.fileupload.FileItem
 import java.net.InetAddress
 import org.bowlerframework._
 
@@ -15,14 +11,14 @@ import org.bowlerframework._
  * To change this layout use File | Settings | File Templates.
  */
 
-class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite{
+class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite {
 
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
   holder.setInitParameter("applicationClass", "org.bowlerframework.stub.SimpleApp")
 
-  test("getPath"){
+  test("getPath") {
     var body: String = null
-    BowlerConfigurator.get("/getPath", new RouteExecutor{
+    BowlerConfigurator.get("/getPath", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         body = scope.request.getPath
       }
@@ -35,9 +31,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("test path variable with punctuation"){
+  test("test path variable with punctuation") {
     var body: String = null
-    BowlerConfigurator.get("/punctuation/:id", new RouteExecutor{
+    BowlerConfigurator.get("/punctuation/:id", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         body = scope.request.getStringParameter("id")
       }
@@ -49,9 +45,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("getSession"){
+  test("getSession") {
     var body: String = null
-    BowlerConfigurator.get("/getSession", new RouteExecutor{
+    BowlerConfigurator.get("/getSession", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         body = scope.request.getSession.getId
       }
@@ -63,9 +59,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("isSecure"){
+  test("isSecure") {
     var body: String = null
-    BowlerConfigurator.get("/isSecure", new RouteExecutor{
+    BowlerConfigurator.get("/isSecure", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         body = scope.request.isSecure + ""
       }
@@ -77,9 +73,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("getServerName"){
+  test("getServerName") {
     var body: String = null
-    BowlerConfigurator.get("/getServerName", new RouteExecutor{
+    BowlerConfigurator.get("/getServerName", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         body = scope.request.getServerName
       }
@@ -90,9 +86,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     }
   }
 
-  test("getIntParameter"){
+  test("getIntParameter") {
     var i: Int = 0
-    BowlerConfigurator.get("/getIntParameter/:int", new RouteExecutor{
+    BowlerConfigurator.get("/getIntParameter/:int", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         i = scope.request.getIntParameter("int")
       }
@@ -104,9 +100,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("getLongParameter"){
+  test("getLongParameter") {
     var i: Long = 0l
-    BowlerConfigurator.get("/getLongParameter/:long", new RouteExecutor{
+    BowlerConfigurator.get("/getLongParameter/:long", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         i = scope.request.getIntParameter("long")
       }
@@ -117,9 +113,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     }
   }
 
-  test("getBooleanParameter"){
+  test("getBooleanParameter") {
     var i: Boolean = false
-    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor{
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         i = scope.request.getBooleanParameter("long")
       }
@@ -131,25 +127,31 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
   }
 
 
-  test("getParameterNames"){
+  test("getParameterNames") {
     var i: Iterable[String] = null
-    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
+    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         i = scope.request.getParameterNames
       }
     })
 
     get("/getParameterNames/foo/bar", ("param", "baz")) {
-      assert(i.exists(p => {p.equals("name")}))
-      assert(i.exists(p => {p.equals("value")}))
-      assert(i.exists(p => {p.equals("param")}))
+      assert(i.exists(p => {
+        p.equals("name")
+      }))
+      assert(i.exists(p => {
+        p.equals("value")
+      }))
+      assert(i.exists(p => {
+        p.equals("param")
+      }))
     }
 
   }
 
-  test("HTTP Method"){
+  test("HTTP Method") {
     var method: HttpMethod = null
-    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
+    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         method = scope.request.getMethod
       }
@@ -163,9 +165,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
   }
 
 
-  test("GET ContentType"){
+  test("GET ContentType") {
     var contentType: Option[String] = null
-    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor{
+    BowlerConfigurator.get("/getParameterNames/:name/:value", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         contentType = scope.request.getContentType
       }
@@ -178,9 +180,9 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
   }
 
-  test("POST ContentType"){
+  test("POST ContentType") {
     var ctype: Option[String] = null
-    BowlerConfigurator.post("/getParameterNames/:name/:value", new RouteExecutor{
+    BowlerConfigurator.post("/getParameterNames/:name/:value", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         ctype = scope.request.getContentType
       }
@@ -193,15 +195,15 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
   }
 
 
-  test("getLocales"){
+  test("getLocales") {
     var locales: List[String] = null
-    BowlerConfigurator.get("/getLocales", new RouteExecutor{
+    BowlerConfigurator.get("/getLocales", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         locales = scope.request.getLocales
       }
     })
 
-    get("/getLocales",Seq.empty, Map("accept-language" -> "fi, en-US")) {
+    get("/getLocales", Seq.empty, Map("accept-language" -> "fi, en-US")) {
       assert(locales(0).equals("fi"))
       assert(locales(1).equals("en_US"))
     }
@@ -209,11 +211,11 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
 
 
 
-  test("getRequestBodyAsString"){
+  test("getRequestBodyAsString") {
     val json = "{\"body\": \"send us some JSON will ya!\"}"
     var requestBody: String = null
     var content: ContentTypeResolver.ContentType = null
-    BowlerConfigurator.post("/getRequestBodyAsString", new RouteExecutor{
+    BowlerConfigurator.post("/getRequestBodyAsString", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         requestBody = scope.request.getRequestBodyAsString
         content = ContentTypeResolver.contentType(scope.request.getAccept)
@@ -221,7 +223,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     })
     val headers = Map("accept" -> "application/json")
 
-    post("/getRequestBodyAsString", json,headers){
+    post("/getRequestBodyAsString", json, headers) {
       assert(content.equals(ContentTypeResolver.JSON))
       assert(json.equals(requestBody))
     }

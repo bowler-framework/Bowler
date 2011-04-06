@@ -1,19 +1,19 @@
 package org.bowlerframework.view.scalate
 
-import org.bowlerframework.{MappedPath, Request}
+import org.bowlerframework.Request
 import java.io.IOException
 
 /**
  * Resolves Templates, View Templates and Layouts for a given request
  */
-trait TemplateResolver{
+trait TemplateResolver {
 
   def getAbsoluteResource(uri: String): String
 
   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template
 
 
-  /** Order of preference for view template resolution should be:<br/>
+  /**Order of preference for view template resolution should be:<br/>
    * <ol>
    *  <li>TemplateSuffixSelector choice</li>
    *  <li>localisation</li>
@@ -28,6 +28,7 @@ trait TemplateResolver{
     var path = TemplateRegistry.rootViewPackageOrFolder + request.getMethod + requestPath
     return resolveResourceWithSuffix(path, TemplateRegistry.templateTypePreference, TemplateRegistry.getSuffixes(request), request.getLocales)
   }
+
   /**
    * Order of preference for layout resolution should be:<br/>
    * <ol>
@@ -43,17 +44,17 @@ trait TemplateResolver{
     return resolveTemplate(request, TemplateRegistry.rootLayoutPackageOrFolder + layout.name)
   }
 
-  /** Order of preference for template resolution should be (this is with an "absolute path", except for selector and locale):<br/>
+  /**Order of preference for template resolution should be (this is with an "absolute path", except for selector and locale):<br/>
    * <ol>
    *  <li>localisation</li>
    *  <li>file-type (mustache, ssp, jade, scaml etc)</li>
    * </ol>
    */
   def resolveTemplate(request: Request, path: String): Template = {
-    if(request != null)
+    if (request != null)
       return resolveResource(path, TemplateRegistry.templateTypePreference, request.getLocales)
     else
-       return resolveResource(path, TemplateRegistry.templateTypePreference, Nil)
+      return resolveResource(path, TemplateRegistry.templateTypePreference, Nil)
   }
 
 

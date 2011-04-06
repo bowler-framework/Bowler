@@ -10,14 +10,14 @@ import org.scalatest.FunSuite
  * To change this template use File | Settings | File Templates.
  */
 
-class ViewModelBuilderTest extends FunSuite{
+class ViewModelBuilderTest extends FunSuite {
 
-  test("widget"){
+  test("widget") {
     val model = vararg(new Widget(1, "wille"))
     println(model)
   }
 
-  test("some(widget)"){
+  test("some(widget)") {
     val model = vararg(Some(new Widget(1, "wille")))
     println(model)
   }

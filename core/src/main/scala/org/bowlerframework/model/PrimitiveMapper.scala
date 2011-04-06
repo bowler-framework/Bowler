@@ -1,8 +1,7 @@
 package org.bowlerframework.model
 
 
-
-object PrimitiveMapper{
+object PrimitiveMapper {
   def getClassForPrimitive(m: String): Class[_] = {
     var fieldCls: Class[_] = null
     m match {

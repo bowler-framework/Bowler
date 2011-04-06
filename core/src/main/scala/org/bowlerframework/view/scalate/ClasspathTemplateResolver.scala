@@ -1,8 +1,7 @@
 package org.bowlerframework.view.scalate
 
 import com.recursivity.commons.{StringInputStreamReader, ClasspathResourceResolver}
-import collection.mutable.HashMap
-import java.io.{IOException, InputStream}
+import java.io.InputStream
 
 
 class ClasspathTemplateResolver extends TemplateResolver with StringInputStreamReader {

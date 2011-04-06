@@ -1,7 +1,6 @@
 package org.bowlerframework
 
 
-
-trait RouteExecutor{
+trait RouteExecutor {
   def executeRoute(requestScope: RequestScope): Unit
 }

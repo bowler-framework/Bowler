@@ -14,17 +14,17 @@ class SimpleTransformingComponent extends Component {
 
   //massive repeating list to test performance
   val people = List(Person("James", "Mells"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),
-    Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"),Person("Hiram", "Tampa"))
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"),
+    Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"), Person("Hiram", "Tampa"))
 
   $(".people").contents(
     node => {

@@ -8,16 +8,16 @@ package org.bowlerframework.view
  * To change this template use File | Settings | File Templates.
  */
 
-object Accept{
+object Accept {
   def matchAccept(acceptHeader: String): Accept = {
-    if(acceptHeader == null)
+    if (acceptHeader == null)
       return HTML
     val lowerCase = acceptHeader.toLowerCase
-    if(lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
+    if (lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
       return HTML
-    else if(lowerCase.contains("application/json") || lowerCase.contains("text/json"))
+    else if (lowerCase.contains("application/json") || lowerCase.contains("text/json"))
       return JSON
-    else if(lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
+    else if (lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
       return XML
     else
       return HTML
@@ -25,6 +25,9 @@ object Accept{
 }
 
 sealed trait Accept
+
 case object HTML extends Accept
+
 case object JSON extends Accept
+
 case object XML extends Accept

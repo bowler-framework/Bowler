@@ -13,19 +13,19 @@ import org.bowlerframework.{RequestResolver, POST}
  * To change this template use File | Settings | File Templates.
  */
 
-class ComponentTest extends FunSuite{
+class ComponentTest extends FunSuite {
 
-  test("get classpath resource"){
+  test("get classpath resource") {
     val result = (new MySimpleComponent).render
     assert("A Title" == (result \\ "title").text)
   }
 
-  test("get inherited markup"){
+  test("get inherited markup") {
     val result = (new ExtendingComponent).render
     assert("A Title" == (result \\ "title").text)
   }
 
-  test("test localization"){
+  test("test localization") {
     val resolver = new DummyRequestResolver(List("es", "se"))
     MarkupContainer.requestResolver = resolver
 
@@ -36,13 +36,13 @@ class ComponentTest extends FunSuite{
   }
 }
 
-class DummyRequestResolver(locales: List[String]) extends RequestResolver{
+class DummyRequestResolver(locales: List[String]) extends RequestResolver {
   var req = new DummyRequest(POST, "/", Map[String, String](), null)
   req.setLocales(locales)
 
   def request = this.req
 
-  def newRequest(locales: List[String]){
+  def newRequest(locales: List[String]) {
     req = new DummyRequest(POST, "/", Map[String, String](), null)
     req.setLocales(locales)
   }

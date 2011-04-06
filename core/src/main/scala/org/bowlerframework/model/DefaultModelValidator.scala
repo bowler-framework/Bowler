@@ -6,7 +6,7 @@ import com.recursivity.commons.validator.{Validator, ClasspathMessageResolver, V
  * Default helper class for dealing with validations (built on the validations with localisation support in <a href="http://github.com/wfaler/recursivity-commons">Recursivity Commons</a>
  */
 
-class DefaultModelValidator(messageBundleContext: Class[_]) extends ModelValidator{
+class DefaultModelValidator(messageBundleContext: Class[_]) extends ModelValidator {
   private val group = ValidationGroup(new ClasspathMessageResolver(messageBundleContext))
 
 

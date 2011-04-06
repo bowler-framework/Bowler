@@ -7,38 +7,44 @@ import org.apache.commons.fileupload.FileItem
 import collection.mutable.HashMap
 
 
-trait BowlerHttpApplicationRouter extends ApplicationRouter{
+trait BowlerHttpApplicationRouter extends ApplicationRouter {
   def flattenParameters(request: HttpServletRequest, params: MultiMapHeadView[String, String] with MapWithIndifferentAccess[String],
-        multiParams: Map[String, Seq[String]], fileParams: collection.Map[String, FileItem] = Map[String, FileItem](), fileMultiParams: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()): Map[String, Any] ={
+                        multiParams: Map[String, Seq[String]], fileParams: collection.Map[String, FileItem] = Map[String, FileItem](), fileMultiParams: collection.Map[String, Seq[FileItem]] = Map[String, Seq[FileItem]]()): Map[String, Any] = {
 
     val map = new HashMap[String, Any]
 
-    params.foreach(f => {map += f._1 -> f._2})
+    params.foreach(f => {
+      map += f._1 -> f._2
+    })
     val nameEnum = request.getParameterNames
-    while(nameEnum.hasMoreElements){
+    while (nameEnum.hasMoreElements) {
       val name = nameEnum.nextElement.asInstanceOf[String]
       val reqParams = request.getParameterValues(name)
-      if(reqParams.length == 1){
+      if (reqParams.length == 1) {
         map += name -> reqParams(0)
-      }else{
-         map += name -> reqParams.toList
+      } else {
+        map += name -> reqParams.toList
       }
     }
 
-    if(multiParams("splat") != null)
+    if (multiParams("splat") != null)
       map += "splat" -> multiParams("splat").toList
-    if(multiParams("captures") != null)
+    if (multiParams("captures") != null)
       map += "captures" -> multiParams("captures").toList
 
-    try{
-      fileParams.foreach(f => {map += f._1 -> f._2})
-    }catch{
+    try {
+      fileParams.foreach(f => {
+        map += f._1 -> f._2
+      })
+    } catch {
       case e: Exception => {}
     }
 
-    try{
-      fileMultiParams.foreach(f => {map += f._1 -> f._2.toList})
-    }catch{
+    try {
+      fileMultiParams.foreach(f => {
+        map += f._1 -> f._2.toList
+      })
+    } catch {
       case e: Exception => {}
     }
 

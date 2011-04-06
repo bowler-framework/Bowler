@@ -12,28 +12,30 @@ import xml.NodeSeq
  * To change this template use File | Settings | File Templates.
  */
 
-class ValidationFeedbackPanel(request: Request = RequestScope.request) extends Component{
+class ValidationFeedbackPanel(request: Request = RequestScope.request) extends Component {
 
-  request.getSession.getErrors match{
-    case None => {$("#errorSpan").contents = ""}
+  request.getSession.getErrors match {
+    case None => {
+      $("#errorSpan").contents = ""
+    }
     case Some(list) => {
       $("#errorPanel").contents(
-          node => {
-            list.flatMap {
-              p =>
-                transform(node.$("#errors")) {
-                  $ =>
-                    $("#error").contents = p._2
-                }
-            }
+        node => {
+          list.flatMap {
+            p =>
+              transform(node.$("#errors")) {
+                $ =>
+                  $("#error").contents = p._2
+              }
           }
-        )
+        }
+      )
     }
   }
 
 }
 
-object ValidationFeedbackPanel{
+object ValidationFeedbackPanel {
   def showErrorMessages: NodeSeq = showErrorMessages(RequestScope.request)
 
   def showErrorMessages(request: Request): NodeSeq = {

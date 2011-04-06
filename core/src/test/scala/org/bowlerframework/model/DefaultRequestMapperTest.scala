@@ -4,7 +4,7 @@ package org.bowlerframework.model
 import org.scalatest.FunSuite
 import com.recursivity.commons.bean.{StringValueTransformer, TransformerRegistry}
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{GET, POST, HttpMethod, HTTP}
+import org.bowlerframework.{GET, POST, HttpMethod}
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,7 +27,7 @@ class DefaultRequestMapperTest extends FunSuite {
     }
   }
 
-  test("assignability"){
+  test("assignability") {
     assert(classOf[A].isAssignableFrom(classOf[B]))
     assert(!classOf[B].isAssignableFrom(classOf[A]))
 
@@ -44,13 +44,13 @@ class DefaultRequestMapperTest extends FunSuite {
     val value = mapper.getValue[Int](makeRequest(Map("decimal" -> "43")))
     assert(43 == value)
 
-    val l =  mapper.getValue[Long](makeRequest(Map("decimal" -> "43")))
+    val l = mapper.getValue[Long](makeRequest(Map("decimal" -> "43")))
     assert(43l == l)
   }
 
-  test("update bean that has Transformer"){
+  test("update bean that has Transformer") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val myBean =  mapper.getValue[MyBean](makeRequest(Map("id" -> "1", "name" -> "otherBean")))
+    val myBean = mapper.getValue[MyBean](makeRequest(Map("id" -> "1", "name" -> "otherBean")))
     assert(myBean != null)
     assert(myBean.id == 1l)
     println("Decimal is: " + myBean.name)
@@ -58,9 +58,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(myBean.name == "otherBean")
   }
 
-  test("bean without Transformer"){
+  test("bean without Transformer") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val myBean =  mapper.getValue[OtherMapperBean](makeRequest(Map("id" -> "1", "name" -> "otherBean", "decimal" -> "3.14", "beans" -> List("1"))))
+    val myBean = mapper.getValue[OtherMapperBean](makeRequest(Map("id" -> "1", "name" -> "otherBean", "decimal" -> "3.14", "beans" -> List("1"))))
     assert(myBean != null)
     assert(myBean.id == 1l)
     assert(myBean.decimal == new BigDecimal(new java.math.BigDecimal("3.14")))
@@ -76,11 +76,11 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
-  test("alias parameters"){
+  test("alias parameters") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
     val request = makeRequest(Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12"))
-    val bean =  mapper.getValue[OtherMapperBean](request)
+    val bean = mapper.getValue[OtherMapperBean](request)
     val myBean = mapper.getValue[MyBean](request)
 
     assert(bean.isInstanceOf[OtherMapperBean])
@@ -104,37 +104,37 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
-  test("alias parameters with GET (should not create new beans)"){
+  test("alias parameters with GET (should not create new beans)") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
     val request = new DummyRequest(GET, "/", map, null)
 
-    try{
-      val bean =  mapper.getValue[OtherMapperBean](request)
-    }catch{
-      case e: ClassCastException => {}// expected
+    try {
+      val bean = mapper.getValue[OtherMapperBean](request)
+    } catch {
+      case e: ClassCastException => {} // expected
     }
   }
 
-  test("alias parameters with transformer GET (should not create new beans)"){
+  test("alias parameters with transformer GET (should not create new beans)") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
     val request = new DummyRequest(GET, "/", map, null)
 
-    try{
+    try {
       val myBean = mapper.getValue[MyBean](request)
-    }catch{
-      case e: ClassCastException => {}// expected
+    } catch {
+      case e: ClassCastException => {} // expected
     }
   }
 
-  test("alias parameters with transformer hit GET (should not edit any values)"){
+  test("alias parameters with transformer hit GET (should not edit any values)") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val myBean =  mapper.getValue[MyBean](makeRequest(GET, Map("id" -> "1", "name" -> "otherBean")))
+    val myBean = mapper.getValue[MyBean](makeRequest(GET, Map("id" -> "1", "name" -> "otherBean")))
     assert(myBean != null)
     assert(myBean.id == 1l)
     println("Decimal is: " + myBean.name)
@@ -142,7 +142,7 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(myBean.name == "someBean")
   }
 
-  test("alias parameters with int and String"){
+  test("alias parameters with int and String") {
     val value = mapper.getValue[java.lang.Integer](makeRequest(Map("string.id" -> "43", "integer.id" -> "34")))
     println(value)
     assert(value == 34)
@@ -151,7 +151,7 @@ class DefaultRequestMapperTest extends FunSuite {
 
   }
 
-  test("test Transient marker trait"){
+  test("test Transient marker trait") {
     val bean = mapper.getValue[TransientBean](makeRequest(GET, Map("id" -> "43", "name" -> "transientBean")))
     assert(bean != null)
     assert(bean.isInstanceOf[TransientBean])
@@ -161,7 +161,7 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
-  test("Option with value"){
+  test("Option with value") {
     val holder = mapper.getValue[Option[TransientBean]](makeRequest(GET, Map("id" -> "43", "name" -> "transientBean")))
     assert(holder.isInstanceOf[Some[TransientBean]])
     val bean = holder.get
@@ -171,7 +171,7 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.name == "transientBean")
   }
 
-  test("Option Without Value"){
+  test("Option Without Value") {
     val map = Map("otherMapperBean.id" -> "1", "otherMapperBean.name" -> "otherBean", "otherMapperBean.decimal" -> "3.14",
       "otherMapperBean.beans" -> List("1"), "myBean.id" -> "2", "myBean.name" -> "some beany", "myBean.decimal" -> "57.12")
 
@@ -179,9 +179,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(None.equals(mapper.getValue[Option[MyBean]](request)))
   }
 
-  test("Option with Nested List"){
+  test("Option with Nested List") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beansOption = mapper.getValue[Option[List[MyBean]]](request, "beans")
     assert(beansOption.isInstanceOf[Option[List[MyBean]]])
@@ -195,9 +195,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
   }
 
-  test("Test List with nameHint"){
+  test("Test List with nameHint") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[List[MyBean]](request, "beans")
     assert(beans.isInstanceOf[List[MyBean]])
@@ -210,9 +210,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
   }
 
-  test("List without namehint - get first list"){
+  test("List without namehint - get first list") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[List[MyBean]](request)
     assert(beans.isInstanceOf[List[MyBean]])
@@ -226,18 +226,18 @@ class DefaultRequestMapperTest extends FunSuite {
 
   }
 
-  test("empty Option[List] should return None"){
+  test("empty Option[List] should return None") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("2"))
+    val map = Map("name" -> "somename", "beans" -> List("2"))
     val request = makeRequest(GET, map)
     val beans = mapper.getValue[Option[List[MyBean]]](request)
     println(beans)
     assert(beans == None)
   }
 
-  test("test Seq"){
+  test("test Seq") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[Seq[MyBean]](request)
     assert(beans.isInstanceOf[Seq[MyBean]])
@@ -251,9 +251,9 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
-  test("test Set"){
+  test("test Set") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[Set[MyBean]](request)
     assert(beans.isInstanceOf[Set[MyBean]])
@@ -266,9 +266,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
   }
 
-  test("java.util.List"){
+  test("java.util.List") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[java.util.List[MyBean]](request)
     assert(beans.isInstanceOf[java.util.List[MyBean]])
@@ -281,9 +281,9 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
   }
 
-  test("java.util.TreeSet"){
+  test("java.util.TreeSet") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
-    val map = Map("name" -> "somename" ,"beans" -> List("1"))
+    val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[java.util.TreeSet[MyBean]](request)
     assert(beans.isInstanceOf[java.util.TreeSet[MyBean]])
@@ -296,26 +296,29 @@ class DefaultRequestMapperTest extends FunSuite {
   }
 
 
-
   def makeRequest(params: Map[String, Any]) = new DummyRequest(POST, "/", params, null)
+
   def makeRequest(method: HttpMethod, params: Map[String, Any]) = new DummyRequest(method, "/", params, null)
 
 
 }
 
 case class TransientBean(id: Long, name: String) extends Transient
+
 case class MyBean(id: Long, name: String, decimal: BigDecimal)
+
 case class OtherMapperBean(id: Long, name: String, decimal: BigDecimal, beans: List[MyBean])
 
 
-class MyBeanTransformer extends StringValueTransformer[MyBean]{
-  def toValue(from: String): Option[MyBean] ={
-    if(from.equals("1"))
+class MyBeanTransformer extends StringValueTransformer[MyBean] {
+  def toValue(from: String): Option[MyBean] = {
+    if (from.equals("1"))
       return Some(MyBean(1l, "someBean", new BigDecimal(new java.math.BigDecimal("54.4"))))
     else
       None
   }
 }
 
- class A
- class B extends A
+class A
+
+class B extends A

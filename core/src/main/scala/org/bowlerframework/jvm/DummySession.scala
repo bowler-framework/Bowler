@@ -5,8 +5,7 @@ import com.recursivity.commons.UUIDGenerator
 import collection.mutable.{MutableList, HashMap}
 
 
-
-class DummySession extends Session{
+class DummySession extends Session {
   private var creationTime = System.currentTimeMillis
   private var id = UUIDGenerator.generate
   private var attributeMap = new HashMap[String, Any]
@@ -18,7 +17,7 @@ class DummySession extends Session{
 
   def getId = id
 
-  def getAttributeNames: List[String] ={
+  def getAttributeNames: List[String] = {
     val list = new MutableList[String]
     attributeMap.keys.foreach(f => list += f)
     return list.toList
@@ -37,9 +36,9 @@ class DummySession extends Session{
   def setAttribute[T](name: String, value: T) = attributeMap += name -> value
 
   def getAttribute[T](name: String): Option[T] = {
-    try{
+    try {
       return Some(attributeMap(name).asInstanceOf[T])
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }
@@ -49,13 +48,13 @@ class DummySession extends Session{
   }
 
   def getLastGetPath: Option[String] = {
-    try{
+    try {
       val lastGet = attributeMap(lastGetName).asInstanceOf[String]
-      if(lastGet == null || lastGet == None){
+      if (lastGet == null || lastGet == None) {
         return None
-      }else
+      } else
         return Some(lastGet)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }
@@ -67,13 +66,13 @@ class DummySession extends Session{
   }
 
   def getErrors: Option[List[Tuple2[String, String]]] = {
-    try{
+    try {
       val validationErrors = attributeMap(errors).asInstanceOf[List[Tuple2[String, String]]]
-      if(validationErrors == null || validationErrors == None){
+      if (validationErrors == null || validationErrors == None) {
         return None
-      }else
+      } else
         return Some(validationErrors)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }
@@ -83,13 +82,13 @@ class DummySession extends Session{
   }
 
   def getValidatedModel: Option[Seq[Any]] = {
-    try{
+    try {
       val model = attributeMap(validationModel).asInstanceOf[Seq[Any]]
-      if(model == null || model == None){
+      if (model == null || model == None) {
         return None
-      }else
+      } else
         return Some(model)
-    }catch{
+    } catch {
       case e: NoSuchElementException => return None
     }
   }

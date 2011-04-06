@@ -10,6 +10,6 @@ import org.bowlerframework.view.squery.{MarkupContainer, Component}
  * To change this template use File | Settings | File Templates.
  */
 
-class ComposedPageComponent(child: MarkupContainer) extends Component{
+class ComposedPageComponent(child: MarkupContainer) extends Component {
   $("body").contents = child.render
 }

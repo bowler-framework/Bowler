@@ -10,8 +10,8 @@ import org.scalatest.FunSuite
  * To change this template use File | Settings | File Templates.
  */
 
-class ModelValidatorBuilderTest extends FunSuite{
-  test("test validatorBuilder"){
+class ModelValidatorBuilderTest extends FunSuite {
+  test("test validatorBuilder") {
     assert(None == ModelValidatorBuilder(classOf[ValidatableBean]))
 
     ModelValidatorBuilder.registerValidatorBuilder(classOf[ValidatableBean], new ValidatableBuilder)
@@ -28,7 +28,7 @@ class ModelValidatorBuilderTest extends FunSuite{
 
 case class ValidatableBean(name: String)
 
-class ValidatableBuilder extends ModelValidatorBuilder[ValidatableBean]{
+class ValidatableBuilder extends ModelValidatorBuilder[ValidatableBean] {
   def initialize(bean: ValidatableBean): ModelValidator = {
     val builder = new DefaultModelValidator(classOf[ValidatableBean])
     return builder

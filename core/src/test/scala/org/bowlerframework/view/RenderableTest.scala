@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import scalate.selectors.DefaultLayoutSelector
 import scalate.{Layout, TemplateRegistry}
-import org.bowlerframework.{GET, Response, MappedPath, HTTP}
+import org.bowlerframework.{GET, Response, MappedPath}
 import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import java.io.{StringReader, StringWriter}
 
@@ -16,10 +16,10 @@ import java.io.{StringReader, StringWriter}
  * To change this layout use File | Settings | File Templates.
  */
 
-class RenderableTest extends FunSuite with Renderable{
+class RenderableTest extends FunSuite with Renderable {
 
 
-  test("empty seq JSON"){
+  test("empty seq JSON") {
     val request = makeJsonRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -27,7 +27,7 @@ class RenderableTest extends FunSuite with Renderable{
     assert("[]" == resp.toString)
   }
 
-  test("non-empty seq JSON"){
+  test("non-empty seq JSON") {
     val request = makeJsonRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -35,28 +35,28 @@ class RenderableTest extends FunSuite with Renderable{
     assert("[\"hello\"]" == resp.toString)
   }
 
-  test("renderWith (empty)"){
+  test("renderWith (empty)") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
-    this.renderWith(ViewPath(GET, MappedPath("/simple")),request, resp, List[Any]())
+    this.renderWith(ViewPath(GET, MappedPath("/simple")), request, resp, List[Any]())
     assert(resp.toString.contains("Where's the list? Hello"))
   }
 
-  test("renderWith model"){
+  test("renderWith model") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
-    this.renderWith(ViewPath(GET, MappedPath("/simple")),request, resp, ViewModel("name", "Wille"))
+    this.renderWith(ViewPath(GET, MappedPath("/simple")), request, resp, ViewModel("name", "Wille"))
     assert(resp.toString.contains("Where's the list? Hello"))
   }
 
 
-  test("renderWith Squery (empty)"){
+  test("renderWith Squery (empty)") {
     val resp = makeResponse
     val request = makeRequest("/somePath")
 
@@ -71,11 +71,11 @@ class RenderableTest extends FunSuite with Renderable{
     assert("A Title" == (result \ "head" \ "title").text)
   }
 
-  test("renderWith Squery (model"){
+  test("renderWith Squery (model") {
     val resp = makeResponse
     val request = makeRequest("/somePath")
 
-    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp,ViewModel("name", "Wille"),ViewModel("name", "Wille"))
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp, ViewModel("name", "Wille"), ViewModel("name", "Wille"))
 
     val result = scala.xml.XML.load(new StringReader(resp.toString))
     assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
@@ -87,16 +87,16 @@ class RenderableTest extends FunSuite with Renderable{
 
   }
 
-  test("renderWith Squery (json)"){
+  test("renderWith Squery (json)") {
     val resp = makeResponse
     val request = makeJsonRequest("/somePath")
 
-    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp,ViewModel("name", "Wille"),ViewModel("name", "Wille"))
+    this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp, ViewModel("name", "Wille"), ViewModel("name", "Wille"))
 
     assert("{\"name\":\"Wille\",\"name\":\"Wille\"}" == resp.toString)
   }
 
-  test("renderWith Squery (json no model)"){
+  test("renderWith Squery (json no model)") {
     val resp = makeResponse
     val request = makeJsonRequest("/somePath")
 
@@ -104,7 +104,7 @@ class RenderableTest extends FunSuite with Renderable{
     assert(resp.getStatus == 204)
   }
 
-  test("empty seq HTML"){
+  test("empty seq HTML") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
     val request = makeRequest("/simple")
@@ -115,7 +115,7 @@ class RenderableTest extends FunSuite with Renderable{
 
   }
 
-  test("render 204 JSON"){
+  test("render 204 JSON") {
     val request = makeJsonRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -123,7 +123,7 @@ class RenderableTest extends FunSuite with Renderable{
     assert(resp.getStatus == 204)
   }
 
-  test("render with no template"){
+  test("render with no template") {
     TemplateRegistry.reset
 
     val request = makeRequest("/simple")

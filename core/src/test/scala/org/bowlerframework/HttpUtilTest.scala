@@ -12,13 +12,13 @@ import org.scalatra.test.scalatest.ScalatraFunSuite
  * To change this layout use File | Settings | File Templates.
  */
 
-class HttpUtilTest extends ScalatraFunSuite{
+class HttpUtilTest extends ScalatraFunSuite {
 
   //val holder = this.addServlet(classOf[BowlerServlet], "/filter/*")
- // holder.setInitParameter("controllerPackage", "org.bowlerframework.stub.controller")
+  // holder.setInitParameter("controllerPackage", "org.bowlerframework.stub.controller")
 
 
-  test("HTTP basePath with servlet"){
+  test("HTTP basePath with servlet") {
     this.addServlet(new BowlerServlet, "/servlet/*")
     val c = new PathController
 
@@ -30,7 +30,7 @@ class HttpUtilTest extends ScalatraFunSuite{
     }
   }
 
-  test("HTTP basePath with filter"){
+  test("HTTP basePath with filter") {
     val holder = this.addFilter(classOf[BowlerFilter], "/filter/*")
     holder.setInitParameter("controllerPackage", "org.bowlerframework.stub.controller")
     val c = new PathController
@@ -43,18 +43,18 @@ class HttpUtilTest extends ScalatraFunSuite{
 
 }
 
-class PathController extends Controller{
+class PathController extends Controller {
   var path: String = null
   var requestPath: String = null
   var fullPath: String = null
 
-  this.get("/SimplePathController/:id")((req, resp) =>{
+  this.get("/SimplePathController/:id")((req, resp) => {
     path = HTTP.basePath
     fullPath = HTTP.relativeUrl(req.getPath)
     requestPath = req.getPath
   })
 
-  this.get("/filter/filterPath/:id")((req, resp) =>{
+  this.get("/filter/filterPath/:id")((req, resp) => {
     path = HTTP.basePath
     fullPath = HTTP.relativeUrl(req.getPath)
     requestPath = req.getPath

@@ -3,9 +3,8 @@ package org.bowlerframework.view.scalate
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import java.io.IOException
-import selectors.{HeaderContainsSuffixSelector, HeaderContainsLayoutSelector, DefaultLayoutSelector}
-import util.matching.Regex
-import org.bowlerframework.{GET, MappedPath, HTTP}
+import selectors.HeaderContainsSuffixSelector
+import org.bowlerframework.{GET, MappedPath}
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,22 +14,22 @@ import org.bowlerframework.{GET, MappedPath, HTTP}
  * To change this template use File | Settings | File Templates.
  */
 
-class ClasspathTemplateResolverTest extends FunSuite{
+class ClasspathTemplateResolverTest extends FunSuite {
   TemplateRegistry.reset
 
   val resolver = TemplateRegistry.templateResolver
 
- TemplateRegistry.appendSuffixSelectors(List(new HeaderContainsSuffixSelector("ipad", Map("User-Agent" -> "ipad")),
+  TemplateRegistry.appendSuffixSelectors(List(new HeaderContainsSuffixSelector("ipad", Map("User-Agent" -> "ipad")),
     new HeaderContainsSuffixSelector("iphone", Map("User-Agent" -> "iphone"))))
 
 
-  test("get a template: root with no locale"){
+  test("get a template: root with no locale") {
     val template = resolver.resolveTemplate(makeRequest("/"), "/layouts/default")
     assert(template.template == "mustache")
 
   }
 
-  test("get a template: root with locale"){
+  test("get a template: root with locale") {
     val request = makeRequest("/")
     request.setLocales(List("es", "se"))
     val template = resolver.resolveTemplate(request, "/layouts/default")
@@ -39,11 +38,11 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
 
-  test("previous stackoverflowexception bug"){
+  test("previous stackoverflowexception bug") {
     val request = makeRequest("/")
-    try{
+    try {
       val template = resolver.resolveLayout(request, Layout("overflow-baby"))
-    }catch{
+    } catch {
       case e: IOException => {
         println(e.getMessage)
         val message = "Could not find a template of type .html, .xhtml, .xml, .mustache, .ssp, .jade or .scaml  with path: classpath:///layouts/overflow-baby"
@@ -53,14 +52,14 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
   }
 
-  test("layout without localisation"){
+  test("layout without localisation") {
     val request = makeRequest("/")
     val template = resolver.resolveLayout(request, Layout("default"))
     println(template)
     assert(template.template == "mustache")
   }
 
-  test("layout with localisation"){
+  test("layout with localisation") {
     val request = makeRequest("/")
     request.setLocales(List("es", "se"))
     val template = resolver.resolveLayout(request, Layout("default"))
@@ -68,7 +67,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "Svenska!")
   }
 
-  test("view: / "){
+  test("view: / ") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/", false))
     val template = resolver.resolveViewTemplate(request)
@@ -76,7 +75,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "index.mustache")
   }
 
-  test("/view: with localisation"){
+  test("/view: with localisation") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/", false))
     request.setLocales(List("es", "se"))
@@ -87,7 +86,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
 
-  test("sub folder index with ending /"){
+  test("sub folder index with ending /") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/widgets/", false))
     request.setLocales(List("es", "se"))
@@ -97,7 +96,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
   }
 
-  test("sub folder index without / ending"){
+  test("sub folder index without / ending") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/widgets", false))
     request.setLocales(List("es", "se"))
@@ -109,7 +108,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
 
 
-  test("named parameter"){
+  test("named parameter") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/widgets/:id", false))
     val template = resolver.resolveViewTemplate(request)
@@ -117,7 +116,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "this is the :id ssp")
   }
 
-  test("nexted named parameter"){
+  test("nexted named parameter") {
     val request = makeRequest("/")
     request.setMappedPath(MappedPath("/widgets/:id", false))
     val template = resolver.resolveViewTemplate(request)
@@ -125,7 +124,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "this is the :id ssp")
   }
 
-  test("view: / with suffix & localisation"){
+  test("view: / with suffix & localisation") {
     val request = makeRequest("/", Map("User-Agent" -> "ipad"))
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/", false))
@@ -135,7 +134,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
 
   }
 
-  test("view: / subfolder with suffix"){
+  test("view: / subfolder with suffix") {
     val request = makeRequest("/widgets/", Map("User-Agent" -> "ipad"))
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/widgets", false))
@@ -145,7 +144,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
 
-  test("view: / with non-existent suffix"){
+  test("view: / with non-existent suffix") {
     val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone"))
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/widgets", false))
@@ -154,7 +153,7 @@ class ClasspathTemplateResolverTest extends FunSuite{
     assert(template.template == "widgets index")
   }
 
-  test("view: / with suffix but no localisation (conflicting lower level suffix with correct localisation)"){
+  test("view: / with suffix but no localisation (conflicting lower level suffix with correct localisation)") {
     val request = makeRequest("/widgets/", Map("User-Agent" -> "iphone,ipad"))
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/widgets", false))
@@ -164,6 +163,8 @@ class ClasspathTemplateResolverTest extends FunSuite{
   }
 
   def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
+
   def makeRequest(path: String, headers: Map[String, String]) = new DummyRequest(GET, path, Map(), null, headers)
+
   //Accept-Language:
 }

@@ -7,7 +7,7 @@ import org.bowlerframework.RequestScope._
  * trait to use to enable the validate(mybean){} validation block
  */
 
-trait Validations{
+trait Validations {
 
   /**
    * Runs a function that does validations - errors are designated by either:<br/>
@@ -20,10 +20,10 @@ trait Validations{
    * can be retained in forms on validation errors.
    *
    */
-  def validate(toValidate: Any*)(function: => Option[List[Tuple2[String, String]]]){
+  def validate(toValidate: Any*)(function: => Option[List[Tuple2[String, String]]]) {
     request.getSession.resetValidations
     val errors = function
-    if(!None.equals(errors) && errors.get.size > 0){
+    if (!None.equals(errors) && errors.get.size > 0) {
       request.getSession.setValidationModel(toValidate.toSeq)
       throw new ValidationException(errors.get)
     }

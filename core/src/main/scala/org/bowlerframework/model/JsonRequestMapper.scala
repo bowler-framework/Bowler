@@ -2,7 +2,7 @@ package org.bowlerframework.model
 
 import net.liftweb.json.JsonParser._
 import com.recursivity.commons.bean.GenericTypeDefinition
-import org.bowlerframework.{GET, DELETE, HTTP, Request}
+import org.bowlerframework.{GET, DELETE, Request}
 
 /**
  * RequestMapper for JSON requests.
@@ -19,7 +19,7 @@ class JsonRequestMapper extends RequestMapper {
     if (request.getMethod == GET || request.getMethod == DELETE) {
       val mapper = new DefaultRequestMapper
       return mapper.getValue[T](request, nameHint)(m)
-    } else{
+    } else {
       return getValue[T](request.getRequestBodyAsString, nameHint)
     }
   }

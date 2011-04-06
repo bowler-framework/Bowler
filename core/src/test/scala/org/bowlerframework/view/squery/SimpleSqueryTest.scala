@@ -53,7 +53,7 @@ class SimpleSqueryTest extends FunSuite {
 
 case class Person(name: String, location: String)
 
-class ChildTransformer(seq: NodeSeq) extends MyTransformer with MarkupContainer{
+class ChildTransformer(seq: NodeSeq) extends MyTransformer with MarkupContainer {
   override def render = super.apply(seq)
 }
 

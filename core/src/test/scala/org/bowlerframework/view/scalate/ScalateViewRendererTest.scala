@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import selectors.DefaultLayoutSelector
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import org.bowlerframework.view.ViewModel
-import org.bowlerframework.{GET, Request, MappedPath, HTTP}
+import org.bowlerframework.{GET, Request, MappedPath}
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,14 +14,14 @@ import org.bowlerframework.{GET, Request, MappedPath, HTTP}
  * To change this template use File | Settings | File Templates.
  */
 
-class ScalateViewRendererTest extends FunSuite{
+class ScalateViewRendererTest extends FunSuite {
   val renderer = new ScalateViewRenderer
   //RenderEngine.reset
 
   def toSeq(models: Any*): Seq[Any] = models.toSeq
 
 
-  test("render view with simple layout"){
+  test("render view with simple layout") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple"))))
     val request = makeRequest("/simple/")
@@ -35,7 +35,7 @@ class ScalateViewRendererTest extends FunSuite{
     assert("<div>Hello Wille</div>" == response.toString)
   }
 
-  test("render view with nested layout"){
+  test("render view with nested layout") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent"))))))
     val request = makeRequest("/simple/")
@@ -49,7 +49,7 @@ class ScalateViewRendererTest extends FunSuite{
     assert("<html><head><title>Parent</title></head><body><div>Hello Wille</div></body></html>" == response.toString)
   }
 
-  test("render view with nested layout, where parent renders other child layouts"){
+  test("render view with nested layout, where parent renders other child layouts") {
     TemplateRegistry.reset
     TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))))
     val request = makeRequest("/simple/")
@@ -66,7 +66,7 @@ class ScalateViewRendererTest extends FunSuite{
   def makeRequest(path: String) = new DummyRequest(GET, path, Map(), null)
 }
 
-class TestLayoutModel extends LayoutModel{
+class TestLayoutModel extends LayoutModel {
   def model(request: Request, viewModel: Map[String, Any], childView: String) = {
 
     Map("title" -> request.getMappedPath.path, "doLayout" -> childView)

@@ -3,7 +3,6 @@ package org.bowlerframework.view.squery
 import org.bowlerframework.view.scalate.ClasspathTemplateResolver
 import xml.{XML, NodeSeq}
 import java.io.{IOException, StringReader}
-import collection.mutable.HashMap
 import java.util.concurrent.ConcurrentHashMap
 import org.bowlerframework.{RequestResolver, RequestScope}
 
@@ -24,7 +23,7 @@ object MarkupContainer {
   private val templateResolver = new ClasspathTemplateResolver
   val types = List(".html", ".xhtml", ".xml")
 
-  var requestResolver : RequestResolver = new RequestResolver{
+  var requestResolver: RequestResolver = new RequestResolver {
     def request = RequestScope.request
   }
 
@@ -44,13 +43,13 @@ object MarkupContainer {
     try {
       if (locales == Nil) {
         val option = map.get("default")
-        if(option == null) throw new NoSuchElementException
+        if (option == null) throw new NoSuchElementException
         if (option == None)
           return getTemplate(cls.getSuperclass, localisationPreferences)
         else return option.get
       } else {
         val option = map.get(locales.head)
-        if(option == null) throw new NoSuchElementException
+        if (option == null) throw new NoSuchElementException
         if (option == None) {
           val newLocales = locales.drop(1)
           return getTemplate(cls, newLocales)

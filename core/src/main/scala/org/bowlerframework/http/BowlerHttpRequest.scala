@@ -7,8 +7,7 @@ import com.recursivity.commons.StringInputStreamReader
 import org.bowlerframework._
 
 
-
-class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader{
+class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: Map[String, Any]) extends Request with StringInputStreamReader {
   val session = new BowlerHttpSession(request.getSession(true))
 
   private val intTransformer = new JavaIntegerTransformer
@@ -20,7 +19,9 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
 
   private var mappedPath: MappedPath = null
 
-  def setMappedPath(mappedPath: MappedPath) = {this.mappedPath = mappedPath}
+  def setMappedPath(mappedPath: MappedPath) = {
+    this.mappedPath = mappedPath
+  }
 
   def getMappedPath = mappedPath
 
@@ -48,7 +49,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getHeaderNames: List[String] = {
     val iter = request.getHeaderNames
     val list = new MutableList[String]
-    while(iter.hasMoreElements)
+    while (iter.hasMoreElements)
       list += iter.nextElement.toString
     return list.toList
   }
@@ -56,7 +57,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getHeaders(name: String): List[String] = {
     val enum = request.getHeaders(name)
     val list = new MutableList[String]
-    while(enum.hasMoreElements)
+    while (enum.hasMoreElements)
       list += enum.nextElement.toString
     return list.toList
   }
@@ -70,11 +71,11 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getHttpServletRequest = request
 
   def getRequestBodyAsString: String = {
-    if(body == null){
+    if (body == null) {
       val is = this.getInputStream
-      try{
+      try {
         body = load(is)
-      }finally{
+      } finally {
         is.close
       }
     }
@@ -86,7 +87,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getLocales: List[String] = {
     val enum = request.getLocales
     val list = new MutableList[String]
-    while(enum.hasMoreElements)
+    while (enum.hasMoreElements)
       list += enum.nextElement.toString
     return list.toList
   }
@@ -94,23 +95,25 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
   def getAccept = request.getHeader("accept")
 
   def getMethod: HttpMethod = {
-    if(method == null){
+    if (method == null) {
       request.getMethod match {
         case "GET" => return GET
         case "PUT" => return PUT
         case "POST" => return POST
         case "DELETE" => return DELETE
       }
-    }else
+    } else
       return method
   }
 
 
-  def setMethod(method: HttpMethod) = {this.method = method}
+  def setMethod(method: HttpMethod) = {
+    this.method = method
+  }
 
-  def getContentType: Option[String]= {
+  def getContentType: Option[String] = {
     val string = request.getContentType
-    if(string == null)
+    if (string == null)
       return None
     else return Some(string)
   }

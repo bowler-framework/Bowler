@@ -13,7 +13,7 @@ trait ComponentRenderSupport {
     renderMap(ViewModelBuilder(models.toSeq).toMap)
   }
 
-  def renderWithNamed(action: String, models: Any*){
+  def renderWithNamed(action: String, models: Any*) {
     render(ViewModelBuilder(models.toSeq), action)
   }
 
@@ -23,7 +23,7 @@ trait ComponentRenderSupport {
     render(uri, model)
   }
 
-  private def render(uri: String, model: Map[String,Any]): String = {
+  private def render(uri: String, model: Map[String, Any]): String = {
     val writer = new StringWriter
     val pw = new PrintWriter(writer)
     val template = ComponentRenderSupport.resolver.resolveTemplate(RequestScope.request, uri)

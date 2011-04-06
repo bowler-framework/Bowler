@@ -10,6 +10,6 @@ import org.bowlerframework.view.squery.Component
  * To change this template use File | Settings | File Templates.
  */
 
-class MySimpleComponent extends Component{
+class MySimpleComponent extends Component {
 
 }

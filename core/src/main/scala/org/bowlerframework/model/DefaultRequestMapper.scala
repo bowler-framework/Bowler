@@ -5,7 +5,7 @@ import org.apache.commons.fileupload.FileItem
 import util.DynamicVariable
 import collection.TraversableLike
 import collection.mutable.{MutableList, HashMap}
-import org.bowlerframework.{PUT, POST, HTTP, Request}
+import org.bowlerframework.{PUT, POST, Request}
 
 /**
  * Maps a single value from a request, for instance a bean from a request.
@@ -130,7 +130,7 @@ class DefaultRequestMapper extends RequestMapper {
         if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias))
           list = f._2.asInstanceOf[List[_]]
       })
-      if(list == null){
+      if (list == null) {
         request.iterator.foreach(f => {
           if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass))
             list = f._2.asInstanceOf[List[_]]

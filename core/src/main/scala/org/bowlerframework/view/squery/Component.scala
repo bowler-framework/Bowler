@@ -10,11 +10,11 @@ import org.fusesource.scalate.scuery.Transformer
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class Component extends Transformer with MarkupContainer{
+abstract class Component extends Transformer with MarkupContainer {
   override def render = this.apply(super.render)
 
   def valueOrEmpty(any: Any): String = {
-    if(any == null)
+    if (any == null)
       return ""
     else return any.toString
   }

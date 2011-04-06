@@ -14,21 +14,21 @@ import org.bowlerframework.GET
  * To change this template use File | Settings | File Templates.
  */
 
-class SqueryRendererTest extends FunSuite{
+class SqueryRendererTest extends FunSuite {
 
-  test("test render"){
+  test("test render") {
     val writer = new StringWriter
     SqueryRenderer.render(new MySimpleComponent, new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
     assert(writer.toString.contains("<title>A Title</title>"))
   }
 
-  test("test performance"){
+  test("test performance") {
     val start = System.currentTimeMillis
     var split = System.currentTimeMillis
     for (i <- 0 until 1002) {
       val writer = new StringWriter
       SqueryRenderer.render(new ComposedPageComponent(new SimpleTransformingComponent), new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
-      if(i == 1)
+      if (i == 1)
         split = System.currentTimeMillis
     }
     val done = System.currentTimeMillis

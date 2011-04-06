@@ -13,16 +13,16 @@ class DefaultRequestMappingStrategy extends RequestMappingStrategy {
 
   def addRequestMapper(contentType: String, mapper: RequestMapper) = requestMappers.put(contentType, mapper)
 
-  def getRequestMapper(request: Request): RequestMapper = {	
-	request.getContentType match {
-		case None => new DefaultRequestMapper
-		case Some(contentType) => 
-			if(contentType.toLowerCase.contains("application/json")) return new JsonRequestMapper 
-			else try {
-				return requestMappers(contentType)
-			}	catch {
-				case e: NoSuchElementException => return new DefaultRequestMapper
-			}
-	}
+  def getRequestMapper(request: Request): RequestMapper = {
+    request.getContentType match {
+      case None => new DefaultRequestMapper
+      case Some(contentType) =>
+        if (contentType.toLowerCase.contains("application/json")) return new JsonRequestMapper
+        else try {
+          return requestMappers(contentType)
+        } catch {
+          case e: NoSuchElementException => return new DefaultRequestMapper
+        }
+    }
   }
 }

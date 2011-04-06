@@ -8,6 +8,6 @@ package org.bowlerframework
  * To change this template use File | Settings | File Templates.
  */
 
-trait RequestResolver{
+trait RequestResolver {
   def request: Request
 }

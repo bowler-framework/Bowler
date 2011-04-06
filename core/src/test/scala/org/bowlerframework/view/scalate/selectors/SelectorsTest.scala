@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import org.bowlerframework.view.scalate.Layout
 import util.matching.Regex
-import org.bowlerframework.{POST, GET, HTTP}
+import org.bowlerframework.{POST, GET}
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,13 +14,13 @@ import org.bowlerframework.{POST, GET, HTTP}
  * To change this layout use File | Settings | File Templates.
  */
 
-class SelectorsTest extends FunSuite{
-  test("defaultLayoutSelector"){
+class SelectorsTest extends FunSuite {
+  test("defaultLayoutSelector") {
     val selector = new DefaultLayoutSelector(Layout("default"))
     assert(selector.find(makeRequest(Map())).get.name == "default")
   }
 
-  test("headerContainsLayoutSelector"){
+  test("headerContainsLayoutSelector") {
     var selector = new HeaderContainsLayoutSelector(Layout("default"), Map("accept" -> "application/json"))
     assert(selector.find(makeRequest(Map())) == None)
 
@@ -28,7 +28,7 @@ class SelectorsTest extends FunSuite{
     assert(selector.find(makeRequest(Map())).get.name == "default")
   }
 
-  test("HeaderLayoutSelector"){
+  test("HeaderLayoutSelector") {
     var selector = new HeaderLayoutSelector(Layout("default"), Map("accept" -> new Regex("^.*application/json.*$")))
     assert(selector.find(makeRequest(Map())) == None)
 
@@ -37,14 +37,14 @@ class SelectorsTest extends FunSuite{
 
   }
 
-  test("uri matcher selector"){
+  test("uri matcher selector") {
     val selector = new UriLayoutSelector(Layout("default"), new Regex("^.*/hello/.*$"))
     assert(selector.find(makeRequest(Map())) == None)
 
     assert(selector.find(new DummyRequest(POST, "/hello/world", Map(), null)).get.name == "default")
   }
 
-  test("uri & method matcher selector"){
+  test("uri & method matcher selector") {
     val selector = new UriAndMethodLayoutSelector(Layout("default"), GET, new Regex("^.*/hello/.*$"))
     assert(selector.find(new DummyRequest(POST, "/hello/world", Map(), null)) == None)
 

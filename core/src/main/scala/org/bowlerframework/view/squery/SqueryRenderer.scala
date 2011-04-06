@@ -10,14 +10,14 @@ import org.bowlerframework._
  * To change this template use File | Settings | File Templates.
  */
 
-object SqueryRenderer{
+object SqueryRenderer {
   def render(component: MarkupContainer): Unit = render(component, RequestScope.request, RequestScope.response)
 
   def render(component: MarkupContainer, request: Request, response: Response): Unit = {
     response.setContentType("text/html")
     response.getWriter.write(component.render.toString)
     request.getSession.resetValidations
-    if(request.getMethod == GET)
+    if (request.getMethod == GET)
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
   }
 }

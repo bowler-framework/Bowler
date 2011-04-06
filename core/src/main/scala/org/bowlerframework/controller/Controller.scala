@@ -9,7 +9,7 @@ import org.bowlerframework._
 
 trait Controller {
 
-  def get(routeMatchers: String)(controller: (Request, Response) => Unit) = BowlerConfigurator.get(routeMatchers, new DefaultRouteExecutor(controller,routeMatchers))
+  def get(routeMatchers: String)(controller: (Request, Response) => Unit) = BowlerConfigurator.get(routeMatchers, new DefaultRouteExecutor(controller, routeMatchers))
 
   def put(routeMatchers: String)(controller: (Request, Response) => Unit) = BowlerConfigurator.put(routeMatchers, new DefaultRouteExecutor(controller, routeMatchers))
 
@@ -28,7 +28,7 @@ trait Controller {
 }
 
 class DefaultRouteExecutor(controller: (Request, Response) => Unit, routeMatcher: String, isRegex: Boolean = false) extends RouteExecutor {
-  def executeRoute(requestScope: RequestScope){
+  def executeRoute(requestScope: RequestScope) {
     RequestScope.executeRoute(MappedPath(routeMatcher, isRegex), requestScope, controller)
   }
 }
