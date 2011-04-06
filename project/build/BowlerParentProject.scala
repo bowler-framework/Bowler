@@ -3,10 +3,9 @@ import sbt._
 class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){
   def toolConfigurationFile = path("config")
 
-  lazy val core = project("core", "core", new CoreProject(_))
-  lazy val persistence = project("persistence-mapper", "persistence-mapper", new PersistenceProject(_), core)
-  lazy val squeryl = project("squeryl-mapper", "squeryl-mapper", new SquerylProject(_), persistence)
-  lazy val jpa = project("jpa-mapper", "jpa-mapper", new JpaProject(_), persistence)
+  lazy val  core =  project("core", "core", new  CoreProject(_)) lazy val  persistence =  project("persistence-mapper", "persistence-mapper", new  PersistenceProject(_), core)
+  lazy val  squeryl = project("squeryl-mapper",  "squeryl-mapper", new SquerylProject(_),  persistence) lazy val jpa  = project("jpa-mapper", "jpa-mapper",  new JpaProject(_),
+  persistence)
 
 
   class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
