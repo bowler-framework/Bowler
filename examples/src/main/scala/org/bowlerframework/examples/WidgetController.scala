@@ -39,28 +39,24 @@ class WidgetController extends Controller with ParameterMapper with Validations 
   // responds to GET with a named parameter (:id becomes named to id)
   get("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
-      if(widget != None)
-        render(widget.get)
-      else render
+        render(widget)
     })
   })
 
   // responds to HTTP DELETE with named param
   delete("/widgets/:id")((request, response) => {
     this.mapRequest[Option[Widget]](request)(widget => {
-      if(widget != None)
-        Widgets.delete(widget.get)
-      else
-        response.sendError(500)
+      widget match{
+        case Some(w) => Widgets.delete(widget.get)
+        case None => response.sendError(500)
+      }
     })
   })
 
   // retrieves an edit form for a widget that lets you edit a pre-existing widget.
   get("/widgets/:id/edit")((request, response) => {
     mapRequest[Option[Widget]](request)(widget => {
-      if(widget != None)
-        render(widget.get)
-      else render
+      render(widget)
     })
   })
 
