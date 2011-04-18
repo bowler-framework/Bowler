@@ -38,7 +38,7 @@ object BlankBowlerProject extends DefaultBowlerTemplate {
       TemplateFile("%s/index.mustache".format(blankProjectPath), "src/main/resources/views/GET/index.mustache") ::
       TemplateFile("%s/Bootstrap.ssp".format(blankProjectPath), "src/main/scala/${mainpackage}/Bootstrap.scala") ::
       TemplateFile("%s/MyController.ssp".format(blankProjectPath), "src/main/scala/${mainpackage}/${controllername}.scala") ::
-      TemplateFile("%s/web.xml".format(blankProjectPath), "src/main/webapp/WEB-INF/web.xml") ::
+      TemplateFile("%s/web.ssp".format(blankProjectPath), "src/main/webapp/WEB-INF/web.xml") ::
       Nil
   }
 
