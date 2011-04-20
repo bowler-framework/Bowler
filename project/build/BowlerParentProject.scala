@@ -89,10 +89,10 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3"
     val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.4.1"
     val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.1"
-    // val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.2"
+    val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.3"
     // this dependency is a temporarily published dependency with a forked lift-json to fix a serious bug
     // that we have fixed in this pull request: https://github.com/lift/lift/pull/3
-    val liftJson = "com.recursivity" % "lift-json_2.8.0" % "2.3-SNAPSHOT"
+    //val liftJson = "com.recursivity" % "lift-json_2.8.0" % "2.3-SNAPSHOT"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {

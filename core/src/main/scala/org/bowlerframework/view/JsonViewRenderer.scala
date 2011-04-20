@@ -22,6 +22,7 @@ class JsonViewRenderer extends ViewRenderer {
   }
 
   def renderView(request: Request, response: Response, models: Seq[Any]) = {
+    response.setContentType("application/json")
     if (models.size == 0) {
       response.setStatus(204)
     } else if (models.size == 1) {
@@ -45,6 +46,7 @@ class JsonViewRenderer extends ViewRenderer {
    * renders a no model view, in the case of JSON, this simply returns a HTTP 204 - No Content response.
    */
   def renderView(request: Request, response: Response) = {
+    response.setContentType("application/json")
     response.setStatus(204)
   }
 
