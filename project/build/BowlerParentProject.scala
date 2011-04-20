@@ -10,8 +10,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     persistence)
 
 
-  class BaseProject(info: ProjectInfo) extends DefaultProject(info) {
-    //} with ChecksumPlugin{
+  class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
     val slf4jVersion = "1.6.0"
     val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test"
     val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
