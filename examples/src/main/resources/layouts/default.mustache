@@ -6,7 +6,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
  <script type="text/javascript">
 
-     function asJson(url){
+     function widgets(url){
         $.ajax({
             beforeSend: function(req) {
                 req.setRequestHeader("Accept", "application/json");
@@ -14,10 +14,28 @@
         type:"GET",
         url: url,
         success: function(data){
-            alert("JSON View=" + data);
+			empty = ""
+			if(data.length > 0){
+				empty = "Widget[0].name = " + data[0].name
+				
+			}		    
+            alert("No of Widgets=" + data.length + " " + empty);
         }
         });
      }
+
+	function singleWidget(url){
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+        type:"GET",
+        url: url,
+        success: function(data){				    
+            alert("Widget= id: " + data.id + "\nname: " + data.name + "\nyearMade: " + data.yearMade + "\ndesc: " + data.description);
+        }
+        });		
+	}
 
      function deleteWidget(id){
         $.ajax({
