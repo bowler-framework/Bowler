@@ -1,5 +1,6 @@
 package org.bowlerframework
 
+import exception.HttpException
 import util.DynamicVariable
 
 
@@ -25,7 +26,11 @@ object RequestScope {
             function(request, response)
           } catch {
             case e: Exception => {
-              BowlerConfigurator.resolveViewRenderer(request).onError(request, response, e)
+              try{
+                BowlerConfigurator.resolveViewRenderer(request).onError(request, response, e)
+              }catch{
+                case e: HttpException => {response.sendError(e.code)}
+              }
             }
           }
         }
