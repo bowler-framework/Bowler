@@ -1,12 +1,12 @@
-package org.bowlerframework.view.scalate.selectors
+package org.bowlerframework.extractors
 
 import org.bowlerframework.Request
 import util.matching.Regex
 
 
-class UriSelector[T](item: T, uri: Regex) extends RequestSelector[T] {
+class UriMatches[T](item: T, uri: Regex) {
 
-  def find(request: Request): Option[T] = {
+  def unapply(request: Request): Option[T] = {
     if (uri.pattern.matcher(request.getPath).matches)
       return Some(item)
     else return None

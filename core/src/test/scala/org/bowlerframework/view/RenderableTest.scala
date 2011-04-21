@@ -2,11 +2,10 @@ package org.bowlerframework.view
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
-import scalate.selectors.DefaultLayoutSelector
 import scalate.{Layout, TemplateRegistry}
-import org.bowlerframework.{GET, Response, MappedPath}
 import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import java.io.{StringReader, StringWriter}
+import org.bowlerframework.{Request, GET, Response, MappedPath}
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,8 +35,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith (empty)") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+    TemplateRegistry.layoutResolver = {(request: Request) => None}
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -46,8 +45,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith model") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+    TemplateRegistry.layoutResolver = {(request: Request) => None}
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -105,8 +104,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("empty seq HTML") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("renderable"))))
+    TemplateRegistry.layoutResolver = {(request: Request) => None}
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -124,7 +123,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("render with no template") {
-    TemplateRegistry.reset
+    TemplateRegistry.layoutResolver = {(request: Request) => None}
 
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))

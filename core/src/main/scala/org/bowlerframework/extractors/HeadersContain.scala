@@ -1,10 +1,10 @@
-package org.bowlerframework.view.scalate.selectors
+package org.bowlerframework.extractors
 
 import org.bowlerframework.Request
 
 
-class HeaderContainsSelector[T](item: T, headers: Map[String, String]) extends RequestSelector[T] {
-  def find(request: Request): Option[T] = {
+class HeadersContain[T](item: T, headers: Map[String, String]) {
+  def unapply(request: Request): Option[T] = {
     var conditionsMet = true
     headers.iterator.foreach(tup => {
       try {

@@ -1,10 +1,11 @@
 package org.bowlerframework.view.scalate
 
 import org.scalatest.FunSuite
-import selectors._
 import util.matching.Regex
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{POST, GET}
+import org.bowlerframework.{Request, POST, GET}
+import org.bowlerframework.extractors.{Default, UriMatches, UriAndMethodMatches}
+import collection.mutable.MutableList
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,14 +16,41 @@ import org.bowlerframework.{POST, GET}
  */
 
 class TemplateRegistryTest extends FunSuite {
+  val uriAndMethod = new UriAndMethodMatches[Layout](Layout("uriAndMethod"), POST, new Regex("^.*/hello/.*$"))
+  val uriMatches = new UriMatches[Layout](Layout("uri"), new Regex("^.*/hello/.*$"))
+  val default = new Default[Layout](Layout("default"))
 
-  TemplateRegistry.reset
+  def resolver(request: Request): Option[Layout] = {
+      var layout: Layout = null
+      request match{
+        case uriAndMethod(l) => Option(l)
+        case uriMatches(l2) => Option(l2)
+        case default(l3) => Option(l3)
+        case _ => None
+      }
+  }
 
-  TemplateRegistry.appendLayoutSelectors(List(new UriAndMethodLayoutSelector(Layout("uriAndMethod"), POST, new Regex("^.*/hello/.*$")),
-    new UriLayoutSelector(Layout("uri"), new Regex("^.*/hello/.*$")), new DefaultLayoutSelector(Layout("default"))))
+  TemplateRegistry.layoutResolver = resolver(_)
 
-  TemplateRegistry.appendSuffixSelectors(List(new UriAndMethodSuffixSelector("uriAndMethod", POST, new Regex("^.*/hello/.*$")),
-    new UriSuffixSelector("uri", new Regex("^.*/hello/.*$"))))
+
+  val uriAndMethodSuffix = new UriAndMethodMatches[String]("uriAndMethod", POST, new Regex("^.*/hello/.*$"))
+  val uriSuffix = new UriMatches[String]("uri", new Regex("^.*/hello/.*$"))
+
+    def suffixResolver(request: Request): List[String] = {
+    val list = new MutableList[String]
+    request match{
+      case uriAndMethodSuffix(ipad) => list += ipad
+      case _ => {}
+    }
+
+    request match{
+      case uriSuffix(iphone) => list += iphone
+      case _ => {}
+    }
+    return list.toList
+  }
+
+  TemplateRegistry.suffixResolver = this.suffixResolver(_)
 
   test("get default layout") {
     assert("default" == TemplateRegistry.getLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.name)

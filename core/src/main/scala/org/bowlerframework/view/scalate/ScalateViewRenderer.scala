@@ -10,48 +10,9 @@ import org.bowlerframework.{GET, HTTP, Response, Request}
 /**
  * A ViewRenderer that uses Scalate templates to render views
  */
-class ScalateViewRenderer extends ViewRenderer {
+class ScalateViewRenderer extends BrowserViewRenderer {
 
-  def onError(request: Request, response: Response, exception: Exception) = {
-    response.setContentType("text/html")
-    if (classOf[HttpException].isAssignableFrom(exception.getClass)) {
-      if (exception.isInstanceOf[ValidationException]) {
-        val validations = exception.asInstanceOf[ValidationException]
-        request.getSession.setErrors(validations.errors)
-        if (request.getSession.getLastGetPath != None)
-          response.sendRedirect(request.getSession.getLastGetPath.get)
-      } else {
-        val http = exception.asInstanceOf[HttpException]
-        response.sendError(http.code)
-        // TODO
-        // render error pages?
-      }
-
-    } else {
-      throw exception
-    }
-  }
-
-  def renderView(request: Request, response: Response, models: Seq[Any]) = {
-    val validated = request.getSession.getValidatedModel
-    var tempModel = models
-    if (validated != None && validated.get.size > 0)
-      tempModel = tempModel ++ validated.get
-
-    val model = ViewModelBuilder(tempModel)
-    if (request.getSession.getErrors != None) {
-      val list = new MutableList[String]
-      request.getSession.getErrors.get.foreach(f => list += f._2)
-      model += "validationErrors" -> list.toList
-    }
-
-    render(request, response, model.toMap)
-    request.getSession.resetValidations
-  }
-
-  private def render(request: Request, response: Response, model: Map[String, Any]) = {
-    response.setContentType("text/html")
-
+  protected def render(request: Request, response: Response, model: Map[String, Any]) = {
     val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
     val engine = RenderEngine.getEngine
     val writer = new StringWriter

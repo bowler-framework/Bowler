@@ -1,12 +1,12 @@
-package org.bowlerframework.view.scalate.selectors
+package org.bowlerframework.extractors
 
 import util.matching.Regex
 import org.bowlerframework.Request
 
 
-class HeaderSelector[T](item: T, headerSelectors: Map[String, Regex]) extends RequestSelector[T] {
+class HeadersMatch[T](item: T, headerSelectors: Map[String, Regex]) {
 
-  def find(request: Request): Option[T] = {
+  def unapply(request: Request): Option[T] = {
     var conditionsMet = true
     try {
       headerSelectors.iterator.foreach(tup => {

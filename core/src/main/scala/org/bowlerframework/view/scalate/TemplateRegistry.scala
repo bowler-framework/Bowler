@@ -1,9 +1,7 @@
 package org.bowlerframework.view.scalate
 
-import selectors.{TemplateSuffixSelector, LayoutSelector}
-import collection.mutable.MutableList
 import reflect.BeanProperty
-import org.bowlerframework.Request
+import org.bowlerframework.{RequestScope, Request}
 
 /**
  * Retrieves a Template based on a request and it's contents, headers and/or path.
@@ -24,43 +22,11 @@ object TemplateRegistry {
   @BeanProperty
   var rootLayoutPackageOrFolder = "/layouts"
 
-  private var suffixSelectors = new MutableList[TemplateSuffixSelector]()
+  var layoutResolver: Function1[Request, Option[Layout]] = {(request) => None}
 
-  private var layoutSelectors = new MutableList[LayoutSelector]()
+  var suffixResolver: Function1[Request, List[String]] = {(request) => List[String]()}
 
-  def appendLayoutSelectors(selectors: List[_ <: LayoutSelector]) = selectors.foreach(f => {
-    layoutSelectors += f
-  })
+  def getLayout(request: Request): Option[Layout] = layoutResolver(request)
 
-  def appendLayoutSelector(selector: LayoutSelector) = {
-    layoutSelectors += selector
-  }
-
-  def appendSuffixSelectors(selectors: List[_ <: TemplateSuffixSelector]) = selectors.foreach(f => {
-    suffixSelectors += f
-  })
-
-  def appendSuffixSelector(selector: TemplateSuffixSelector) = {
-    suffixSelectors += selector
-  }
-
-  def reset = {
-    layoutSelectors = new MutableList[LayoutSelector]()
-    suffixSelectors = new MutableList[TemplateSuffixSelector]()
-  }
-
-  def getLayout(request: Request): Option[Layout] = {
-    val selector = layoutSelectors.find(p => {
-      p.find(request) != None
-    })
-    if (selector == None) return None
-    else return selector.get.find(request)
-  }
-
-  def getSuffixes(request: Request): List[String] = suffixSelectors.filter(p => {
-    p.find(request) != None
-  }).map(f => {
-    f.find(request).get
-  }).toList
-
+  def getSuffixes(request: Request): List[String] = suffixResolver(request)
 }

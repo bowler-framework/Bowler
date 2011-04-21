@@ -3,8 +3,9 @@ package org.bowlerframework.view.scalate
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import java.io.IOException
-import selectors.HeaderContainsSuffixSelector
-import org.bowlerframework.{GET, MappedPath}
+import org.bowlerframework.{Request, GET, MappedPath}
+import org.bowlerframework.extractors.HeadersContain
+import collection.mutable.MutableList
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,12 +16,24 @@ import org.bowlerframework.{GET, MappedPath}
  */
 
 class ClasspathTemplateResolverTest extends FunSuite {
-  TemplateRegistry.reset
+  TemplateRegistry.layoutResolver = {(request: Request) => None}
 
   val resolver = TemplateRegistry.templateResolver
 
-  TemplateRegistry.appendSuffixSelectors(List(new HeaderContainsSuffixSelector("ipad", Map("User-Agent" -> "ipad")),
-    new HeaderContainsSuffixSelector("iphone", Map("User-Agent" -> "iphone"))))
+  val headersContain = new HeadersContain[String]("ipad", Map("User-Agent" -> "ipad"))
+  val headerContainsIphone = new HeadersContain[String]("iphone", Map("User-Agent" -> "iphone"))
+
+  def suffixResolver(request: Request): List[String] = {
+    val list = new MutableList[String]
+    request match{
+      case headersContain(ipad) => list += ipad
+      case headerContainsIphone(iphone) => list += iphone
+      case _ => {}
+    }
+    return list.toList
+  }
+
+  TemplateRegistry.suffixResolver = this.suffixResolver(_)
 
 
   test("get a template: root with no locale") {

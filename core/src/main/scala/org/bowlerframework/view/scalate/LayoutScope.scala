@@ -1,11 +1,19 @@
 package org.bowlerframework.view.scalate
 
+import org.bowlerframework.controller.Controller
+
 /**
  * Created by IntelliJ IDEA.
  * User: wfaler
- * Date: 21/04/2011
- * Time: 01:16
+ * Date: 20/04/2011
+ * Time: 23:46
  * To change this template use File | Settings | File Templates.
  */
 
-case class Layout(name: String, parentLayout: Option[Layout] = None, layoutModel: LayoutModel = new NoopLayoutModel)
+trait LayoutScope{ this: Controller => {
+
+}
+
+  //layout(layout)
+
+}

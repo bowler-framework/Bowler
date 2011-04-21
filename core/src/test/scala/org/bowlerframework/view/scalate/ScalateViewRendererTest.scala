@@ -1,7 +1,6 @@
 package org.bowlerframework.view.scalate
 
 import org.scalatest.FunSuite
-import selectors.DefaultLayoutSelector
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import org.bowlerframework.view.ViewModel
 import org.bowlerframework.{GET, Request, MappedPath}
@@ -22,8 +21,7 @@ class ScalateViewRendererTest extends FunSuite {
 
 
   test("render view with simple layout") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple"))))
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("simple"))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -36,8 +34,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render view with nested layout") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent"))))))
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("simple", Some(Layout("parent"))))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -50,8 +47,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render view with nested layout, where parent renders other child layouts") {
-    TemplateRegistry.reset
-    TemplateRegistry.appendLayoutSelectors(List(new DefaultLayoutSelector(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))))
+    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
