@@ -18,7 +18,7 @@ class SqueryRendererTest extends FunSuite {
 
   test("test render") {
     val writer = new StringWriter
-    SqueryRenderer.render(new MySimpleComponent, new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
+    SqueryRenderer(new MySimpleComponent, new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
     assert(writer.toString.contains("<title>A Title</title>"))
   }
 
@@ -27,7 +27,7 @@ class SqueryRendererTest extends FunSuite {
     var split = System.currentTimeMillis
     for (i <- 0 until 1002) {
       val writer = new StringWriter
-      SqueryRenderer.render(new ComposedPageComponent(new SimpleTransformingComponent), new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
+      SqueryRenderer(new ComposedPageComponent(new SimpleTransformingComponent), new DummyRequest(GET, "/hello/", Map(), null), new DummyResponse(writer))
       if (i == 1)
         split = System.currentTimeMillis
     }

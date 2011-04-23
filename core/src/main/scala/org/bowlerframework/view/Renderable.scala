@@ -1,7 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
-import squery.{SqueryRenderer, MarkupContainer}
+import squery.{MarkupContainer, ViewComponentRegistry}
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,32 +12,21 @@ import squery.{SqueryRenderer, MarkupContainer}
  */
 trait Renderable {
 
-  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
-    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer): Unit = renderWith(component, RequestScope.request, RequestScope.response)
 
-  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
-    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, request: Request, response: Response): Unit = {
-    matchAccept(request.getHeader("accept")) match {
-      case JSON => render(request, response)
-      case _ => SqueryRenderer.render(component, request, response)
-    }
+    ViewComponentRegistry.register(request, component)
+    render(request, response)
   }
 
-  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
-    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, models: Any*): Unit = {
-    renderWith(component, RequestScope.request, RequestScope.response, models.toSeq)
+    ViewComponentRegistry.register(RequestScope.request, component)
+    renderSeq(RequestScope.request, RequestScope.response,  models.toSeq)
   }
 
-  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
-    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, request: Request, response: Response, models: Any*): Unit = {
-    matchAccept(request.getHeader("accept")) match {
-      case JSON => renderSeq(request, response, models.toSeq)
-      case _ => SqueryRenderer.render(component, request, response)
-    }
+    ViewComponentRegistry.register(request, component)
+    renderSeq(request, response, models.toSeq)
   }
 
   def renderWith(viewPath: ViewPath): Unit = renderWith(viewPath, RequestScope.request, RequestScope.response)
@@ -76,20 +65,6 @@ trait Renderable {
   private def renderSeq(request: Request, response: Response, models: Seq[Any]): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
     renderer.renderView(request, response, models)
-  }
-
-  private def matchAccept(acceptHeader: String): Accept = {
-    if (acceptHeader == null)
-      return HTML
-    val lowerCase = acceptHeader.toLowerCase
-    if (lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
-      return HTML
-    else if (lowerCase.contains("application/json") || lowerCase.contains("text/json"))
-      return JSON
-    else if (lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
-      return XML
-    else
-      return HTML
   }
 
 }

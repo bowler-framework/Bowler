@@ -18,6 +18,7 @@ import org.bowlerframework.{Request, GET, Response, MappedPath}
 class RenderableTest extends FunSuite with Renderable {
 
 
+
   test("empty seq JSON") {
     val request = makeJsonRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
@@ -56,11 +57,12 @@ class RenderableTest extends FunSuite with Renderable {
 
 
   test("renderWith Squery (empty)") {
+    TemplateRegistry.defaultLayout = {(request) => None}
     val resp = makeResponse
     val request = makeRequest("/somePath")
 
     this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp)
-
+    println(resp.toString)
     val result = scala.xml.XML.load(new StringReader(resp.toString))
     assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
     assert("Mells" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(1).text)
@@ -71,6 +73,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith Squery (model") {
+    TemplateRegistry.defaultLayout = {(request) => None}
     val resp = makeResponse
     val request = makeRequest("/somePath")
 
@@ -87,6 +90,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith Squery (json)") {
+    TemplateRegistry.defaultLayout = {(request) => None}
     val resp = makeResponse
     val request = makeJsonRequest("/somePath")
 

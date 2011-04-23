@@ -6,6 +6,7 @@ import org.bowlerframework.exception.{ValidationException, HttpException}
 import collection.mutable.MutableList
 import org.bowlerframework.model.ViewModelBuilder
 import org.bowlerframework.{GET, HTTP, Response, Request}
+import org.bowlerframework.view.squery.ViewComponentRegistry
 
 /**
  * A ViewRenderer that uses Scalate templates to render views
@@ -13,13 +14,22 @@ import org.bowlerframework.{GET, HTTP, Response, Request}
 class ScalateViewRenderer extends BrowserViewRenderer {
 
   protected def render(request: Request, response: Response, model: Map[String, Any]) = {
-    val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
-    val engine = RenderEngine.getEngine
-    val writer = new StringWriter
-    val pw = new PrintWriter(writer)
-    val context = new BowlerRenderContext(view.uri, engine, pw)
-    context.render(view.uri, model)
-    val viewValue = writer.toString
+    val viewValue: String = {
+      val squeryView = ViewComponentRegistry(request, model)
+      squeryView match{
+        case None => {
+          val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
+          val engine = RenderEngine.getEngine
+          val writer = new StringWriter
+          val pw = new PrintWriter(writer)
+          val context = new BowlerRenderContext(view.uri, engine, pw)
+          context.render(view.uri, model)
+          writer.toString
+        }
+        case Some(component) => component.render.toString
+      }
+    }
+
     val layout = Layout.activeLayout(request)
     if (layout != None)
       renderLayout(layout.get, request, response, model, viewValue)

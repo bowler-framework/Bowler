@@ -11,9 +11,9 @@ import org.bowlerframework._
  */
 
 object SqueryRenderer {
-  def render(component: MarkupContainer): Unit = render(component, RequestScope.request, RequestScope.response)
+  def apply(component: MarkupContainer): Unit = apply(component, RequestScope.request, RequestScope.response)
 
-  def render(component: MarkupContainer, request: Request, response: Response): Unit = {
+  def apply(component: MarkupContainer, request: Request, response: Response): Unit = {
     response.setContentType("text/html")
     response.getWriter.write(component.render.toString)
     request.getSession.resetValidations
