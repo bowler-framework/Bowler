@@ -12,7 +12,7 @@ import org.bowlerframework.{Request, GET, Response, MappedPath}
  * User: wfaler
  * Date: 28/12/2010
  * Time: 20:52
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class RenderableTest extends FunSuite with Renderable {
@@ -35,8 +35,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith (empty)") {
-    TemplateRegistry.layoutResolver = {(request: Request) => None}
-    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => None}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -45,8 +45,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith model") {
-    TemplateRegistry.layoutResolver = {(request: Request) => None}
-    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => None}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -104,8 +104,8 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("empty seq HTML") {
-    TemplateRegistry.layoutResolver = {(request: Request) => None}
-    TemplateRegistry.layoutResolver = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => None}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse
@@ -123,7 +123,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("render with no template") {
-    TemplateRegistry.layoutResolver = {(request: Request) => None}
+    TemplateRegistry.defaultLayout = {(request: Request) => None}
 
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))

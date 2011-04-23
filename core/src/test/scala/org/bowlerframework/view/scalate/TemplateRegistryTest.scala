@@ -12,7 +12,7 @@ import collection.mutable.MutableList
  * User: wfaler
  * Date: 05/01/2011
  * Time: 22:12
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class TemplateRegistryTest extends FunSuite {
@@ -30,7 +30,7 @@ class TemplateRegistryTest extends FunSuite {
       }
   }
 
-  TemplateRegistry.layoutResolver = resolver(_)
+  TemplateRegistry.defaultLayout = resolver(_)
 
 
   val uriAndMethodSuffix = new UriAndMethodMatches[String]("uriAndMethod", POST, new Regex("^.*/hello/.*$"))
@@ -52,16 +52,16 @@ class TemplateRegistryTest extends FunSuite {
 
   TemplateRegistry.suffixResolver = this.suffixResolver(_)
 
-  test("get default layout") {
-    assert("default" == TemplateRegistry.getLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.name)
+  test("get default activeLayout") {
+    assert("default" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.name)
   }
 
-  test("get URI specific layout") {
-    assert("uri" == TemplateRegistry.getLayout(new DummyRequest(GET, "/hello/", Map(), null)).get.name)
+  test("get URI specific activeLayout") {
+    assert("uri" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/hello/", Map(), null)).get.name)
   }
 
-  test("get URI AND Method specific layout") {
-    assert("uriAndMethod" == TemplateRegistry.getLayout(new DummyRequest(POST, "/hello/", Map(), null)).get.name)
+  test("get URI AND Method specific activeLayout") {
+    assert("uriAndMethod" == TemplateRegistry.defaultLayout(new DummyRequest(POST, "/hello/", Map(), null)).get.name)
   }
 
   test("get 2 suffixes") {

@@ -1,5 +1,7 @@
 package org.bowlerframework
 
+import collection.mutable.HashMap
+
 
 trait Request {
   def getPath: String
@@ -47,6 +49,8 @@ trait Request {
   def getParameterMap: Map[String, Any]
 
   def getRequestBodyAsString: String
+
+  val scopeDetails = new HashMap[String, Any]
 
 
 }

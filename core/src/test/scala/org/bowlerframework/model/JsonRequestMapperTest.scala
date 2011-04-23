@@ -10,7 +10,7 @@ import org.bowlerframework.{GET, POST}
  * User: wfaler
  * Date: 27/12/2010
  * Time: 17:38
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class JsonRequestMapperTest extends FunSuite {

@@ -8,7 +8,7 @@ import org.bowlerframework.model.AliasRegistry
  */
 trait ViewRenderer {
   /**
-   * Renders a view and associated layout(s) given one or more view model objects.
+   * Renders a view and associated activeLayout(s) given one or more view model objects.
    */
   def renderView(request: Request, response: Response, models: Seq[Any])
 

@@ -20,7 +20,7 @@ class ScalateViewRenderer extends BrowserViewRenderer {
     val context = new BowlerRenderContext(view.uri, engine, pw)
     context.render(view.uri, model)
     val viewValue = writer.toString
-    val layout = TemplateRegistry.getLayout(request)
+    val layout = Layout.activeLayout(request)
     if (layout != None)
       renderLayout(layout.get, request, response, model, viewValue)
     else

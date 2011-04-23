@@ -12,7 +12,7 @@ import java.text.DecimalFormat
  * User: wfaler
  * Date: 04/01/2011
  * Time: 22:27
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class ScalateRenderEngineTest extends FunSuite {

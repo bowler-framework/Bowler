@@ -8,24 +8,33 @@ import squery.{SqueryRenderer, MarkupContainer}
  * User: wfaler
  * Date: 28/12/2010
  * Time: 20:49
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 trait Renderable {
+
+  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
+    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer): Unit = renderWith(component, RequestScope.request, RequestScope.response)
 
+  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
+    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, request: Request, response: Response): Unit = {
-    Accept.matchAccept(request.getHeader("accept")) match {
+    matchAccept(request.getHeader("accept")) match {
       case JSON => render(request, response)
       case _ => SqueryRenderer.render(component, request, response)
     }
   }
 
+  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
+    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, models: Any*): Unit = {
     renderWith(component, RequestScope.request, RequestScope.response, models.toSeq)
   }
 
+  @deprecated("This by-passes the regular RenderStrategy -> ViewRenderer pipeline and is dirty code likely " +
+    "to be removed shortly, replaced by a cleaner Squery integration")
   def renderWith(component: MarkupContainer, request: Request, response: Response, models: Any*): Unit = {
-    Accept.matchAccept(request.getHeader("accept")) match {
+    matchAccept(request.getHeader("accept")) match {
       case JSON => renderSeq(request, response, models.toSeq)
       case _ => SqueryRenderer.render(component, request, response)
     }
@@ -67,6 +76,20 @@ trait Renderable {
   private def renderSeq(request: Request, response: Response, models: Seq[Any]): Unit = {
     val renderer = BowlerConfigurator.resolveViewRenderer(request)
     renderer.renderView(request, response, models)
+  }
+
+  private def matchAccept(acceptHeader: String): Accept = {
+    if (acceptHeader == null)
+      return HTML
+    val lowerCase = acceptHeader.toLowerCase
+    if (lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
+      return HTML
+    else if (lowerCase.contains("application/json") || lowerCase.contains("text/json"))
+      return JSON
+    else if (lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
+      return XML
+    else
+      return HTML
   }
 
 }

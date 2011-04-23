@@ -9,10 +9,27 @@ import scalate.ScalateViewRenderer
  */
 class DefaultRenderStrategy extends RenderStrategy {
   def resolveViewRenderer(request: Request): ViewRenderer = {
-    Accept.matchAccept(request.getHeader("accept")) match {
+    matchAccept(request.getHeader("accept")) match {
       case JSON => return new JsonViewRenderer
       case _ => return new ScalateViewRenderer
     }
   }
+
+  private def matchAccept(acceptHeader: String): Accept = {
+    if (acceptHeader == null)
+      return HTML
+    val lowerCase = acceptHeader.toLowerCase
+    if (lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
+      return HTML
+    else if (lowerCase.contains("application/json") || lowerCase.contains("text/json"))
+      return JSON
+    else if (lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
+      return XML
+    else
+      return HTML
+  }
+
+
+
 }
 

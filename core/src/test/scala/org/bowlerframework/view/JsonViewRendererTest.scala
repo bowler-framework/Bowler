@@ -13,7 +13,7 @@ import org.bowlerframework.model.Transient
  * User: wfaler
  * Date: 28/12/2010
  * Time: 23:47
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class JsonViewRendererTest extends FunSuite {

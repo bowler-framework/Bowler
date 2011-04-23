@@ -30,7 +30,7 @@ trait TemplateResolver {
   }
 
   /**
-   * Order of preference for layout resolution should be:<br/>
+   * Order of preference for activeLayout resolution should be:<br/>
    * <ol>
    *  <li>LayoutSelector choice</li>
    *  <li>localisation</li>

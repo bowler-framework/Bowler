@@ -16,7 +16,7 @@ import collection.mutable.MutableList
  */
 
 class ClasspathTemplateResolverTest extends FunSuite {
-  TemplateRegistry.layoutResolver = {(request: Request) => None}
+  TemplateRegistry.defaultLayout = {(request: Request) => None}
 
   val resolver = TemplateRegistry.templateResolver
 
@@ -65,14 +65,14 @@ class ClasspathTemplateResolverTest extends FunSuite {
 
   }
 
-  test("layout without localisation") {
+  test("activeLayout without localisation") {
     val request = makeRequest("/")
     val template = resolver.resolveLayout(request, Layout("default"))
     println(template)
     assert(template.template == "mustache")
   }
 
-  test("layout with localisation") {
+  test("activeLayout with localisation") {
     val request = makeRequest("/")
     request.setLocales(List("es", "se"))
     val template = resolver.resolveLayout(request, Layout("default"))

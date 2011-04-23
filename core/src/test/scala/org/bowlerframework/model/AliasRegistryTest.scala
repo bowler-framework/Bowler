@@ -7,7 +7,7 @@ import com.recursivity.commons.bean.GenericTypeDefinition
  * User: wfaler
  * Date: 28/12/2010
  * Time: 02:10
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class AliasRegistryTest extends FunSuite {

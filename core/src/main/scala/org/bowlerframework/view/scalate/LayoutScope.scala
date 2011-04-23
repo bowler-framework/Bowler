@@ -14,6 +14,6 @@ trait LayoutScope{ this: Controller => {
 
 }
 
-  //layout(layout)
+  //activeLayout(activeLayout)
 
 }

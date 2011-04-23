@@ -10,7 +10,7 @@ import org.bowlerframework.{GET, BowlerConfigurator}
  * User: wfaler
  * Date: 28/12/2010
  * Time: 23:15
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class DefaultRenderStrategyTest extends FunSuite {

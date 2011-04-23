@@ -12,7 +12,7 @@ import org.bowlerframework.{POST, GET}
  * User: wfaler
  * Date: 05/01/2011
  * Time: 22:04
- * To change this layout use File | Settings | File Templates.
+ * To change this activeLayout use File | Settings | File Templates.
  */
 
 class ExtractorsTest extends FunSuite {
