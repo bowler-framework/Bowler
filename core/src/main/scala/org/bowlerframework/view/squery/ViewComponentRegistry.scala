@@ -13,9 +13,9 @@ import org.bowlerframework.{Request, RequestScope}
  */
 
 object ViewComponentRegistry{
-  private val registry = new HashMap[ViewPath, (Map[String, Any]) => MarkupContainer]
+  private val registry = new HashMap[ViewPath, Function1[Map[String, Any], MarkupContainer]]
 
-  def register(viewPath: ViewPath, component: ((Map[String, Any])) => MarkupContainer): Unit = {
+  def register(viewPath: ViewPath, component: Function1[Map[String, Any], MarkupContainer]): Unit = {
     registry.put(viewPath, component)
   }
 
@@ -23,7 +23,7 @@ object ViewComponentRegistry{
     request.scopeDetails.put("squeryView", component)
   }
 
-  def register(component: Component): Unit = register(RequestScope.request, component)
+  def register(component: MarkupContainer): Unit = register(RequestScope.request, component)
 
   def apply(request: Request, resources: Map[String, Any]): Option[MarkupContainer] = {
     request.scopeDetails.get("squeryView") match{
@@ -33,7 +33,7 @@ object ViewComponentRegistry{
           case Some(s) => Option(s(resources))
         }
       }
-      case Some(component) => Some(component.asInstanceOf[Component])
+      case Some(component) => Some(component.asInstanceOf[MarkupContainer])
     }
   }
 

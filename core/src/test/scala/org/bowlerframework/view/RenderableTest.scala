@@ -6,6 +6,7 @@ import scalate.{Layout, TemplateRegistry}
 import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import java.io.{StringReader, StringWriter}
 import org.bowlerframework.{Request, GET, Response, MappedPath}
+import squery.ViewComponentRegistry
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,13 +37,22 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith (empty)") {
-    TemplateRegistry.defaultLayout = {(request: Request) => None}
     TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
     this.renderWith(ViewPath(GET, MappedPath("/simple")), request, resp, List[Any]())
     assert(resp.toString.contains("Where's the list? Hello"))
+  }
+
+  test("renderWith Squery and layout"){
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
+    val request = makeRequest("/index")
+    request.setMappedPath(new MappedPath("/index", false))
+    val resp = makeResponse
+    renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp)
+    assert(resp.toString.contains("Where's the list?"))
+    assert(resp.toString.contains("Mells"))
   }
 
   test("renderWith model") {
@@ -60,9 +70,20 @@ class RenderableTest extends FunSuite with Renderable {
     TemplateRegistry.defaultLayout = {(request) => None}
     val resp = makeResponse
     val request = makeRequest("/somePath")
-
     this.renderWith(new ComposedPageComponent(new SimpleTransformingComponent), request, resp)
-    println(resp.toString)
+    assertSquery(resp)
+  }
+
+  test("render Squery with registered"){
+    val resp = makeResponse
+    val request = makeRequest("/somePath")
+    ViewComponentRegistry.register(request, new ComposedPageComponent(new SimpleTransformingComponent))
+
+    this.render(request, resp)
+    assertSquery(resp)
+  }
+
+  def assertSquery(resp: Response) = {
     val result = scala.xml.XML.load(new StringReader(resp.toString))
     assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
     assert("Mells" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(1).text)
