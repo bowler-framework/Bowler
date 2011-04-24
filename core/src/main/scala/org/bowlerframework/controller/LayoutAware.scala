@@ -25,7 +25,12 @@ trait LayoutAware{ this: Controller => {
 
   private def setup(request: Request): Unit = {
     TemplateRegistry.controllerLayouts.get(this.getClass) match{
-      case None => {request.scopeDetails.put("activeLayout", TemplateRegistry.defaultLayout(request))}
+      case None => {
+        TemplateRegistry.defaultLayout(request) match{
+          case None => {}
+          case Some(layout) => request.scopeDetails.put("activeLayout", layout)
+        }
+      }
       case Some(template) => request.scopeDetails.put("activeLayout", template)
     }
   }

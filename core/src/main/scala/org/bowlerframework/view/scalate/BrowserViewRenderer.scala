@@ -36,6 +36,7 @@ trait BrowserViewRenderer extends ViewRenderer{
   }
 
   def renderView(request: Request, response: Response, models: Seq[Any]) = {
+    response.setContentType("text/html")
     val validated = request.getSession.getValidatedModel
     var tempModel = models
     if (validated != None && validated.get.size > 0)

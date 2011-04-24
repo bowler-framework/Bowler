@@ -2,8 +2,8 @@ package org.bowlerframework.examples
 
 import jpa.{CarValidatorBuilder, Make, Car}
 import org.bowlerframework.view.scalate._
-import org.bowlerframework.view.scalate.selectors._
 
+import org.bowlerframework.Request
 import org.bowlerframework.examples.squeryl._
 
 import com.recursivity.commons.bean.{StringValueTransformer, TransformerRegistry}
@@ -27,15 +27,8 @@ class Bootstrap {
   // parent layout, that uses a LayoutModel to enrich the layout based on request if needed.
   val parentLayout = Layout("default", None, new ParentLayoutModel)
 
-  // this is a childLayout for parentLayout, and has the parent set on it, as shown.
-  val composableLayout = Layout("child", Some(parentLayout))
-
-
-  //You can define which layout to use based on chaining LayoutSelectors, for instance based on URL,
-  // User-Agent or other factors.
-  TemplateRegistry.appendLayoutSelectors(List(
-    new UriLayoutSelector(composableLayout, new Regex("^.*/composable/.*$")),
-    new DefaultLayoutSelector(parentLayout)))
+  def resolver(request: Request): Option[Layout] = Option(parentLayout)
+  TemplateRegistry.defaultLayout = resolver(_)
 
   // Register the WidgetTransformer so that we can look up Widgets for pages by ID
   TransformerRegistry.registerTransformer(classOf[Widget], classOf[WidgetTransformer])

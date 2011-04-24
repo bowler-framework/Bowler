@@ -16,7 +16,12 @@ object Layout{
 
   def activeLayout(request: Request): Option[Layout] = {
     request.scopeDetails.get("activeLayout") match{
-      case None => TemplateRegistry.defaultLayout(request)
+      case None => {
+        TemplateRegistry.defaultLayout(request) match{
+          case None => None
+          case Some(layout) => Some(layout)
+        }
+      }
       case Some(layout) => Some(layout.asInstanceOf[Layout])
     }
   }
