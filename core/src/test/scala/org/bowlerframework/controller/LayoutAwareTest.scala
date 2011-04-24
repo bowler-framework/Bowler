@@ -1,9 +1,11 @@
 package org.bowlerframework.controller
 
 import org.scalatest.FunSuite
-import org.bowlerframework.view.scalate.Layout
 import org.bowlerframework.http.BowlerFilter
 import org.scalatra.test.scalatest.ScalatraFunSuite
+import org.bowlerframework.view.scalate.{TemplateRegistry, Layout}
+import org.bowlerframework.jvm.DummyRequest
+import org.bowlerframework.{GET, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,6 +32,23 @@ class LayoutAwareTest extends ScalatraFunSuite{
     }
   }
 
+  test("test double nested bug"){
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("GlobalLayout", None))}
+    val controller = new GlobalLayout
+    get("/globalLayout/", ("name", "wille")) {
+      assert(controller.currentLayout.name == "GlobalLayout")
+    }
+
+    TemplateRegistry.defaultLayout = {(request: Request) => None}
+  }
+
+}
+
+class GlobalLayout extends Controller{
+  var currentLayout: Layout = null
+  this.get("/globalLayout/")((request, response ) => {
+    currentLayout = Layout.activeLayout(request).get
+  })
 }
 
 class LayoutAwareController extends Controller with LayoutAware{

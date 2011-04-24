@@ -20,7 +20,7 @@ class LayoutTest extends FunSuite{
 
   test("layout bug - double nested Some()"){
     Layout.activeLayout(new DummyRequest(GET, "/LayoutTest", Map(), null)) match{
-      case Some(layout) => println(layout)
+      case Some(layout) => assert(layout.name == "default")
       case None => fail
     }
   }
