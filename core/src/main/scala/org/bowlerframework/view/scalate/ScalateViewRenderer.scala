@@ -1,10 +1,6 @@
 package org.bowlerframework.view.scalate
 
-import org.bowlerframework.view.ViewRenderer
 import java.io.{StringWriter, PrintWriter}
-import org.bowlerframework.exception.{ValidationException, HttpException}
-import collection.mutable.MutableList
-import org.bowlerframework.model.ViewModelBuilder
 import org.bowlerframework.{GET, HTTP, Response, Request}
 import org.bowlerframework.view.squery.ViewComponentRegistry
 
@@ -30,11 +26,10 @@ class ScalateViewRenderer extends BrowserViewRenderer {
       }
     }
 
-    val layout = Layout.activeLayout(request)
-    if (layout != None)
-      renderLayout(layout.get, request, response, model, viewValue)
-    else
-      response.getWriter.write(viewValue)
+    Layout.activeLayout(request) match{
+      case None => response.getWriter.write(viewValue)
+      case Some(layout) => renderLayout(layout, request, response, model, viewValue)
+    }
 
     if (request.getMethod == GET) {
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
@@ -48,10 +43,10 @@ class ScalateViewRenderer extends BrowserViewRenderer {
     val parent = TemplateRegistry.templateResolver.resolveLayout(request, layout)
     val stringWriter = new StringWriter
     var writer: PrintWriter = null
-    if (layout.parentLayout == None)
-      writer = response.getWriter
-    else {
-      writer = new PrintWriter(stringWriter)
+
+    layout.parentLayout match{
+      case None => writer = response.getWriter
+      case Some(parent) => writer = new PrintWriter(stringWriter)
     }
 
     val responseContext = new BowlerRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
