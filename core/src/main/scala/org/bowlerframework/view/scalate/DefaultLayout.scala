@@ -44,10 +44,6 @@ object DefaultLayout{
     return new DefaultLayout(name, viewId, parentLayout, layoutModel)
   }
 
-  def apply(name: String): DefaultLayout = {
-    return new DefaultLayout(name)
-  }
-
   def apply(name: String, parentLayout: Option[Layout]): DefaultLayout ={
     return new DefaultLayout(name, "doLayout", parentLayout, None)
   }
