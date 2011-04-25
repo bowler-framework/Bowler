@@ -33,7 +33,7 @@ class LayoutAwareTest extends ScalatraFunSuite{
   }
 
   test("test double nested bug"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("GlobalLayout", None))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("GlobalLayout"))}
     val controller = new GlobalLayout
     get("/globalLayout/", ("name", "wille")) {
       assert(controller.currentLayout.name == "GlobalLayout")

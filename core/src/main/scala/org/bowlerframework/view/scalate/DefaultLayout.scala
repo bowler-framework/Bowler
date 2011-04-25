@@ -11,12 +11,17 @@ import java.io.{StringWriter, PrintWriter}
  * To change this template use File | Settings | File Templates.
  */
 
-class DefaultLayout(val name: String, parent: Option[Layout] = None, model: LayoutModel = new NoopLayoutModel) extends Layout{
+class DefaultLayout(val name: String, viewId: String = "doLayout", parent: Option[Layout] = None, layoutModel: Option[LayoutModel] = None) extends Layout{
 
-  override def layoutModel = model
   override def parentLayout = parent
 
-  def render(request: Request, response: Response, viewModel: Map[String, Any]) = {
+  def render(request: Request, response: Response, childView: String) = {
+    val model = {
+      layoutModel match{
+        case None => Map(viewId -> childView)
+        case Some(layoutModel) => layoutModel.model(request, Tuple2(viewId, childView))
+      }
+    }
     val stringWriter = new StringWriter
     val writer: PrintWriter = {
       parentLayout match{
@@ -27,15 +32,23 @@ class DefaultLayout(val name: String, parent: Option[Layout] = None, model: Layo
     val engine = RenderEngine.getEngine
     val parent = TemplateRegistry.templateResolver.resolveLayout(request, name)
     val responseContext = new BowlerRenderContext(parent.uri, engine, writer)
-    responseContext.render(parent.uri, viewModel.toMap)
+    responseContext.render(parent.uri, model)
     if (parentLayout != None)
-      parentLayout.get.render(request, response, parentLayout.get.layoutModel.model(request, viewModel, stringWriter.toString))
+      parentLayout.get.render(request, response, stringWriter.toString)
   }
 
 }
 
 object DefaultLayout{
-  def apply(name: String, parentLayout: Option[Layout] = None, layoutModel: LayoutModel = new NoopLayoutModel):DefaultLayout ={
-    return new DefaultLayout(name, parentLayout, layoutModel)
+  def apply(name: String, viewId: String = "doLayout", parentLayout: Option[Layout] = None, layoutModel: Option[LayoutModel] = None):DefaultLayout ={
+    return new DefaultLayout(name, viewId, parentLayout, layoutModel)
+  }
+
+  def apply(name: String): DefaultLayout = {
+    return new DefaultLayout(name)
+  }
+
+  def apply(name: String, parentLayout: Option[Layout]): DefaultLayout ={
+    return new DefaultLayout(name, "doLayout", parentLayout, None)
   }
 }

@@ -13,7 +13,7 @@ import org.bowlerframework.{GET, Request}
  */
 
 class LayoutTest extends FunSuite{
-  val parentLayout = DefaultLayout("default", None, new NoopLayoutModel)
+  val parentLayout = DefaultLayout("default")
 
   def resolver(request: Request): Option[Layout] = Option(parentLayout)
   TemplateRegistry.defaultLayout = resolver(_)

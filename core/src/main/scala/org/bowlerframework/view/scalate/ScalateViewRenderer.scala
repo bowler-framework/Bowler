@@ -11,8 +11,7 @@ class ScalateViewRenderer extends BrowserViewRenderer {
 
   protected def render(request: Request, response: Response, model: Map[String, Any]) = {
     val viewValue: String = {
-      val squeryView = ViewComponentRegistry(request, model)
-      squeryView match{
+      ViewComponentRegistry(request, model) match{
         case None => {
           val view = TemplateRegistry.templateResolver.resolveViewTemplate(request)
           val engine = RenderEngine.getEngine
@@ -28,11 +27,10 @@ class ScalateViewRenderer extends BrowserViewRenderer {
 
     Layout.activeLayout(request) match{
       case None => response.getWriter.write(viewValue)
-      case Some(layout) => layout.render(request, response, layout.layoutModel.model(request, model, viewValue))
+      case Some(layout) => layout.render(request, response, viewValue)
     }
 
-    if (request.getMethod == GET) {
+    if (request.getMethod == GET)
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
-    }
   }
 }
