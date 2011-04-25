@@ -42,11 +42,11 @@ class ScalateViewRenderer extends BrowserViewRenderer {
 
     val parent = TemplateRegistry.templateResolver.resolveLayout(request, layout)
     val stringWriter = new StringWriter
-    var writer: PrintWriter = null
-
-    layout.parentLayout match{
-      case None => writer = response.getWriter
-      case Some(parent) => writer = new PrintWriter(stringWriter)
+    val writer: PrintWriter = {
+      layout.parentLayout match{
+        case None => response.getWriter
+        case Some(parent) => new PrintWriter(stringWriter)
+      }
     }
 
     val responseContext = new BowlerRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
