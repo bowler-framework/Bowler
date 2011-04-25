@@ -21,7 +21,7 @@ class ScalateViewRendererTest extends FunSuite {
 
 
   test("render view with simple activeLayout") {
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("simple"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("simple"))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -34,7 +34,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render view with nested activeLayout") {
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("simple", Some(Layout("parent"))))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("simple", Some(DefaultLayout("parent"))))}
     val request = makeRequest("/simple/")
 
     request.setLocales(List("es", "se"))
@@ -47,8 +47,8 @@ class ScalateViewRendererTest extends FunSuite {
     assert("<html><head><title>Parent</title></head><body><div>Hello Wille</div></body></html>" == response.toString)
   }
 
-  test("render view with nested activeLayout, where parent renders other child layouts") {
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("simple", Some(Layout("parent2", None, new TestLayoutModel))))}
+  test("render view with nested layout, where parent renders other child layouts") {
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("simple", Some(DefaultLayout("parent2", None, new TestLayoutModel))))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -65,7 +65,6 @@ class ScalateViewRendererTest extends FunSuite {
 
 class TestLayoutModel extends LayoutModel {
   def model(request: Request, viewModel: Map[String, Any], childView: String) = {
-
     Map("title" -> request.getMappedPath.path, "doLayout" -> childView)
   }
 }

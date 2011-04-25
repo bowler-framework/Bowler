@@ -3,9 +3,9 @@ package org.bowlerframework.controller
 import org.scalatest.FunSuite
 import org.bowlerframework.http.BowlerFilter
 import org.scalatra.test.scalatest.ScalatraFunSuite
-import org.bowlerframework.view.scalate.{TemplateRegistry, Layout}
 import org.bowlerframework.jvm.DummyRequest
 import org.bowlerframework.{GET, Request}
+import org.bowlerframework.view.scalate.{DefaultLayout, TemplateRegistry, Layout}
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +33,7 @@ class LayoutAwareTest extends ScalatraFunSuite{
   }
 
   test("test double nested bug"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("GlobalLayout", None))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("GlobalLayout", None))}
     val controller = new GlobalLayout
     get("/globalLayout/", ("name", "wille")) {
       assert(controller.currentLayout.name == "GlobalLayout")
@@ -45,25 +45,25 @@ class LayoutAwareTest extends ScalatraFunSuite{
 }
 
 class GlobalLayout extends Controller{
-  var currentLayout: Layout = null
+  var currentLayout: DefaultLayout = null
   this.get("/globalLayout/")((request, response ) => {
-    currentLayout = Layout.activeLayout(request).get
+    currentLayout = Layout.activeLayout(request).get.asInstanceOf[DefaultLayout]
   })
 }
 
 class LayoutAwareController extends Controller with LayoutAware{
-  layout(Layout("ControllerScoped"))
-  var currentLayout: Layout = null
+  layout(DefaultLayout("ControllerScoped"))
+  var currentLayout: DefaultLayout = null
 
   this.get("/layoutAware/")((request, response ) => {
-    currentLayout = Layout.activeLayout(request).get
+    currentLayout = Layout.activeLayout(request).get.asInstanceOf[DefaultLayout]
 
   })
 
   this.get("/layoutAware/route/")((request, response ) => {
-    layout(Layout("RouteScoped"))
+    layout(DefaultLayout("RouteScoped"))
 
 
-    currentLayout = Layout.activeLayout(request).get
+    currentLayout = Layout.activeLayout(request).get.asInstanceOf[DefaultLayout]
   })
 }

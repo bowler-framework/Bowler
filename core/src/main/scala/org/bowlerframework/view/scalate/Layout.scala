@@ -1,6 +1,7 @@
 package org.bowlerframework.view.scalate
 
-import org.bowlerframework.{Request, RequestScope}
+import java.io.PrintWriter
+import org.bowlerframework.{Response, Request, RequestScope}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +11,12 @@ import org.bowlerframework.{Request, RequestScope}
  * To change this template use File | Settings | File Templates.
  */
 
-case class Layout(name: String, parentLayout: Option[Layout] = None, layoutModel: LayoutModel = new NoopLayoutModel)
+trait Layout{
+  def parentLayout: Option[Layout] = None
+  def layoutModel: LayoutModel
+  def render(request: Request, response: Response, model: Map[String, Any])
+}
+
 
 object Layout{
 

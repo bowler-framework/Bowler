@@ -2,7 +2,7 @@ package org.bowlerframework.view
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
-import scalate.{Layout, TemplateRegistry}
+import scalate.{DefaultLayout, Layout, TemplateRegistry}
 import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import java.io.{StringReader, StringWriter}
 import org.bowlerframework.{Request, GET, Response, MappedPath}
@@ -37,7 +37,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith (empty)") {
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -46,7 +46,7 @@ class RenderableTest extends FunSuite with Renderable {
   }
 
   test("renderWith Squery and layout"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -57,7 +57,7 @@ class RenderableTest extends FunSuite with Renderable {
 
   test("renderWith model") {
     TemplateRegistry.defaultLayout = {(request: Request) => None}
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("renderable"))}
     val request = makeRequest("/index")
     request.setMappedPath(new MappedPath("/index", false))
     val resp = makeResponse
@@ -130,7 +130,7 @@ class RenderableTest extends FunSuite with Renderable {
 
   test("empty seq HTML") {
     TemplateRegistry.defaultLayout = {(request: Request) => None}
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(Layout("renderable"))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(DefaultLayout("renderable"))}
     val request = makeRequest("/simple")
     request.setMappedPath(new MappedPath("/simple", false))
     val resp = makeResponse

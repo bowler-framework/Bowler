@@ -54,7 +54,7 @@ class ClasspathTemplateResolverTest extends FunSuite {
   test("previous stackoverflowexception bug") {
     val request = makeRequest("/")
     try {
-      val template = resolver.resolveLayout(request, Layout("overflow-baby"))
+      val template = resolver.resolveLayout(request, "overflow-baby")
     } catch {
       case e: IOException => {
         println(e.getMessage)
@@ -67,7 +67,7 @@ class ClasspathTemplateResolverTest extends FunSuite {
 
   test("activeLayout without localisation") {
     val request = makeRequest("/")
-    val template = resolver.resolveLayout(request, Layout("default"))
+    val template = resolver.resolveLayout(request, "default")
     println(template)
     assert(template.template == "mustache")
   }
@@ -75,7 +75,7 @@ class ClasspathTemplateResolverTest extends FunSuite {
   test("activeLayout with localisation") {
     val request = makeRequest("/")
     request.setLocales(List("es", "se"))
-    val template = resolver.resolveLayout(request, Layout("default"))
+    val template = resolver.resolveLayout(request, "default")
     println(template)
     assert(template.template == "Svenska!")
   }

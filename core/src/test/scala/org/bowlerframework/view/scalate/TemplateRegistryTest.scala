@@ -16,9 +16,9 @@ import collection.mutable.MutableList
  */
 
 class TemplateRegistryTest extends FunSuite {
-  val uriAndMethod = new UriAndMethodMatches[Layout](Layout("uriAndMethod"), POST, new Regex("^.*/hello/.*$"))
-  val uriMatches = new UriMatches[Layout](Layout("uri"), new Regex("^.*/hello/.*$"))
-  val default = new Default[Layout](Layout("default"))
+  val uriAndMethod = new UriAndMethodMatches[DefaultLayout](DefaultLayout("uriAndMethod"), POST, new Regex("^.*/hello/.*$"))
+  val uriMatches = new UriMatches[DefaultLayout](DefaultLayout("uri"), new Regex("^.*/hello/.*$"))
+  val default = new Default[DefaultLayout](DefaultLayout("default"))
 
   def resolver(request: Request): Option[Layout] = {
       var layout: Layout = null
@@ -53,15 +53,15 @@ class TemplateRegistryTest extends FunSuite {
   TemplateRegistry.suffixResolver = this.suffixResolver(_)
 
   test("get default activeLayout") {
-    assert("default" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.name)
+    assert("default" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/worldy/world", Map(), null)).get.asInstanceOf[DefaultLayout].name)
   }
 
   test("get URI specific activeLayout") {
-    assert("uri" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/hello/", Map(), null)).get.name)
+    assert("uri" == TemplateRegistry.defaultLayout(new DummyRequest(GET, "/hello/", Map(), null)).get.asInstanceOf[DefaultLayout].name)
   }
 
   test("get URI AND Method specific activeLayout") {
-    assert("uriAndMethod" == TemplateRegistry.defaultLayout(new DummyRequest(POST, "/hello/", Map(), null)).get.name)
+    assert("uriAndMethod" == TemplateRegistry.defaultLayout(new DummyRequest(POST, "/hello/", Map(), null)).get.asInstanceOf[DefaultLayout].name)
   }
 
   test("get 2 suffixes") {

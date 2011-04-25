@@ -28,31 +28,11 @@ class ScalateViewRenderer extends BrowserViewRenderer {
 
     Layout.activeLayout(request) match{
       case None => response.getWriter.write(viewValue)
-      case Some(layout) => renderLayout(layout, request, response, model, viewValue)
+      case Some(layout) => layout.render(request, response, layout.layoutModel.model(request, model, viewValue))
     }
 
     if (request.getMethod == GET) {
       request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
     }
   }
-
-  private def renderLayout(layout: Layout, request: Request, response: Response, viewModel: Map[String, Any], view: String) {
-    val engine = RenderEngine.getEngine
-    var layoutModel = layout.layoutModel.model(request, viewModel, view)
-
-    val parent = TemplateRegistry.templateResolver.resolveLayout(request, layout)
-    val stringWriter = new StringWriter
-    val writer: PrintWriter = {
-      layout.parentLayout match{
-        case None => response.getWriter
-        case Some(parent) => new PrintWriter(stringWriter)
-      }
-    }
-
-    val responseContext = new BowlerRenderContext(TemplateRegistry.templateResolver.resolveLayout(request, layout).uri, engine, writer)
-    responseContext.render(parent.uri, layoutModel.toMap)
-    if (layout.parentLayout != None)
-      renderLayout(layout.parentLayout.get, request, response, viewModel, stringWriter.toString)
-  }
-
 }

@@ -13,14 +13,14 @@ import org.bowlerframework.{GET, Request}
  */
 
 class LayoutTest extends FunSuite{
-  val parentLayout = Layout("default", None, new NoopLayoutModel)
+  val parentLayout = DefaultLayout("default", None, new NoopLayoutModel)
 
   def resolver(request: Request): Option[Layout] = Option(parentLayout)
   TemplateRegistry.defaultLayout = resolver(_)
 
   test("layout bug - double nested Some()"){
     Layout.activeLayout(new DummyRequest(GET, "/LayoutTest", Map(), null)) match{
-      case Some(layout) => assert(layout.name == "default")
+      case Some(layout) => assert(layout.asInstanceOf[DefaultLayout].name == "default")
       case None => fail
     }
   }

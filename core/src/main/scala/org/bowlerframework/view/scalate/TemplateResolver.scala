@@ -38,10 +38,10 @@ trait TemplateResolver {
    * </ol>
    *
    */
-  def resolveLayout(request: Request, layout: Layout): Template = {
+  def resolveLayout(request: Request, layout: String): Template = {
     if (!TemplateRegistry.rootLayoutPackageOrFolder.endsWith("/"))
       TemplateRegistry.rootLayoutPackageOrFolder = TemplateRegistry.rootLayoutPackageOrFolder + "/"
-    return resolveTemplate(request, TemplateRegistry.rootLayoutPackageOrFolder + layout.name)
+    return resolveTemplate(request, TemplateRegistry.rootLayoutPackageOrFolder + layout)
   }
 
   /**Order of preference for template resolution should be (this is with an "absolute path", except for selector and locale):<br/>

@@ -2,10 +2,10 @@ package org.bowlerframework.view.scalate.selectors
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.view.scalate.Layout
 import util.matching.Regex
 import org.bowlerframework.extractors._
 import org.bowlerframework.{POST, GET}
+import org.bowlerframework.view.scalate.{DefaultLayout, Layout}
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +17,7 @@ import org.bowlerframework.{POST, GET}
 
 class ExtractorsTest extends FunSuite {
   test("defaultLayoutSelector") {
-    val selector = new Default[Layout](Layout("default"))
+    val selector = new Default[DefaultLayout](DefaultLayout("default"))
 
     makeRequest(Map()) match{
       case selector(layout) => assert(layout.name == "default")
@@ -26,33 +26,33 @@ class ExtractorsTest extends FunSuite {
 
 
   test("headerContainsLayoutSelector") {
-    val selector = new HeadersContain[Layout](Layout("default"), Map("accept" -> "application/json"))
+    val selector = new HeadersContain[DefaultLayout](DefaultLayout("default"), Map("accept" -> "application/json"))
     makeRequest(Map()) match{
       case selector(layout) => fail
       case _ => {}//expected
     }
 
-    val sel = new HeadersContain[Layout](Layout("default"), Map("accept" -> "text/html"))
+    val sel = new HeadersContain[DefaultLayout](DefaultLayout("default"), Map("accept" -> "text/html"))
     makeRequest(Map()) match{
       case sel(layout) => assert(layout.name == "default")
     }
   }
 
   test("HeaderLayoutSelector") {
-    val selector = new HeadersMatch[Layout](Layout("default"), Map("accept" -> new Regex("^.*application/json.*$")))
+    val selector = new HeadersMatch[DefaultLayout](DefaultLayout("default"), Map("accept" -> new Regex("^.*application/json.*$")))
     makeRequest(Map()) match{
       case selector(layout) => fail
       case _ => {}//expected
     }
 
-    val sel = new HeadersMatch[Layout](Layout("default"), Map("accept" -> new Regex("^.*text/html.*$")))
+    val sel = new HeadersMatch[DefaultLayout](DefaultLayout("default"), Map("accept" -> new Regex("^.*text/html.*$")))
     makeRequest(Map()) match{
       case sel(layout) => assert(layout.name == "default")
     }
   }
 
   test("uri matcher selector") {
-    val selector = new UriMatches[Layout](Layout("default"), new Regex("^.*/hello/.*$"))
+    val selector = new UriMatches[DefaultLayout](DefaultLayout("default"), new Regex("^.*/hello/.*$"))
     makeRequest(Map()) match{
       case selector(layout) => fail
       case _ => {}//expected
@@ -64,7 +64,7 @@ class ExtractorsTest extends FunSuite {
   }
 
   test("uri & method matcher selector") {
-    val selector = new UriAndMethodMatches[Layout](Layout("default"), GET, new Regex("^.*/hello/.*$"))
+    val selector = new UriAndMethodMatches[DefaultLayout](DefaultLayout("default"), GET, new Regex("^.*/hello/.*$"))
     makeRequest(Map()) match{
       case selector(layout) => fail
       case _ => {}//expected
