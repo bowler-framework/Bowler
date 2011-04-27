@@ -65,7 +65,7 @@ class ScalateViewRendererTest extends FunSuite {
 
 class TestLayoutModel extends LayoutModel {
 
-  def model(request: Request, viewIdAndValue: (String, String)) = {
+  def model(request: Request, viewModel: Map[String, Any], viewIdAndValue: (String, String)) = {
     Map("title" -> request.getMappedPath.path, viewIdAndValue._1 -> viewIdAndValue._2)
   }
 

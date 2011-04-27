@@ -27,7 +27,7 @@ class ScalateViewRenderer extends BrowserViewRenderer {
 
     Layout.activeLayout(request) match{
       case None => response.getWriter.write(viewValue)
-      case Some(layout) => layout.render(request, response, viewValue)
+      case Some(layout) => layout.render(request, response, model, viewValue)
     }
 
     if (request.getMethod == GET)

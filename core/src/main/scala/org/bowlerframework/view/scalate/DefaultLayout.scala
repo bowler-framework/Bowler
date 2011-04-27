@@ -15,11 +15,11 @@ class DefaultLayout(val name: String, viewId: String = "doLayout", parent: Optio
 
   override def parentLayout = parent
 
-  def render(request: Request, response: Response, childView: String) = {
+  def render(request: Request, response: Response, viewModel: Map[String, Any], childView: String) = {
     val model = {
       layoutModel match{
         case None => Map(viewId -> childView)
-        case Some(layoutModel) => layoutModel.model(request, Tuple2(viewId, childView))
+        case Some(layoutModel) => layoutModel.model(request, viewModel, Tuple2(viewId, childView))
       }
     }
     val stringWriter = new StringWriter
@@ -34,7 +34,7 @@ class DefaultLayout(val name: String, viewId: String = "doLayout", parent: Optio
     val responseContext = new BowlerRenderContext(parent.uri, engine, writer)
     responseContext.render(parent.uri, model)
     if (parentLayout != None)
-      parentLayout.get.render(request, response, stringWriter.toString)
+      parentLayout.get.render(request, response, viewModel, stringWriter.toString)
   }
 
 }

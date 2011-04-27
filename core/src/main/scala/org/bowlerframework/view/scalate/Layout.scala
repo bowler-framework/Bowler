@@ -13,7 +13,7 @@ import org.bowlerframework.{Response, Request, RequestScope}
 
 trait Layout{
   def parentLayout: Option[Layout] = None
-  def render(request: Request, response: Response, childView: String)
+  def render(request: Request, response: Response, viewModel: Map[String, Any], childView: String)
 }
 
 

@@ -12,12 +12,12 @@ import java.io.{PrintWriter, StringWriter}
  * To change this template use File | Settings | File Templates.
  */
 
-class SqueryLayout(componentCreator: (Request) => Component, viewSelector: String, parent: Option[Layout] = None) extends Layout{
+class SqueryLayout(componentCreator: (Map[String, Any]) => Component, viewSelector: String, parent: Option[Layout] = None) extends Layout{
 
   override def parentLayout = parent
 
-  def render(request: Request, response: Response, childView: String) = {
-    val component = componentCreator(request)
+  def render(request: Request, response: Response, viewModel: Map[String, Any], childView: String) = {
+    val component = componentCreator(viewModel)
     component.$(viewSelector).contents = childView
 
     val stringWriter = new StringWriter
@@ -30,6 +30,6 @@ class SqueryLayout(componentCreator: (Request) => Component, viewSelector: Strin
 
     writer.write(component.render.toString)
     if(parentLayout.get != None)
-      parentLayout.get.render(request, response, stringWriter.toString)
+      parentLayout.get.render(request, response, viewModel, stringWriter.toString)
   }
 }
