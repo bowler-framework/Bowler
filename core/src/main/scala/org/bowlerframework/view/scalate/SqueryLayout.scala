@@ -2,7 +2,8 @@ package org.bowlerframework.view.scalate
 
 import org.bowlerframework.{Response, Request}
 import org.bowlerframework.view.squery.Component
-import java.io.{PrintWriter, StringWriter}
+import java.io.{StringReader, PrintWriter, StringWriter}
+import org.xml.sax.SAXParseException
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +19,11 @@ class SqueryLayout(componentCreator: (Map[String, Any]) => Component, viewSelect
 
   def render(request: Request, response: Response, viewModel: Map[String, Any], childView: String) = {
     val component = componentCreator(viewModel)
-    component.$(viewSelector).contents = childView
+    try{
+      component.$(viewSelector).contents = scala.xml.XML.load(new StringReader(childView))
+    }catch{
+      case e: SAXParseException => component.$(viewSelector).contents = childView
+    }
 
     val stringWriter = new StringWriter
     val writer: PrintWriter = {
@@ -29,7 +34,7 @@ class SqueryLayout(componentCreator: (Map[String, Any]) => Component, viewSelect
     }
 
     writer.write(component.render.toString)
-    if(parentLayout.get != None)
+    if(parentLayout != None)
       parentLayout.get.render(request, response, viewModel, stringWriter.toString)
   }
 }
