@@ -1,7 +1,7 @@
 package org.bowlerframework.view.scalate
 
 import org.bowlerframework.{Response, Request}
-import org.bowlerframework.view.squery.Component
+import org.bowlerframework.view.scuery.Component
 import java.io.{StringReader, PrintWriter, StringWriter}
 import org.xml.sax.SAXParseException
 
@@ -13,7 +13,7 @@ import org.xml.sax.SAXParseException
  * To change this template use File | Settings | File Templates.
  */
 
-class SqueryLayout(componentCreator: (Map[String, Any]) => Component, viewSelector: String, parent: Option[Layout] = None) extends Layout{
+class ScueryLayout(componentCreator: (Map[String, Any]) => Component, viewSelector: String, parent: Option[Layout] = None) extends Layout{
 
   override def parentLayout = parent
 

@@ -25,9 +25,9 @@ import org.bowlerframework.model.{ModelValidatorBuilder, DefaultModelValidator}
  */
 class Bootstrap {
   // parent layout, that uses a LayoutModel to enrich the layout based on request if needed.
-  val parentLayout = Layout("default", None, new ParentLayoutModel)
+  val parentLayout = DefaultLayout("default", "doLayout", None, Some(new ParentLayoutModel))
 
-  def resolver(request: Request): Option[Layout] = Option(parentLayout)
+  def resolver(request: Request): Option[DefaultLayout] = Option(parentLayout)
   TemplateRegistry.defaultLayout = resolver(_)
 
   // Register the WidgetTransformer so that we can look up Widgets for pages by ID

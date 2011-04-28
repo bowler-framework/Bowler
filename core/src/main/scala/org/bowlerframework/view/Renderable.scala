@@ -1,7 +1,7 @@
 package org.bowlerframework.view
 
 import org.bowlerframework.{BowlerConfigurator, Response, RequestScope, Request}
-import squery.{MarkupContainer, ViewComponentRegistry}
+import scuery.{MarkupContainer, ViewComponentRegistry}
 
 /**
  * Created by IntelliJ IDEA.

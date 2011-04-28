@@ -1,7 +1,7 @@
 package org.bowlerframework.examples
 
-import org.bowlerframework.view.squery.component.ValidationFeedbackPanel._
-import org.bowlerframework.view.squery.Component
+import org.bowlerframework.view.scuery.component.ValidationFeedbackPanel._
+import org.bowlerframework.view.scuery.Component
 import org.bowlerframework.RequestScope
 
 /**

@@ -1,6 +1,6 @@
-package org.bowlerframework.view.squery.component
+package org.bowlerframework.view.scuery.component
 
-import org.bowlerframework.view.squery.Component
+import org.bowlerframework.view.scuery.Component
 import org.bowlerframework.{RequestScope, Request}
 import xml.NodeSeq
 

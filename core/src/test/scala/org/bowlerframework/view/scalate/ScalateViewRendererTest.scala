@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import org.bowlerframework.view.ViewModel
 import org.bowlerframework.{GET, Request, MappedPath}
-import org.bowlerframework.view.squery.stub.{HeaderAndDivComponent, MySimpleComponent}
+import org.bowlerframework.view.scuery.stub.{HeaderAndDivComponent, MySimpleComponent}
 import java.io.StringReader
 
 /**
@@ -63,7 +63,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render view with Squery Layout"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(new SqueryLayout({(model: Map[String, Any]) => new MySimpleComponent}, "body", None))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(new ScueryLayout({(model: Map[String, Any]) => new MySimpleComponent}, "body", None))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -75,7 +75,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render view with nested Squery Layout"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(new SqueryLayout({(model: Map[String, Any]) => new HeaderAndDivComponent}, "div", Some(new SqueryLayout({(model: Map[String, Any]) => new MySimpleComponent}, "body", None))))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(new ScueryLayout({(model: Map[String, Any]) => new HeaderAndDivComponent}, "div", Some(new ScueryLayout({(model: Map[String, Any]) => new MySimpleComponent}, "body", None))))}
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))
     request.setMappedPath(new MappedPath("/simple", false))
@@ -88,7 +88,7 @@ class ScalateViewRendererTest extends FunSuite {
   }
 
   test("render with nested Squery Layout inside DefaultLayout"){
-    TemplateRegistry.defaultLayout = {(request: Request) => Option(new SqueryLayout({(model: Map[String, Any]) => new HeaderAndDivComponent}, "div", Some(DefaultLayout("parent", None))))}
+    TemplateRegistry.defaultLayout = {(request: Request) => Option(new ScueryLayout({(model: Map[String, Any]) => new HeaderAndDivComponent}, "div", Some(DefaultLayout("parent", None))))}
 
     val request = makeRequest("/simple/")
     request.setLocales(List("es", "se"))

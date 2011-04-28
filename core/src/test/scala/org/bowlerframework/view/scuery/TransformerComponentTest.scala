@@ -1,4 +1,4 @@
-package org.bowlerframework.view.squery
+package org.bowlerframework.view.scuery
 
 import org.scalatest.FunSuite
 import stub.{ConcreteInheritanceCompositionComponent, ComposedPageComponent, SimpleTransformingComponent}

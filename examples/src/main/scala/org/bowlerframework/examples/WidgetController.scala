@@ -3,7 +3,7 @@ package org.bowlerframework.examples
 import org.bowlerframework.controller.{Controller, LayoutAware}
 import org.bowlerframework.model.{ ParameterMapper, Validations}
 import org.bowlerframework.view.{Renderable, ViewPath}
-import org.bowlerframework.view.scalate.Layout
+import org.bowlerframework.view.scalate.DefaultLayout
 import org.bowlerframework._
 
 /**
@@ -17,9 +17,9 @@ import org.bowlerframework._
  */
 
 class WidgetController extends Controller with ParameterMapper with Validations with Renderable with LayoutAware {
-  val parentLayout = Layout("default", None, new ParentLayoutModel)
+  val parentLayout = DefaultLayout("default", "doLayout", None, Some(new ParentLayoutModel))
   // this is a childLayout for parentLayout, and has the parent set on it, as shown.
-  val composableLayout = Layout("child", Some(parentLayout))
+  val composableLayout = DefaultLayout("child", Some(parentLayout))
 
   // simple, no args render, just renders the root (or http 204 for JSON)
   get("/")((request, response) => render)
@@ -69,7 +69,7 @@ class WidgetController extends Controller with ParameterMapper with Validations 
 
 
     // form for creating a new Widget - passes in a new, empty widget to be filled out.
-  get("/widgets/new/squery")((request, response) => {renderWith(new SqueryWidgetPage(new NewWidgetForm),Widget(0, null, null, null))})
+  get("/widgets/new/scuery")((request, response) => {renderWith(new ScueryWidgetPage(new NewWidgetForm),Widget(0, null, null, null))})
 
   // HTTP POST for creating new Widgets.
   post("/widgets")((request, response) =>{

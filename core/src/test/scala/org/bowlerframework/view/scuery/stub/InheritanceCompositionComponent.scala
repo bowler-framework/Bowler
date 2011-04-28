@@ -1,6 +1,6 @@
-package org.bowlerframework.view.squery.stub
+package org.bowlerframework.view.scuery.stub
 
-import org.bowlerframework.view.squery.Component
+import org.bowlerframework.view.scuery.Component
 
 /**
  * Created by IntelliJ IDEA.

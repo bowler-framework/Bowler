@@ -1,6 +1,6 @@
 package org.bowlerframework.examples
 
-import org.bowlerframework.view.squery.{Component,MarkupContainer}
+import org.bowlerframework.view.scuery.{Component,MarkupContainer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@ import org.bowlerframework.view.squery.{Component,MarkupContainer}
  * To change this template use File | Settings | File Templates.
  */
 
-class SqueryWidgetPage(component: MarkupContainer) extends Component{
+class ScueryWidgetPage(component: MarkupContainer) extends Component{
 
   $(".tabs-container").contents = component.render
 

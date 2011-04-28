@@ -12,10 +12,10 @@ import org.bowlerframework.view.scalate.{ComponentRenderSupport, RenderEngine, L
  */
 
 class ParentLayoutModel extends LayoutModel{
-  def model(request: Request, viewModel: Map[String, Any], childView: String): Map[String, Any] = {
+  def model(request: Request, viewModel: Map[String, Any], viewIdAndValue: Tuple2[String, String]): Map[String, Any] = {
     val map = new HashMap[String, Any]
     // lets start by adding the childView so it's guaranteed to appear!
-    map += "doLayout" -> childView
+    map += viewIdAndValue._1 -> viewIdAndValue._2
 
     // lets see if we want to add a tab panel to this layout!
     val regex = new Regex("^.*/composable/.*$")

@@ -1,4 +1,4 @@
-package org.bowlerframework.view.squery.stub
+package org.bowlerframework.view.scuery.stub
 
 /**
  * Created by IntelliJ IDEA.

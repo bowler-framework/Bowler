@@ -3,10 +3,10 @@ package org.bowlerframework.view
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.{DummyResponse, DummyRequest}
 import scalate.{DefaultLayout, Layout, TemplateRegistry}
-import squery.stub.{ComposedPageComponent, SimpleTransformingComponent}
+import scuery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import java.io.{StringReader, StringWriter}
 import org.bowlerframework.{Request, GET, Response, MappedPath}
-import squery.ViewComponentRegistry
+import scuery.ViewComponentRegistry
 
 /**
  * Created by IntelliJ IDEA.

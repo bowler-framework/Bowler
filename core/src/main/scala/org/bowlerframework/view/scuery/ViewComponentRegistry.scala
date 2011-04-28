@@ -1,4 +1,4 @@
-package org.bowlerframework.view.squery
+package org.bowlerframework.view.scuery
 
 import org.bowlerframework.view.ViewPath
 import collection.mutable.HashMap
