@@ -23,6 +23,7 @@ trait LayoutAware{ this: Controller => {
     }
   }
 
+
   private def setup(request: Request): Unit = {
     TemplateRegistry.controllerLayouts.get(this.getClass) match{
       case None => {
