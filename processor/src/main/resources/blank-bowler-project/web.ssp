@@ -1,3 +1,4 @@
+<%@ var mainpackage:String %>
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
@@ -31,7 +32,7 @@
  		<filter-class>org.bowlerframework.http.BowlerFilter</filter-class>
 		<init-param>
 			<param-name>bootstrapClass</param-name>
-			<param-value>bowlerquickstart.Bootstrap</param-value>
+			<param-value>${mainpackage}.Bootstrap</param-value>
  		</init-param>
  	</filter>
 
