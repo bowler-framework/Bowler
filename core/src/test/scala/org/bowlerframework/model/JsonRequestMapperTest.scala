@@ -4,6 +4,7 @@ import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
 import java.util.Date
 import org.bowlerframework.{GET, POST}
+import com.recursivity.commons.bean.GenericTypeDefinition
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,6 +24,15 @@ class JsonRequestMapperTest extends FunSuite {
 
   test("unmarshall child with nameHint") {
     val address = mapper.getValue[Address](makeRequest(json), "address")
+    assert(address != null)
+    assert(address.isInstanceOf[Address])
+    assert(address.street == "Bulevard")
+    assert(address.city == "Helsinki")
+  }
+
+  test("unmarshall child with nameHint - GenericTypeDef") {
+    val address = mapper.getValueWithTypeDefinition(
+      GenericTypeDefinition("org.bowlerframework.model.Address", None),makeRequest(json), "address").asInstanceOf[Address]
     assert(address != null)
     assert(address.isInstanceOf[Address])
     assert(address.street == "Bulevard")
@@ -48,8 +58,62 @@ class JsonRequestMapperTest extends FunSuite {
     assert(person.children(1).birthdate == None)
 
     assert(person.children.size == 2)
+  }
+
+
+  test("without nameHint - GenericTypeDef") {
+    val person = mapper.getValueWithTypeDefinition(
+      GenericTypeDefinition("org.bowlerframework.model.Person", None),makeRequest(json)).asInstanceOf[Person]
+    assert(person != null)
+    assert(person.isInstanceOf[Person])
+    assert(person.name == "joe")
+    assert(person.address.street == "Bulevard")
+    assert(person.address.city == "Helsinki")
+
+    assert(person.children(0).name == "Mary")
+    assert(person.children(1).name == "Mazy")
+
+    assert(person.children(0).age == 5)
+    assert(person.children(1).age == 3)
+
+    assert(person.children(0).birthdate.get.isInstanceOf[Date])
+    assert(person.children(1).birthdate == None)
+
+    assert(person.children.size == 2)
+  }
+
+  test("Option with result Some") {
+    val address = mapper.getValue[Option[Address]](makeRequest(json), "address")
+    assert(address != null)
+    assert(address.get.isInstanceOf[Address])
+    assert(address.get.street == "Bulevard")
+    assert(address.get.city == "Helsinki")
 
   }
+
+  test("Option with result None") {
+    val address = mapper.getValue[Option[Address]](makeRequest("{}"), "address")
+    assert(address != null)
+    assert(address == None)
+  }
+
+  test("Option with result Some - GenericTypeDef") {
+    val address = mapper.getValueWithTypeDefinition(optTypeDef, makeRequest(json), "address").asInstanceOf[Option[Address]]
+    assert(address != null)
+    assert(address.get.isInstanceOf[Address])
+    assert(address.get.street == "Bulevard")
+    assert(address.get.city == "Helsinki")
+  }
+
+  test("Option with result None - GenericTypeDef") {
+    val address = mapper.getValueWithTypeDefinition(optTypeDef, makeRequest("{}"), "address").asInstanceOf[Option[Address]]
+    assert(address != null)
+    assert(address == None)
+  }
+
+  val optTypeDef = GenericTypeDefinition("scala.Option", Some(List(GenericTypeDefinition("org.bowlerframework.model.Address", None))))
+
+
 
   def makeRequest(body: String) = new DummyRequest(POST, "/", Map(), body)
 

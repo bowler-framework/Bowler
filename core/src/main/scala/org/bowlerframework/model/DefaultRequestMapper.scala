@@ -17,6 +17,14 @@ class DefaultRequestMapper extends RequestMapper {
 
   def httpRequest = _requestToMap value
 
+  def getValueWithTypeDefinition(typeDefinition: GenericTypeDefinition, request: Request, nameHint: String): Any = {
+    val map = new HashMap[String, Any]
+    request.getParameterMap.foreach(f => map.put(f._1, f._2))
+    _requestToMap.withValue(request) {
+      return getValue[Any](map, nameHint, typeDefinition)
+    }
+  }
+
   def getValue[T](request: Request, nameHint: String = null)(implicit m: Manifest[T]): T = {
     val map = new HashMap[String, Any]
     request.getParameterMap.foreach(f => map.put(f._1, f._2))
@@ -40,9 +48,9 @@ class DefaultRequestMapper extends RequestMapper {
     if (primitive != None)
       return primitive
 
-    val cls = Class.forName(typeDef.clazz)
+    val cls = typeDef.definedClass
 
-    if (classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])))
+    if (classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && typeDef.genericTypes.get(0).definedClass.isAssignableFrom(classOf[FileItem])))
       return getFileValues[T](request, nameHint, typeDef)
 
     if (typeDef.genericTypes == None) {
@@ -95,7 +103,7 @@ class DefaultRequestMapper extends RequestMapper {
 
   private def getGenerifiedValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
     val newTypeDef = typeDef.genericTypes.get(0)
-    val clazz = Class.forName(typeDef.clazz)
+    val clazz = typeDef.definedClass
     if (clazz.equals(classOf[Option[_]])) {
       val value = getValue[Any](request, nameHint, newTypeDef)
       if (value != None) {
@@ -149,7 +157,7 @@ class DefaultRequestMapper extends RequestMapper {
 
 
   private def getFileValues[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
-    val cls = Class.forName(typeDef.clazz)
+    val cls = typeDef.definedClass
     if (classOf[FileItem].isAssignableFrom(cls)) {
       if (nameHint != null)
         return request(nameHint).asInstanceOf[T]
@@ -167,7 +175,7 @@ class DefaultRequestMapper extends RequestMapper {
       })
       return response
 
-    } else if (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && Class.forName(typeDef.genericTypes.get(0).clazz).isAssignableFrom(classOf[FileItem])) {
+    } else if (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && typeDef.genericTypes.get(0).definedClass.isAssignableFrom(classOf[FileItem])) {
       if (nameHint != null)
         return request(nameHint).asInstanceOf[T]
       var response: T = None.asInstanceOf[T]

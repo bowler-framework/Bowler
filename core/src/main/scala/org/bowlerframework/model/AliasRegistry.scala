@@ -80,7 +80,7 @@ object AliasRegistry {
    */
   def getModelAliasKey(typeDef: GenericTypeDefinition): Option[String] = {
     try {
-      val cls = Class.forName(typeDef.clazz)
+      val cls = typeDef.definedClass
       if (classOf[TraversableLike[_, _]].isAssignableFrom(cls) || classOf[java.util.Collection[_]].isAssignableFrom(cls)) {
         if (typeDef.genericTypes != None) {
           return Some(typeDef.genericTypes.get.head.toSimpleString(true) + "s")

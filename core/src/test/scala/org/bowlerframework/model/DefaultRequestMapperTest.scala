@@ -2,9 +2,9 @@ package org.bowlerframework.model
 
 
 import org.scalatest.FunSuite
-import com.recursivity.commons.bean.{StringValueTransformer, TransformerRegistry}
 import org.bowlerframework.jvm.DummyRequest
 import org.bowlerframework.{GET, POST, HttpMethod}
+import com.recursivity.commons.bean.{GenericTypeDefinition, StringValueTransformer, TransformerRegistry}
 
 /**
  * Created by IntelliJ IDEA.
@@ -195,6 +195,24 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
   }
 
+  test("Option with Nested List - with GenericTypeDefinition") {
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename", "beans" -> List("1"))
+    val request = makeRequest(map)
+    val beansOption = mapper.getValueWithTypeDefinition(GenericTypeDefinition("scala.Option",
+      Some(List(GenericTypeDefinition("scala.List",
+        Some(List(GenericTypeDefinition("org.bowlerframework.model.MyBean",None))))))), request).asInstanceOf[Option[List[MyBean]]]
+    assert(beansOption.isInstanceOf[Option[List[MyBean]]])
+    val beans = beansOption.get
+    assert(beans.size == 1)
+    assert(beans(0).isInstanceOf[MyBean])
+
+    val bean = beans(0)
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
   test("Test List with nameHint") {
     TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
     val map = Map("name" -> "somename", "beans" -> List("1"))
@@ -231,6 +249,17 @@ class DefaultRequestMapperTest extends FunSuite {
     val map = Map("name" -> "somename", "beans" -> List("2"))
     val request = makeRequest(GET, map)
     val beans = mapper.getValue[Option[List[MyBean]]](request)
+    println(beans)
+    assert(beans == None)
+  }
+
+  test("empty Option[List] should return None - with GenericTypeDefinition") {
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename", "beans" -> List("2"))
+    val request = makeRequest(GET, map)
+    val beans = mapper.getValueWithTypeDefinition(GenericTypeDefinition("scala.Option",
+      Some(List(GenericTypeDefinition("scala.List",
+        Some(List(GenericTypeDefinition("org.bowlerframework.model.MyBean",None))))))), request).asInstanceOf[Option[List[MyBean]]]
     println(beans)
     assert(beans == None)
   }
@@ -286,6 +315,22 @@ class DefaultRequestMapperTest extends FunSuite {
     val map = Map("name" -> "somename", "beans" -> List("1"))
     val request = makeRequest(map)
     val beans = mapper.getValue[java.util.TreeSet[MyBean]](request)
+    assert(beans.isInstanceOf[java.util.TreeSet[MyBean]])
+    assert(beans.size == 1)
+    val bean = beans.iterator.next
+    assert(bean.isInstanceOf[MyBean])
+    assert(bean.id == 1l)
+    assert(bean.name == "someBean")
+    assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+
+  test("java.util.TreeSet - with GenericTypeDefinition") {
+    TransformerRegistry.registerTransformer(classOf[MyBean], classOf[MyBeanTransformer])
+    val map = Map("name" -> "somename", "beans" -> List("1"))
+    val request = makeRequest(map)
+    val beans = mapper.getValueWithTypeDefinition(GenericTypeDefinition("java.util.TreeSet",
+      Some(List(GenericTypeDefinition("org.bowlerframework.model.MyBean", None)))), request).asInstanceOf[java.util.TreeSet[MyBean]]
     assert(beans.isInstanceOf[java.util.TreeSet[MyBean]])
     assert(beans.size == 1)
     val bean = beans.iterator.next
