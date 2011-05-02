@@ -86,7 +86,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
     val scalatra = "org.scalatra" %% "scalatra" % "2.0.0.M3"
     val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3"
-    val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.5.1"
+    val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.5.3"
     val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.3"
     // this dependency is a temporarily published dependency with a forked lift-json to fix a serious bug
