@@ -1,9 +1,9 @@
 package org.bowlerframework.model
 
 import net.liftweb.json.JsonParser._
-import org.bowlerframework.{GET, DELETE, Request}
 import com.recursivity.commons.bean.GenericTypeDefinition
 import net.liftweb.json.{MappingException, Extraction, TypeInfo}
+import org.bowlerframework.{Session, GET, DELETE, Request}
 
 /**
  * RequestMapper for JSON requests.
@@ -25,6 +25,11 @@ class JsonRequestMapper extends RequestMapper {
   }
 
   def getValueWithTypeDefinition(typeDefinition: GenericTypeDefinition, request: Request, nameHint: String): Any = {
+    val cls = typeDefinition.definedClass
+    if(classOf[Request].isAssignableFrom(cls))
+      return request
+    if(classOf[Session].isAssignableFrom(cls))
+      return request.getSession
     if (request.getMethod == GET || request.getMethod == DELETE) {
       val mapper = new DefaultRequestMapper
       return mapper.getValueWithTypeDefinition(typeDefinition, request, nameHint)

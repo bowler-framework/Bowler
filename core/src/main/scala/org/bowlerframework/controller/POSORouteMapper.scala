@@ -53,9 +53,9 @@ object POSORouteMapper extends Renderable{
   def createClosure(member: Member, service: AnyRef): Function2[Request, Response, Any] = {
     val cls: Class[_] = service.getClass
     val argTypes = member.parameters.map(_.paramType.definedClass)
-    val methods = cls.getMethods.filter(p => p.getName.equals(member.name))
+    val methods = cls.getMethods.filter(p => p.getName.equals(member.reflectedName))
     val function = methods.find(method => {
-      if(method.getReturnType == member.returnType.definedClass){
+      if(member.returnType.clazz == "scala.Unit" || (method.getReturnType == member.returnType.definedClass)){
         if(method.getParameterTypes.length == argTypes.size){
           var correct = true
           var i = 0
@@ -80,16 +80,38 @@ object POSORouteMapper extends Renderable{
       case Some(m) => {
         val closure = {(request: Request, response: Response) => {
           val mapper = BowlerConfigurator.getRequestMapper(request)
-          val args = {
-            if(mapper.isInstanceOf[JsonRequestMapper] && !(request.getMethod == GET || request.getMethod == DELETE))
-              member.parameters.map(parameter => mapper.getValueWithTypeDefinition(parameter.paramType, request)).toArray
+          val args: Array[java.lang.Object] = {
+            if(member.parameters == 0)
+              Array[java.lang.Object]()
+            else if(mapper.isInstanceOf[JsonRequestMapper] && !(request.getMethod == GET || request.getMethod == DELETE))
+              member.parameters.map(parameter => mapper.getValueWithTypeDefinition(parameter.paramType, request)).toArray.asInstanceOf[Array[java.lang.Object]]
             else
-              member.parameters.map(parameter => mapper.getValueWithTypeDefinition(parameter.paramType, request, parameter.name)).toArray
+              member.parameters.map(parameter => mapper.getValueWithTypeDefinition(parameter.paramType, request, parameter.name)).toArray.asInstanceOf[Array[java.lang.Object]]
           }
-          if(!isRenderable)
-            render(m.invoke(service, args))
-          else
-            m.invoke(service, args)
+          if(!isRenderable){
+            if(member.returnType.clazz != "scala.Unit"){
+              if(m.getParameterTypes.length == 0)
+                render(request, response, m.invoke(service))
+              else{
+                render(request, response, m.invoke(service, args: _* ))
+              }
+            }else{
+              if(m.getParameterTypes.length == 0){
+                m.invoke(service)
+                render(request, response)
+              }else{
+                m.invoke(service, args: _* )
+                render(request, response)
+              }
+            }
+          }else{
+            if(m.getParameterTypes.length == 0)
+              m.invoke(service)
+            else{
+              m.invoke(service, args: _* )
+            }
+
+          }
         }}
         return closure
       }

@@ -5,7 +5,7 @@ import org.apache.commons.fileupload.FileItem
 import util.DynamicVariable
 import collection.TraversableLike
 import collection.mutable.{MutableList, HashMap}
-import org.bowlerframework.{PUT, POST, Request}
+import org.bowlerframework.{Session, PUT, POST, Request}
 
 /**
  * Maps a single value from a request, for instance a bean from a request.
@@ -52,13 +52,16 @@ class DefaultRequestMapper extends RequestMapper {
 
     if (classOf[FileItem].isAssignableFrom(cls) || (classOf[Seq[_]].isAssignableFrom(cls) && typeDef.genericTypes != None && typeDef.genericTypes.get(0).definedClass.isAssignableFrom(classOf[FileItem])))
       return getFileValues[T](request, nameHint, typeDef)
+    if(classOf[Request].isAssignableFrom(cls))
+      return httpRequest.asInstanceOf[T]
+    if(classOf[Session].isAssignableFrom(cls))
+      return httpRequest.getSession.asInstanceOf[T]
 
     if (typeDef.genericTypes == None) {
       // deal with non-generics, non-files, non-primitives
       val alias = AliasRegistry(typeDef)
       var hintOfName: String = nameHint
       var dealiasedRequest = getDealiasedRequest(alias, request)
-      println("DefaultRequestMapper " + alias + " " + dealiasedRequest)
 
       if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
       else {
@@ -66,7 +69,17 @@ class DefaultRequestMapper extends RequestMapper {
           hintOfName.substring(alias.length + 1)
       }
 
-      val response = getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
+      val response = {
+        try{
+          getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
+        }catch{
+          case e: NoSuchElementException => {
+            if(hintOfName != null)
+              getValue[T](request, null, typeDef)
+            else throw e
+          }
+        }
+      }
       if (response == null && !TransformerRegistry(cls).equals(None) && (httpRequest.getMethod.equals(POST) || httpRequest.getMethod.equals(PUT))) {
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
       } else if (response == null && (!httpRequest.getMethod.equals(POST) || !httpRequest.getMethod.equals(PUT))) {
@@ -96,7 +109,7 @@ class DefaultRequestMapper extends RequestMapper {
         dealiasedRequest.put(key, f._2)
       }
     })
-    if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
+    //if (dealiasedRequest.keys.size == 0) dealiasedRequest = request
     return dealiasedRequest
   }
 
