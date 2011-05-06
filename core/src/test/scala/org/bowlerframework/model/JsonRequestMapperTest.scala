@@ -32,7 +32,7 @@ class JsonRequestMapperTest extends FunSuite {
 
   test("unmarshall child with nameHint - GenericTypeDef") {
     val address = mapper.getValueWithTypeDefinition(
-      GenericTypeDefinition("org.bowlerframework.model.Address", None),makeRequest(json), "address").asInstanceOf[Address]
+      GenericTypeDefinition("org.bowlerframework.model.Address", None), makeRequest(json), "address").asInstanceOf[Address]
     assert(address != null)
     assert(address.isInstanceOf[Address])
     assert(address.street == "Bulevard")
@@ -63,7 +63,7 @@ class JsonRequestMapperTest extends FunSuite {
 
   test("without nameHint - GenericTypeDef") {
     val person = mapper.getValueWithTypeDefinition(
-      GenericTypeDefinition("org.bowlerframework.model.Person", None),makeRequest(json)).asInstanceOf[Person]
+      GenericTypeDefinition("org.bowlerframework.model.Person", None), makeRequest(json)).asInstanceOf[Person]
     assert(person != null)
     assert(person.isInstanceOf[Person])
     assert(person.name == "joe")
@@ -111,8 +111,28 @@ class JsonRequestMapperTest extends FunSuite {
     assert(address == None)
   }
 
-  val optTypeDef = GenericTypeDefinition("scala.Option", Some(List(GenericTypeDefinition("org.bowlerframework.model.Address", None))))
+  test("BigDecimal with JDouble") {
+    val cash = mapper.getValue[Money](makeRequest(money))
+    assert(cash.currency == "SEK")
+    assert(cash.amount == new BigDecimal(new java.math.BigDecimal("3.14")))
 
+  }
+
+  test("BigDecimal with JInt") {
+    val cash = mapper.getValue[Money](makeRequest(intMoney))
+    assert(cash.currency == "SEK")
+    assert(cash.amount == new BigDecimal(new java.math.BigDecimal("3")))
+
+  }
+
+  test("BigDecimal with JString") {
+    val cash = mapper.getValue[Money](makeRequest(stringMoney))
+    assert(cash.currency == "SEK")
+    assert(cash.amount == new BigDecimal(new java.math.BigDecimal("3.14")))
+
+  }
+
+  val optTypeDef = GenericTypeDefinition("scala.Option", Some(List(GenericTypeDefinition("org.bowlerframework.model.Address", None))))
 
 
   def makeRequest(body: String) = new DummyRequest(POST, "/", Map(), body)
@@ -141,6 +161,27 @@ class JsonRequestMapperTest extends FunSuite {
            ]
          }
        """
+  val money = """
+         { "currency": "SEK",
+           "amount": 3.14
+         }
+       """
+
+  val intMoney = """
+         { "currency": "SEK",
+           "amount": 3
+         }
+       """
+
+  val stringMoney = """
+         { "currency": "SEK",
+           "amount": "3.14"
+         }
+       """
+
+}
+
+case class Money(currency: String, amount: BigDecimal) {
 
 }
 

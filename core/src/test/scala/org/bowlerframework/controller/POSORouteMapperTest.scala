@@ -101,7 +101,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":2,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":2,"name":"otherBean","decimal":"3.14"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.14")
     }
@@ -114,7 +114,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":3,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":3,"name":"otherBean","decimal":"3.15"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.15")
     }
@@ -127,7 +127,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean/8", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":4,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":4,"name":"otherBean","decimal":"3.16"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.16")
       assert(controller.id == 8L)
@@ -142,7 +142,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":2,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":2,"name":"otherBean","decimal":"3.14"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.14")
     }
@@ -155,7 +155,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":3,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":3,"name":"otherBean","decimal":"3.15"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.15")
     }
@@ -168,7 +168,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
 
     post("/poso/bean/9", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
       println(body)
-      assert("""{"id":4,"name":"otherBean","decimal":{"bigDecimal":{},"mc":{}}}""" == body)
+      assert("""{"id":4,"name":"otherBean","decimal":"3.17"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.17")
       assert(controller.id == 9L)

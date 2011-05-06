@@ -1,16 +1,25 @@
 package org.bowlerframework.model
 
-import net.liftweb.json.JsonParser._
+
 import com.recursivity.commons.bean.GenericTypeDefinition
-import net.liftweb.json.{MappingException, Extraction, TypeInfo}
 import org.bowlerframework.{Session, GET, DELETE, Request}
+import org.bowlerframework.view.json.BigDecimalSerializer
+import net.liftweb.json._
 
 /**
  * RequestMapper for JSON requests.
  */
 
 class JsonRequestMapper extends RequestMapper {
-  implicit val formats = net.liftweb.json.DefaultFormats
+
+  val hints = new ShortTypeHints(classOf[BigDecimal] :: Nil) {
+
+    override def deserialize: PartialFunction[(String, JObject), Any] = {
+      case ("BigDecimal", JObject(JField("currency", _) :: JField("amount", JInt(t)) :: Nil)) => BigDecimal(t.longValue)
+    }
+  }
+
+  implicit val formats = net.liftweb.json.DefaultFormats + new BigDecimalSerializer
 
   def getValue[T](request: Request, nameHint: String = null)(implicit m: Manifest[T]): T = {
     if (request.getMethod == GET || request.getMethod == DELETE) {

@@ -1,5 +1,6 @@
 package org.bowlerframework.view
 
+import json.BigDecimalSerializer
 import org.bowlerframework.{Response, Request}
 import net.liftweb.json.JsonAST._
 import net.liftweb.json.Extraction._
@@ -9,7 +10,7 @@ import org.bowlerframework.exception.HttpException
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
  */
 class JsonViewRenderer extends ViewRenderer {
-  implicit val formats = net.liftweb.json.DefaultFormats
+  implicit val formats = net.liftweb.json.DefaultFormats + new BigDecimalSerializer
 
   def onError(request: Request, response: Response, exception: Exception) = {
     if (classOf[HttpException].isAssignableFrom(exception.getClass)) {

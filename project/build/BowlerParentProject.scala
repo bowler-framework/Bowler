@@ -14,6 +14,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
     val scalaToolsRepo = "Scala-Tools repo" at "http://scala-tools.org/repo-releases/"
 
+
   class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
     val slf4jVersion = "1.6.0"
     val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test"
@@ -23,7 +24,6 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
     val sfl4japi = "org.slf4j" % "slf4j-api" % slf4jVersion
     val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"
-
 
 
 
