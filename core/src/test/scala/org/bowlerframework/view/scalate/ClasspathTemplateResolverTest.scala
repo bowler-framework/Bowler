@@ -171,6 +171,7 @@ class ClasspathTemplateResolverTest extends FunSuite {
     request.setLocales(List("es", "se"))
     request.setMappedPath(MappedPath("/widgets", false))
     val template = resolver.resolveViewTemplate(request)
+    println(template.uri)
     assert(template.uri == "/views/GET/widgets/index_ipad.ssp")
     assert(template.template == "ipad widgets")
   }

@@ -35,7 +35,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     var body: String = null
     BowlerConfigurator.get("/punctuation/:id", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        body = scope.request.getStringParameter("id")
+        body = scope.request.getStringParameter("id").getOrElse(null)
       }
     })
 
@@ -90,7 +90,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     var i: Int = 0
     BowlerConfigurator.get("/getIntParameter/:int", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        i = scope.request.getIntParameter("int")
+        i = scope.request.getIntParameter("int").getOrElse(234)
       }
     })
 
@@ -104,7 +104,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     var i: Long = 0l
     BowlerConfigurator.get("/getLongParameter/:long", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        i = scope.request.getIntParameter("long")
+        i = scope.request.getLongParameter("long").getOrElse(345345l)
       }
     })
 
@@ -117,7 +117,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     var i: Boolean = false
     BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        i = scope.request.getBooleanParameter("long")
+        i = scope.request.getBooleanParameter("long").getOrElse(false)
       }
     })
 
@@ -218,7 +218,7 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     BowlerConfigurator.post("/getRequestBodyAsString", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
         requestBody = scope.request.getRequestBodyAsString
-        content = ContentTypeResolver.contentType(scope.request.getAccept)
+        content = ContentTypeResolver.contentType(scope.request.getAccept.get)
       }
     })
     val headers = Map("accept" -> "application/json")

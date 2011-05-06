@@ -23,7 +23,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
     var body: String = null
     BowlerConfigurator.get("/hello/:name/:company", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        body = scope.request.getParameter("name") + " : " + scope.request.getParameter("company")
+        body = scope.request.getParameter("name").get + " : " + scope.request.getParameter("company").get
       }
     })
 
@@ -36,7 +36,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
     var body: String = null
     BowlerConfigurator.get("/say/*/to/*", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val list = scope.request.getParameterValues("splat")
+        val list = scope.request.getParameterValues("splat").getOrElse(null)
         body = list(0) + " " + list(1)
       }
     })
@@ -52,7 +52,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
 
     BowlerConfigurator.get(regex, new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val list = scope.request.getParameterValues("captures")
+        val list = scope.request.getParameterValues("captures").getOrElse(null)
         body = list(0) + " " + list(1)
       }
     })
@@ -66,7 +66,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
     var body: String = null
     BowlerConfigurator.get("/index", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        body = scope.request.getStringParameter("name")
+        body = scope.request.getStringParameter("name").getOrElse(null)
       }
     })
 
@@ -81,14 +81,14 @@ class SimpleRouteTest extends ScalatraFunSuite {
     var body: String = null
     BowlerConfigurator.get("/json", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val content = ContentTypeResolver.contentType(scope.request.getAccept)
+        val content = ContentTypeResolver.contentType(scope.request.getAccept.get)
         body = ContentTypeResolver.contentString(content)
       }
     })
 
     BowlerConfigurator.get("/html", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val content = ContentTypeResolver.contentType(scope.request.getAccept)
+        val content = ContentTypeResolver.contentType(scope.request.getAccept.get)
         body = ContentTypeResolver.contentString(content)
       }
     })
@@ -96,7 +96,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
 
     BowlerConfigurator.get("/xml", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val content = ContentTypeResolver.contentType(scope.request.getAccept)
+        val content = ContentTypeResolver.contentType(scope.request.getAccept.get)
         body = ContentTypeResolver.contentString(content)
       }
     })
@@ -123,7 +123,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
 
     def executeRoute(requestScope: RequestScope): Unit = {
       assert(m.toString.equals("Int"))
-      assert(func(Integer.parseInt(requestScope.request.getStringParameter("addValue")).asInstanceOf[R]) == 8)
+      assert(func(Integer.parseInt(requestScope.request.getStringParameter("addValue").get).asInstanceOf[R]) == 8)
     }
 
   }

@@ -8,7 +8,7 @@ class HeadersContain[T](item: T, headers: Map[String, String]) {
     var conditionsMet = true
     headers.iterator.foreach(tup => {
       try {
-        if (!request.getHeader(tup._1).contains(tup._2))
+        if (!request.getHeader(tup._1).getOrElse("").contains(tup._2))
           conditionsMet = false
       } catch {
         case e: NoSuchElementException => {

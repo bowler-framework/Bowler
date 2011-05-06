@@ -36,7 +36,7 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
     listResources(1, req, resp)
   })
   controller.get("/" + resourceName + "/page/:number")((req, resp) => {
-    listResources(req.getIntParameter("number"), req, resp)
+    listResources(req.getIntParameter("number").getOrElse(1), req, resp)
   })
 
   controller.get("/" + resourceName + "/:id")((req, resp) => renderBean(req, resp))
@@ -102,15 +102,14 @@ class CrudController[T <: {def id: K}, K](controller: InterceptingController, da
 
   def parseId(request: Request, idName: String): K = {
     return TransformerRegistry(dao.keyType).
-      getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(request.getStringParameter(idName)).getOrElse(throw new IllegalArgumentException("Cannot convert key to correct key type")).asInstanceOf[K]
+      getOrElse(throw new IllegalArgumentException("no StringValueTransformer registered for type " + dao.keyType.getName)).toValue(request.getStringParameter(idName).getOrElse("")).getOrElse(throw new IllegalArgumentException("Cannot convert key to correct key type")).asInstanceOf[K]
   }
 
   def listResources(page: Int, request: Request, response: Response) = {
-    try {
-      request.getSession.setAttribute("_bowlerListItems", request.getIntParameter("itemsInList"))
-    } catch {
-      case e: Exception => {} // do nothing, fallback to default behavior
-    }
+	request.getIntParameter("itemsInList") match{
+		case None => {}
+		case Some(count) => request.getSession.setAttribute("_bowlerListItems", count)
+	}
 
     val items = request.getSession.getAttribute[Int]("_bowlerListItems")
     // add check for request param of "itemsInList"

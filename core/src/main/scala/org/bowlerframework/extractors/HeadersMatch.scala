@@ -10,7 +10,7 @@ class HeadersMatch[T](item: T, headerSelectors: Map[String, Regex]) {
     var conditionsMet = true
     try {
       headerSelectors.iterator.foreach(tup => {
-        if (!tup._2.pattern.matcher(request.getHeader(tup._1)).matches)
+        if (!tup._2.pattern.matcher(request.getHeader(tup._1).getOrElse("")).matches)
           conditionsMet = false
       })
     } catch {

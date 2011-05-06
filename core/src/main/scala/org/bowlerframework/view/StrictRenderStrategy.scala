@@ -18,30 +18,26 @@ class StrictRenderStrategy(mappings: Map[String, () => ViewRenderer] =
                            "application/xhtml+xml" -> {() => new ScalateViewRenderer},
                            "*/*" -> {() => new JsonViewRenderer})) extends RenderStrategy{
   def resolveViewRenderer(request: Request): ViewRenderer = {
-    val accept = {
-      try{
-        request.getAccept
-      }catch{
-        case e: NoSuchElementException => throw new HttpException(406)
+    request.getAccept match{
+      case None => return JsonViewRenderer()
+      case Some(accept) => {
+        val tokenizer = {
+          if(accept.indexOf(";") > 0)
+            new StringTokenizer(accept.substring(0, accept.indexOf(";")).toLowerCase, ",")
+          else
+            new StringTokenizer(accept.toLowerCase, ",")
+        }
+
+        while(tokenizer.hasMoreTokens){
+          val acceptContentType = tokenizer.nextToken.trim
+          val opt = mappings.get(acceptContentType)
+          opt match{
+            case Some(viewRenderer) => return viewRenderer()
+            case None => {}
+          }
+        }
+        JsonViewRenderer()
       }
     }
-
-    val tokenizer = {
-      if(accept.indexOf(";") > 0)
-        new StringTokenizer(accept.substring(0, accept.indexOf(";")).toLowerCase, ",")
-      else
-        new StringTokenizer(accept.toLowerCase, ",")
-    }
-
-    while(tokenizer.hasMoreTokens){
-      val acceptContentType = tokenizer.nextToken.trim
-      val opt = mappings.get(acceptContentType)
-      opt match{
-        case Some(viewRenderer) => return viewRenderer()
-        case None => {}
-      }
-
-    }
-    throw new HttpException(406)
   }
 }

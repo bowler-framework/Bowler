@@ -29,22 +29,31 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
 
   def getServerName = request.getServerName
 
-  def getBooleanParameter(name: String) = booleanTransformer.toValue(params(name).toString).get.asInstanceOf[Boolean]
+  def getBooleanParameter(name: String) = params.get(name) match{
+      case None => None
+      case Some(s) => Option(booleanTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Boolean])
+    }
 
-  def getLongParameter(name: String) = longTransformer.toValue(params(name).toString).get.asInstanceOf[Long]
+  def getLongParameter(name: String) = params.get(name) match{
+      case None => None
+      case Some(s) => Option(longTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Long])
+    }
 
-  def getIntParameter(name: String) = intTransformer.toValue(params(name).toString).get.asInstanceOf[Int]
+  def getIntParameter(name: String) = params.get(name) match{
+      case None => None
+      case Some(s) => Option(intTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Int])
+    }
 
-  def getParameter(name: String) = params(name)
+  def getParameter(name: String) = params.get(name).asInstanceOf[Option[String]]
 
-  def getParameterValues(name: String) = params(name).asInstanceOf[List[Any]]
+  def getParameterValues(name: String) = Option(params.get(name).getOrElse(null).asInstanceOf[List[Any]])
 
   def getParameterNames = params.keys
 
 
   def getParameterMap = params
 
-  def getStringParameter(name: String) = params(name).toString
+  def getStringParameter(name: String) = params.get(name).asInstanceOf[Option[String]]
 
   def getHeaderNames: List[String] = {
     val iter = request.getHeaderNames
@@ -62,7 +71,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
     return list.toList
   }
 
-  def getHeader(name: String) = request.getHeader(name)
+  def getHeader(name: String) = Option(request.getHeader(name))
 
   def getSession = session
 
@@ -92,7 +101,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
     return list.toList
   }
 
-  def getAccept = request.getHeader("accept")
+  def getAccept = Option(request.getHeader("accept"))
 
   def getMethod: HttpMethod = {
     if (method == null) {
@@ -115,4 +124,5 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
     val string = request.getContentType
     return Option(string)
   }
+
 }

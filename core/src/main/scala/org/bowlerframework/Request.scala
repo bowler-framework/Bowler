@@ -20,13 +20,13 @@ trait Request {
 
   def getSession: Session
 
-  def getHeader(name: String): String
+  def getHeader(name: String): Option[String]
 
   def getHeaders(name: String): List[String]
 
   def getHeaderNames: List[String]
 
-  def getAccept: String
+  def getAccept: Option[String]
 
   def getContentType: Option[String]
 
@@ -34,17 +34,17 @@ trait Request {
 
   def getParameterNames: Iterable[String]
 
-  def getParameterValues(name: String): List[Any]
+  def getParameterValues(name: String): Option[List[Any]]
 
-  def getParameter(name: String): Any
+  def getParameter(name: String): Option[Any]
 
-  def getStringParameter(name: String): String
+  def getStringParameter(name: String): Option[String]
 
-  def getIntParameter(name: String): Int
+  def getIntParameter(name: String): Option[Int]
 
-  def getLongParameter(name: String): Long
+  def getLongParameter(name: String): Option[Long]
 
-  def getBooleanParameter(name: String): Boolean
+  def getBooleanParameter(name: String): Option[Boolean]
 
   def getParameterMap: Map[String, Any]
 

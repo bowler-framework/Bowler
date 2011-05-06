@@ -2,9 +2,9 @@ package org.bowlerframework.view
 
 import org.scalatest.FunSuite
 import org.bowlerframework.jvm.DummyRequest
-import org.bowlerframework.{GET, BowlerConfigurator}
 import scalate.ScalateViewRenderer
 import org.bowlerframework.exception.HttpException
+import org.bowlerframework.{BowlerConfigurator, GET}
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,28 +56,16 @@ class StrictRenderStrategyTest extends FunSuite {
   test("no Accept header") {
     BowlerConfigurator.setRenderStrategy(new StrictRenderStrategy)
     val request = new DummyRequest(GET, "/", Map(), null, Map())
-    try{
-      BowlerConfigurator.resolveViewRenderer(request)
-      fail
-    }catch{
-      case e: HttpException => {
-        assert(e.code == 406)
-      }
-    }
+    assert(BowlerConfigurator.resolveViewRenderer(request).isInstanceOf[JsonViewRenderer])
     BowlerConfigurator.setRenderStrategy(new DefaultRenderStrategy)
   }
 
   test("no matching renderer") {
     BowlerConfigurator.setRenderStrategy(new StrictRenderStrategy)
     val request = new DummyRequest(GET, "/", Map(), null, Map("accept" -> "application/xml"))
-    try{
-      BowlerConfigurator.resolveViewRenderer(request)
-      fail
-    }catch{
-      case e: HttpException => {
-        assert(e.code == 406)
-      }
-    }
+    assert(BowlerConfigurator.resolveViewRenderer(request).isInstanceOf[JsonViewRenderer])
+
     BowlerConfigurator.setRenderStrategy(new DefaultRenderStrategy)
   }
+  BowlerConfigurator.setRenderStrategy(new DefaultRenderStrategy)
 }

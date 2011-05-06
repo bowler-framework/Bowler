@@ -15,10 +15,10 @@ class DefaultRenderStrategy extends RenderStrategy {
     }
   }
 
-  private def matchAccept(acceptHeader: String): Accept = {
-    if (acceptHeader == null)
+  private def matchAccept(acceptHeader: Option[String]): Accept = {
+    if (acceptHeader == None)
       return HTML
-    val lowerCase = acceptHeader.toLowerCase
+    val lowerCase = acceptHeader.get.toLowerCase
     if (lowerCase.contains("text/html") || lowerCase.contains("application/xhtml+xml"))
       return HTML
     else if (lowerCase.contains("application/json") || lowerCase.contains("text/json"))

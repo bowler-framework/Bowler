@@ -14,7 +14,7 @@ class MyController extends Controller with Validations {
     mapRequest[Int](request)(a => {
       i = i + a
       // RequestScope allows access to Request/Response via dynamic variable
-      responseString = request.getStringParameter("name") + i
+      responseString = request.getStringParameter("name").get + i
 
       println(responseString)
     })

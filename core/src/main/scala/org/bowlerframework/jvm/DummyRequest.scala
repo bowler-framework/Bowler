@@ -21,19 +21,28 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
 
   def getRequestBodyAsString = body
 
-  def getBooleanParameter(name: String) = booleanTransformer.toValue(params(name).toString).get.asInstanceOf[Boolean]
+  def getBooleanParameter(name: String) = params.get(name) match {
+    case None => None
+    case Some(s) => Option(booleanTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Boolean])
+  }
 
-  def getLongParameter(name: String) = longTransformer.toValue(params(name).toString).get.asInstanceOf[Long]
+  def getLongParameter(name: String) = params.get(name) match {
+    case None => None
+    case Some(s) => Option(longTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Long])
+  }
 
-  def getIntParameter(name: String) = intTransformer.toValue(params(name).toString).get.asInstanceOf[Int]
+  def getIntParameter(name: String) = params.get(name) match {
+    case None => None
+    case Some(s) => Option(intTransformer.toValue(s.toString).getOrElse(null).asInstanceOf[Int])
+  }
 
-  def getParameter(name: String) = params(name)
+  def getParameter(name: String) = Option(params.get(name).getOrElse(null))
 
-  def getParameterValues(name: String) = params(name).asInstanceOf[List[Any]]
+  def getParameterValues(name: String) = Option(params.get(name).getOrElse(null).asInstanceOf[List[Any]])
 
   def getParameterNames = params.keys
 
-  def getStringParameter(name: String) = params(name).toString
+  def getStringParameter(name: String) = Option(params.get(name).getOrElse(null).asInstanceOf[String])
 
 
   def getParameterMap = params
@@ -46,9 +55,15 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
 
   def getPath = path
 
-  def getHeaders(name: String) = List(headers(name))
+  def getHeaders(name: String) = {
+    try {
+      List(headers(name))
+    } catch {
+      case e: NoSuchElementException => List[String]()
+    }
+  }
 
-  def getHeader(name: String) = headers(name)
+  def getHeader(name: String) = Option(headers.get(name).getOrElse(null))
 
   def getHeaderNames: List[String] = {
     val list = new MutableList[String]
@@ -62,7 +77,7 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
     this.locales = locales
   }
 
-  def getAccept = headers("accept")
+  def getAccept = headers.get("accept")
 
   def getMethod = method
 
@@ -76,4 +91,5 @@ class DummyRequest(var method: HttpMethod, path: String, params: Map[String, Any
     }
 
   }
+
 }
