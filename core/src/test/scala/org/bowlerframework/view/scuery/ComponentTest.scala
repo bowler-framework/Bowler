@@ -34,6 +34,11 @@ class ComponentTest extends FunSuite {
     resolver.newRequest(List[String]("es", "fi"))
     assert("English" == ((new LocalizedComponent).render \\ "body").text)
   }
+
+}
+
+class ComponentWithoutMarkup extends Component{
+
 }
 
 class DummyRequestResolver(locales: List[String]) extends RequestResolver {

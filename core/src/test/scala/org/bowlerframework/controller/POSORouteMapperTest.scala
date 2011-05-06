@@ -9,6 +9,7 @@ import org.bowlerframework.view.Renderable
 import java.io.{StringReader, StringWriter}
 import org.bowlerframework.view.scuery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import org.bowlerframework.model.{MyBean}
+import org.bowlerframework.view.scalate.{TemplateRegistry, Layout}
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,6 +20,9 @@ import org.bowlerframework.model.{MyBean}
  */
 
 class POSORouteMapperTest extends ScalatraFunSuite{
+  def resolver(request: Request): Option[Layout] = None
+  TemplateRegistry.defaultLayout = resolver(_)
+
   val holder = this.addFilter(classOf[BowlerFilter], "/*")
   holder.setInitParameter("controllerPackage", "org.bowlerframework.stub.controller")
 
