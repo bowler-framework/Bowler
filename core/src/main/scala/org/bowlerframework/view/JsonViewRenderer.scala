@@ -6,11 +6,13 @@ import net.liftweb.json.JsonAST._
 import net.liftweb.json.Extraction._
 import net.liftweb.json.Printer._
 import org.bowlerframework.exception.HttpException
+import net.liftweb.json.Formats
+
 /**
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
  */
-class JsonViewRenderer extends ViewRenderer {
-  implicit val formats = net.liftweb.json.DefaultFormats + new BigDecimalSerializer
+class JsonViewRenderer(jsonFormats: Formats = (net.liftweb.json.DefaultFormats + new BigDecimalSerializer)) extends ViewRenderer {
+  implicit val formats = jsonFormats
 
   def onError(request: Request, response: Response, exception: Exception) = {
     if (classOf[HttpException].isAssignableFrom(exception.getClass)) {
@@ -58,3 +60,9 @@ class JsonViewRenderer extends ViewRenderer {
 
 
 case class ValidationError(key: String, message: String)
+
+object JsonViewRenderer{
+  var formats = (net.liftweb.json.DefaultFormats + new BigDecimalSerializer)
+
+  def apply() = new JsonViewRenderer
+}

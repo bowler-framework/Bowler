@@ -10,7 +10,7 @@ import scalate.ScalateViewRenderer
 class DefaultRenderStrategy extends RenderStrategy {
   def resolveViewRenderer(request: Request): ViewRenderer = {
     matchAccept(request.getHeader("accept")) match {
-      case JSON => return new JsonViewRenderer
+      case JSON => return JsonViewRenderer()
       case _ => return new ScalateViewRenderer
     }
   }
@@ -28,8 +28,5 @@ class DefaultRenderStrategy extends RenderStrategy {
     else
       return HTML
   }
-
-
-
 }
 

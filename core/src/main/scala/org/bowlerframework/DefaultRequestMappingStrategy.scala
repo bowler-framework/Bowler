@@ -17,7 +17,7 @@ class DefaultRequestMappingStrategy extends RequestMappingStrategy {
     request.getContentType match {
       case None => new DefaultRequestMapper
       case Some(contentType) =>
-        if (contentType.toLowerCase.contains("application/json")) return new JsonRequestMapper
+        if (contentType.toLowerCase.contains("application/json")) return JsonRequestMapper()
         else try {
           return requestMappers(contentType)
         } catch {

@@ -10,16 +10,9 @@ import net.liftweb.json._
  * RequestMapper for JSON requests.
  */
 
-class JsonRequestMapper extends RequestMapper {
+class JsonRequestMapper(jsonFormats: Formats = (net.liftweb.json.DefaultFormats + new BigDecimalSerializer)) extends RequestMapper {
 
-  val hints = new ShortTypeHints(classOf[BigDecimal] :: Nil) {
-
-    override def deserialize: PartialFunction[(String, JObject), Any] = {
-      case ("BigDecimal", JObject(JField("currency", _) :: JField("amount", JInt(t)) :: Nil)) => BigDecimal(t.longValue)
-    }
-  }
-
-  implicit val formats = net.liftweb.json.DefaultFormats + new BigDecimalSerializer
+  implicit val formats = jsonFormats
 
   def getValue[T](request: Request, nameHint: String = null)(implicit m: Manifest[T]): T = {
     if (request.getMethod == GET || request.getMethod == DELETE) {
@@ -68,5 +61,10 @@ class JsonRequestMapper extends RequestMapper {
     }
   }
 
+}
 
+object JsonRequestMapper{
+  var formats = (net.liftweb.json.DefaultFormats + new BigDecimalSerializer)
+
+  def apply() = new JsonRequestMapper
 }
