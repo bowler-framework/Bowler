@@ -209,8 +209,6 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     }
   }
 
-
-
   test("getRequestBodyAsString") {
     val json = "{\"body\": \"send us some JSON will ya!\"}"
     var requestBody: String = null
@@ -229,5 +227,69 @@ class BowlerHttpRequestTest extends org.scalatra.test.scalatest.ScalatraFunSuite
     }
   }
 
+
+  test("getIntParameter - None") {
+    var i: Int = 0
+    BowlerConfigurator.get("/getIntParameter/:int", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getIntParameter("int2"))
+      }
+    })
+  }
+
+  test("getLongParameter - None") {
+    var i: Long = 0l
+    BowlerConfigurator.get("/getLongParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getLongParameter("long2"))
+      }
+    })
+  }
+
+  test("getBooleanParameter - None") {
+    var i: Boolean = false
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getBooleanParameter("lon2g"))
+      }
+    })
+  }
+
+  test("getParameterValues - None") {
+    var i: Boolean = false
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getParameterValues("lon2g"))
+      }
+    })
+  }
+
+  test("getParameter - None") {
+    var i: Boolean = false
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getParameter("lon2g"))
+      }
+    })
+  }
+
+  test("getStringParameter - None") {
+    var i: Boolean = false
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getStringParameter("lon2g"))
+      }
+    })
+  }
+
+
+  test("getHeader - None") {
+    var i: Boolean = false
+    BowlerConfigurator.get("/getBooleanParameter/:long", new RouteExecutor {
+      def executeRoute(scope: RequestScope) = {
+        assert(None == scope.request.getHeader("lon2g"))
+      }
+    })
+  }
 
 }
