@@ -5,6 +5,7 @@ import org.bowlerframework.view.Renderable
 import org.bowlerframework.model.JsonRequestMapper
 import org.bowlerframework._
 import java.util.StringTokenizer
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,7 +56,8 @@ object POSORouteMapper extends Renderable{
     val argTypes = member.parameters.map(_.paramType.definedClass)
     val methods = cls.getMethods.filter(p => p.getName.equals(member.reflectedName))
     val function = methods.find(method => {
-      if(member.returnType.clazz == "scala.Unit" || (method.getReturnType == member.returnType.definedClass)){
+      if(member.returnType.clazz == "scala.Unit" || member.returnType.clazz == "scala.Nothing"
+        || (method.getReturnType == member.returnType.definedClass)){
         if(method.getParameterTypes.length == argTypes.size){
           var correct = true
           var i = 0
@@ -89,28 +91,45 @@ object POSORouteMapper extends Renderable{
               member.parameters.map(parameter => mapper.getValueWithTypeDefinition(parameter.paramType, request, parameter.name)).toArray.asInstanceOf[Array[java.lang.Object]]
           }
           if(!isRenderable){
-            if(member.returnType.clazz != "scala.Unit"){
-              if(m.getParameterTypes.length == 0)
-                render(request, response, m.invoke(service))
-              else{
-                render(request, response, m.invoke(service, args: _* ))
-              }
-            }else{
-              if(m.getParameterTypes.length == 0){
-                m.invoke(service)
-                render(request, response)
+            try{
+              if(member.returnType.clazz != "scala.Unit" && member.returnType.clazz != "scala.Nothing"){
+                if(m.getParameterTypes.length == 0)
+                  render(request, response, m.invoke(service))
+                else{
+                  render(request, response, m.invoke(service, args: _* ))
+                }
               }else{
-                m.invoke(service, args: _* )
-                render(request, response)
+                if(m.getParameterTypes.length == 0){
+                  m.invoke(service)
+                  render(request, response)
+                }else{
+                  m.invoke(service, args: _* )
+                  render(request, response)
+                }
+              }
+            }catch{
+              case e: InvocationTargetException => {
+                if(e.getCause != null)
+                  throw e.getCause
+                else
+                  throw e
               }
             }
           }else{
-            if(m.getParameterTypes.length == 0)
-              m.invoke(service)
-            else{
-              m.invoke(service, args: _* )
+            try{
+              if(m.getParameterTypes.length == 0)
+                m.invoke(service)
+              else{
+                m.invoke(service, args: _* )
+              }
+            }catch{
+              case e: InvocationTargetException => {
+                if(e.getCause != null)
+                  throw e.getCause
+                else
+                  throw e
+              }
             }
-
           }
         }}
         return closure

@@ -10,6 +10,7 @@ import java.io.{StringReader, StringWriter}
 import org.bowlerframework.view.scuery.stub.{ComposedPageComponent, SimpleTransformingComponent}
 import org.bowlerframework.model.{MyBean}
 import org.bowlerframework.view.scalate.{TemplateRegistry, Layout}
+import org.bowlerframework.exception.NotFoundException
 
 /**
  * Created by IntelliJ IDEA.
@@ -69,6 +70,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List[Tuple2[String, String]]()
 
     get("/poso/unit", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      println(body)
       assert(204 == this.status)
     }
   }
@@ -87,7 +89,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List[Tuple2[String, String]]()
 
     get("/poso/render", list) {
-      println(body)
       val result = scala.xml.XML.load(new StringReader(body))
       assert("James" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(0).text)
       assert("Mells" == ((result \ "body" \ "div" \ "table" \\ "tr")(0) \ "td")(1).text)
@@ -104,7 +105,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("myBean.id","2"), Tuple2("myBean.name", "otherBean"), Tuple2("myBean.decimal", "3.14"))
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":2,"name":"otherBean","decimal":"3.14"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.14")
@@ -117,7 +117,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("id","3"), Tuple2("name", "otherBean"), Tuple2("decimal", "3.15"))
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":3,"name":"otherBean","decimal":"3.15"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.15")
@@ -130,7 +129,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("id","4"), Tuple2("name", "otherBean"), Tuple2("decimal", "3.16"))
 
     post("/poso/bean/8", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":4,"name":"otherBean","decimal":"3.16"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.16")
@@ -145,7 +143,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("myBean.id","2"), Tuple2("myBean.name", "otherBean"), Tuple2("myBean.decimal", "3.14"))
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":2,"name":"otherBean","decimal":"3.14"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.14")
@@ -158,7 +155,6 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("id","3"), Tuple2("name", "otherBean"), Tuple2("decimal", "3.15"))
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":3,"name":"otherBean","decimal":"3.15"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.15")
@@ -171,11 +167,19 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("id","4"), Tuple2("name", "otherBean"), Tuple2("decimal", "3.17"))
 
     post("/poso/bean/9", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
-      println(body)
       assert("""{"id":4,"name":"otherBean","decimal":"3.17"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.17")
       assert(controller.id == 9L)
+    }
+  }
+
+  test("HTTP Exceptions defect"){
+    POSORouteMapper(new PosoController, new RenderablePoso)
+    val list = List[Tuple2[String, String]]()
+
+    get("/poso/render/other", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      assert(404 == this.status)
     }
   }
 
@@ -223,6 +227,10 @@ class RenderablePoso extends Renderable{
   var id: Long = 1L
   def `GET /poso/render` = {
     renderWith(new ComposedPageComponent(new SimpleTransformingComponent))
+  }
+
+  def `GET /posonotfoundexception` = {
+    throw new NotFoundException
   }
 
   def `POST /poso/bean`(bean: MyBean) = {

@@ -1,109 +1,92 @@
 package org.bowlerframework.examples
 
-import org.bowlerframework.controller.{Controller, LayoutAware}
-import org.bowlerframework.model.{ ParameterMapper, Validations}
+import org.bowlerframework.model.Validations
 import org.bowlerframework.view.{Renderable, ViewPath}
 import org.bowlerframework.view.scalate.DefaultLayout
 import org.bowlerframework._
+import controller.{FunctionNameConventionRoutes, Controller, LayoutAware}
 
 /**
  * Our main application controller, showing a simple CRUD interface.
  *
  * extends:
  * - Controller: used to construct routes and deal with them by providing functions that respond to routes.
- * - ParameterMapper: takes a request and maps any values into beans or other objects.
+ * - FunctionNameConventionRoutes: self-typed to Controller, allows mapping by function-name convention
  * - Validations: validation enables the Controller
  * - Renderable: allows you to render View Model objects.
  */
 
-class WidgetController extends Controller with ParameterMapper with Validations with Renderable with LayoutAware {
+class WidgetController extends Controller with FunctionNameConventionRoutes with Validations with Renderable with LayoutAware {
   val parentLayout = DefaultLayout("default", "doLayout", None, Some(new ParentLayoutModel))
   // this is a childLayout for parentLayout, and has the parent set on it, as shown.
   val composableLayout = DefaultLayout("child", Some(parentLayout))
 
-  // simple, no args render, just renders the root (or http 204 for JSON)
-  get("/")((request, response) => render)
-
   def renderWidgets = {
-     render(Widgets.findAll)
+    render(Widgets.findAll)
   }
 
   def renderComposable = {
-	layout(composableLayout)
-  	renderWith(ViewPath(GET, MappedPath("/widgets/")), Widgets.findAll)	
+    layout(composableLayout)
+    renderWith(ViewPath(GET, MappedPath("/widgets/")), Widgets.findAll)
   }
 
-  // renders the base routes
-  get("/widgets")((request, response) => renderWidgets)
-  get("/widgets/")((request, response) => renderWidgets)
-  get("/composable")((request, response) => {renderComposable})
-  get("/composable/")((request, response) => {renderComposable})
+  def `GET /widgets` = renderWidgets
 
+  def `GET /widgets/` = renderWidgets
+
+  def `GET /composable` = renderComposable
+
+  def `GET /composable/` = renderComposable
+
+  def `GET /` = render
 
   // responds to GET with a named parameter (:id becomes named to id)
-  get("/widgets/:id")((request, response) => {
-    this.mapRequest[Option[Widget]](request)(widget => {
-        render(widget)
-    })
-  })
-
-  // responds to HTTP DELETE with named param
-  delete("/widgets/:id")((request, response) => {
-    this.mapRequest[Option[Widget]](request)(widget => {
-      widget match{
-        case Some(w) => Widgets.delete(widget.get)
-        case None => response.sendError(500)
-      }
-    })
-  })
+  def `GET /widgets/:id`(widget: Option[Widget]) = render(widget)
 
   // retrieves an edit form for a widget that lets you edit a pre-existing widget.
-  get("/widgets/:id/edit")((request, response) => {
-    mapRequest[Option[Widget]](request)(widget => {
-      render(widget)
-    })
-  })
+  def `GET /widgets/:id/edit`(widget: Option[Widget]) = render(widget)
 
   // form for creating a new Widget - passes in a new, empty widget to be filled out.
-  get("/widgets/new")((request, response) => {render(Widget(0, null, null, null))})
+  def `GET /widgets/new` = render(Widget(0, null, null, null))
+
+  // form for creating a new Widget - passes in a new, empty widget to be filled out.
+  def `GET /widgets/new/scuery` = renderWith(new ScueryWidgetPage(new NewWidgetForm), Widget(0, null, null, null))
 
 
-    // form for creating a new Widget - passes in a new, empty widget to be filled out.
-  get("/widgets/new/scuery")((request, response) => {renderWith(new ScueryWidgetPage(new NewWidgetForm),Widget(0, null, null, null))})
+  // responds to HTTP DELETE with named param
+  def `DELETE /widgets/:id`(widget: Option[Widget]) = {
+    widget match {
+      case Some(w) => Widgets.delete(widget.get)
+      case None => RequestScope.response.sendError(500)
+    }
+  }
 
   // HTTP POST for creating new Widgets.
-  post("/widgets")((request, response) =>{
-
-    // Map the request into the resulting Widget..
-    this.mapRequest[Widget](request)(widget => {
-
-      // validate the Widget, pass the widget as a param, so the validation error functionality knows which object
-      // failed validation, IF it fails.
-      validate(widget){
-        val validator = new WidgetValidator(widget)
-        validator.add(new UniqueValidator({widget.id}))
-        validator.validate
-      }
-      Widgets.create(widget)
-      // send a redirect to the base page.
-      response.sendRedirect("/widgets")
-    })
-  })
-
+  def `POST /widgets`(widget: Widget) = {
+    println("POST RECEIVED")
+    // validate the Widget, pass the widget as a param, so the validation error functionality knows which object
+    // failed validation, IF it fails.
+    validate(widget) {
+      val validator = new WidgetValidator(widget)
+      validator.add(new UniqueValidator({
+        widget.id
+      }))
+      validator.validate
+    }
+    Widgets.create(widget)
+    // send a redirect to the base page.
+    RequestScope.response.sendRedirect("/widgets")
+  }
 
   // similar to the above POST, but for updating existing widgets.
-  post("/widgets/:id")((request, response) => {
-    this.mapRequest[Widget](request)(widget => {
-      validate(widget){
-        val validator = new WidgetValidator(widget)
-        validator.validate
-      }
-      println("update")
-      Widgets.update(widget)
-      response.sendRedirect("/widgets")
-    })
-  })
-
+  def `POST /widgets/:id`(widget: Widget) = {
+    validate(widget) {
+      val validator = new WidgetValidator(widget)
+      validator.validate
+    }
+    Widgets.update(widget)
+    RequestScope.response.sendRedirect("/widgets")
+  }
 }
 
 
