@@ -1,7 +1,7 @@
 package org.bowlerframework.model
 
+import org.bowlerframework.{RequestScope, BowlerConfigurator, Request}
 
-import org.bowlerframework.{BowlerConfigurator, Request}
 
 /**
  * Maps from a Request into any number of object types (limited to 12) IF a mapping can be resolved.
@@ -12,7 +12,7 @@ import org.bowlerframework.{BowlerConfigurator, Request}
  */
 
 trait ParameterMapper {
-  def mapRequest[T](request: Request, nameHint: String = null)(func: T => Any)(implicit m: Manifest[T]): Any = {
+  def mapRequest[T](request: Request = RequestScope.request, nameHint: String = null)(func: T => Any)(implicit m: Manifest[T]): Any = {
     val param = BowlerConfigurator.getRequestMapper(request).getValue[T](request, nameHint)
     ParameterMapperHelper.handleErrors {
       func(param)

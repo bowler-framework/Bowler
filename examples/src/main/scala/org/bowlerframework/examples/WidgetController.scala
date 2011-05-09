@@ -21,18 +21,14 @@ class WidgetController extends Controller with FunctionNameConventionRoutes with
   // this is a childLayout for parentLayout, and has the parent set on it, as shown.
   val composableLayout = DefaultLayout("child", Some(parentLayout))
 
-  def renderWidgets = {
-    render(Widgets.findAll)
-  }
-
   def renderComposable = {
     layout(composableLayout)
     renderWith(ViewPath(GET, MappedPath("/widgets/")), Widgets.findAll)
   }
 
-  def `GET /widgets` = renderWidgets
+  def `GET /widgets` = render(Widgets.findAll)
 
-  def `GET /widgets/` = renderWidgets
+  def `GET /widgets/` = render(Widgets.findAll)
 
   def `GET /composable` = renderComposable
 
