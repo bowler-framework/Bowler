@@ -7,11 +7,12 @@ import scalate.ScalateViewRenderer
  * A Default RenderStrategy - returns a JsonViewRenderer if the client has set the "accept" header to "application/json",<br/>
  * Otherwise returns a ScalateViewRenderer for rendering Scalate Web views
  */
-class DefaultRenderStrategy extends RenderStrategy {
+class DefaultRenderStrategy(xmlViewRenderer: () => ViewRenderer = {() => new ScalateViewRenderer}) extends RenderStrategy {
   def resolveViewRenderer(request: Request): ViewRenderer = {
     matchAccept(request.getHeader("accept")) match {
       case JSON => return JsonViewRenderer()
-      case _ => return new ScalateViewRenderer
+      case HTML => return new ScalateViewRenderer
+      case XML => xmlViewRenderer()
     }
   }
 
