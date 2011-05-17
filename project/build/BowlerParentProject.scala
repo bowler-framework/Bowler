@@ -13,14 +13,28 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
     val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
     val scalaToolsRepo = "Scala-Tools repo" at "http://scala-tools.org/repo-releases/"
+	val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
+	val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
 
   class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
     val slf4jVersion = "1.6.0"
-    val scalatest = "org.scalatest" % "scalatest" % "1.3" % "test"
-    val scalatraTest = "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
+    val scalatest = {
+      if(buildScalaVersion.contains("2.9"))
+        "org.scalatest" %% "scalatest" % "1.4.1" % "test"
+      else
+        "org.scalatest" % "scalatest" % "1.3" % "test"
+  	}
+    val scalatraTest = {
+      if(buildScalaVersion.contains("2.9"))
+        "org.scalatra" %% "scalatra-scalatest" % "2.0.0-SNAPSHOT" % "test"
+      else
+        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
+  	}
+
+
     val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
-    val scalaCompiler = "org.scala-lang" % "scala-compiler" % "2.8.1"
+    val scalaCompiler = "org.scala-lang" % "scala-compiler" % buildScalaVersion
     val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
     val sfl4japi = "org.slf4j" % "slf4j-api" % slf4jVersion
     val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"
@@ -85,25 +99,47 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
   }
 
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
-    val scalatra = "org.scalatra" %% "scalatra" % "2.0.0.M3"
-    val scalatraFileUpload = "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3"
-    val commons = "com.recursivity" % "recursivity-commons_2.8.1" % "0.5.3"
-    val scalate = "org.fusesource.scalate" % "scalate-core" % "1.4.1"
-    val liftJson = "net.liftweb" % "lift-json_2.8.1" % "2.3"
+    val scalatra = {
+      if(buildScalaVersion.contains("2.9"))
+        "org.scalatra" %% "scalatra" % "2.0.0-SNAPSHOT"
+      else
+        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
+  	}
+    val scalatraFileUpload = {
+      if(buildScalaVersion.contains("2.9"))
+        "org.scalatra" %% "scalatra-fileupload" % "2.0.0-SNAPSHOT"
+      else
+        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
+  	}
+
+    val commons = "com.recursivity" %% "recursivity-commons" % "0.5.3"
+
+    val scalate = {
+	  if(buildScalaVersion.contains("2.9"))
+		"org.fusesource.scalate" % "scalate-core" % "1.5.0-SNAPSHOT"
+	  else
+        "org.fusesource.scalate" % "scalate-core" % "1.4.1"
+    }
+    
+    val liftJson = {
+	  if(buildScalaVersion.contains("2.9"))
+		"net.liftweb" %% "lift-json" % "2.4-SNAPSHOT"
+	  else
+        "net.liftweb" %% "lift-json" % "2.3"
+    }
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2" % "test"
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-    val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6" % "test"
+    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7" % "test"
     val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
-    //	val bowlerCore = "org.bowlerframework" % "core_2.8.1" % projectVersion
   }
 
   class SquerylProject(info: ProjectInfo) extends BaseProject(info) {
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-    val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6"
+    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7"
 
     lazy val bowlerDep = persistence
 
@@ -115,7 +151,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) {
     val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.6.1.Final" % "provided"
     lazy val bowlerDep = persistence
     //val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
-    val jpa = "com.recursivity" % "recursivity-jpa_2.8.1" % "1.0"
+    val jpa = "com.recursivity" %% "recursivity-jpa" % "1.0"
     val h2database = "hsqldb" % "hsqldb" % "1.8.0.7" % "test"
     val jbossRepo = "JBoss Repo" at "https://repository.jboss.org/nexus/content/repositories/releases/"
   }

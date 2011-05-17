@@ -142,15 +142,6 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(myBean.name == "someBean")
   }
 
-  test("alias parameters with int and String") {
-    val value = mapper.getValue[java.lang.Integer](makeRequest(Map("string.id" -> "43", "integer.id" -> "34")))
-    println(value)
-    assert(value == 34)
-
-    assert("43" == mapper.getValue[String](makeRequest(Map("String.id" -> "43", "Int.id" -> "34"))))
-
-  }
-
   test("test Transient marker trait") {
     val bean = mapper.getValue[TransientBean](makeRequest(GET, Map("id" -> "43", "name" -> "transientBean")))
     assert(bean != null)
@@ -338,6 +329,15 @@ class DefaultRequestMapperTest extends FunSuite {
     assert(bean.id == 1l)
     assert(bean.name == "someBean")
     assert(bean.decimal == new BigDecimal(new java.math.BigDecimal("54.4")))
+  }
+
+  test("alias parameters with int and String") {
+    val value = mapper.getValue[java.lang.Integer](makeRequest(Map("string.id" -> "43", "integer.id" -> "34")))
+    println(value)
+    assert(value == 34)
+
+    assert("43" == mapper.getValue[String](makeRequest(Map("string.id" -> "43", "Int.id" -> "34"))))
+
   }
 
 
