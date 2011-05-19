@@ -9,7 +9,7 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){/
   val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.6.1.Final"
 
   val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
-  val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
+  val scalaToolsnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
   val hsqldb = "hsqldb" % "hsqldb" % "1.8.0.7" 
 
