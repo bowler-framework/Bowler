@@ -34,7 +34,7 @@ trait Request {
 
   def getParameterNames: Iterable[String]
 
-  def getParameterValues(name: String): Option[List[Any]]
+  def getParameterValues(name: String): List[Any]
 
   def getParameter(name: String): Option[Any]
 

@@ -46,7 +46,7 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
 
   def getParameter(name: String) = params.get(name).asInstanceOf[Option[String]]
 
-  def getParameterValues(name: String) = Option(params.get(name).getOrElse(null).asInstanceOf[List[Any]])
+  def getParameterValues(name: String) = params.get(name).getOrElse(List[Any]()).asInstanceOf[List[Any]]
 
   def getParameterNames = params.keys
 

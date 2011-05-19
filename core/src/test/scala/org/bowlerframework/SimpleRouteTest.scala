@@ -36,7 +36,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
     var body: String = null
     BowlerConfigurator.get("/say/*/to/*", new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val list = scope.request.getParameterValues("splat").getOrElse(null)
+        val list = scope.request.getParameterValues("splat")
         body = list(0) + " " + list(1)
       }
     })
@@ -52,7 +52,7 @@ class SimpleRouteTest extends ScalatraFunSuite {
 
     BowlerConfigurator.get(regex, new RouteExecutor {
       def executeRoute(scope: RequestScope) = {
-        val list = scope.request.getParameterValues("captures").getOrElse(null)
+        val list = scope.request.getParameterValues("captures")
         body = list(0) + " " + list(1)
       }
     })
