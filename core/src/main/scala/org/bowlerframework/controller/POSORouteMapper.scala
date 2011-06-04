@@ -76,7 +76,7 @@ object POSORouteMapper extends Renderable{
       }
     })
 
-    val isRenderable = classOf[Renderable].isAssignableFrom(service.getClass)
+    val isRenderable = {classOf[Renderable].isAssignableFrom(service.getClass) || classOf[Async].isAssignableFrom(service.getClass)}
 
     function match{
       case Some(m) => {

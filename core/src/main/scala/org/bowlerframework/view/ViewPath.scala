@@ -1,6 +1,6 @@
 package org.bowlerframework.view
 
-import org.bowlerframework.{HttpMethod, MappedPath}
+import org.bowlerframework.{MappedPath, GET, HttpMethod}
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,3 +11,9 @@ import org.bowlerframework.{HttpMethod, MappedPath}
  */
 
 case class ViewPath(method: HttpMethod, path: MappedPath)
+
+object ViewPath{
+  def apply(path: String): ViewPath = ViewPath(GET, MappedPath(path))
+  def apply(method: HttpMethod, path: String): ViewPath = ViewPath(method, MappedPath(path))
+  implicit def stringToViewPath(path: String): ViewPath = ViewPath(GET, MappedPath(path))
+}
