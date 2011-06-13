@@ -116,7 +116,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
 
     val scalate = {
 	  if(buildScalaVersion.contains("2.9"))
-		"org.fusesource.scalate" % "scalate-core" % "1.5.0-SNAPSHOT"
+		"org.fusesource.scalate" % "scalate-core" % "1.5.0"
 	  else
         "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     }
