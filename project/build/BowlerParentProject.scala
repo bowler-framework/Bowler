@@ -26,11 +26,12 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
         "org.scalatest" % "scalatest" % "1.3" % "test"
   	}
     val scalatraTest = {
-      if(buildScalaVersion.contains("2.9"))
-        "org.scalatra" %% "scalatra-scalatest" % "2.0.0-SNAPSHOT" % "test"
-      else
-        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
-  	}
+	      if(buildScalaVersion.contains("2.9"))
+	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0-SNAPSHOT" % "test"
+	      else
+	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
+	  	}
+  
 
 
     val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
@@ -99,18 +100,18 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   }
 
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
-    val scalatra = {
-      if(buildScalaVersion.contains("2.9"))
-        "org.scalatra" %% "scalatra" % "2.0.0-SNAPSHOT"
-      else
-        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
-  	}
-    val scalatraFileUpload = {
-      if(buildScalaVersion.contains("2.9"))
-        "org.scalatra" %% "scalatra-fileupload" % "2.0.0-SNAPSHOT"
-      else
-        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
-  	}
+	val scalatra = {
+	      if(buildScalaVersion.contains("2.9"))
+	        "org.scalatra" %% "scalatra" % "2.0.0-SNAPSHOT"
+	      else
+	        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
+	  	}
+	val scalatraFileUpload = {
+	      if(buildScalaVersion.contains("2.9"))
+	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0-SNAPSHOT"
+	      else
+	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
+	  	}
 
     val commons = "com.recursivity" %% "recursivity-commons" % "0.5.3"
 
@@ -121,25 +122,20 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
         "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     }
     
-    val liftJson = {
-	  if(buildScalaVersion.contains("2.9"))
-		"net.liftweb" %% "lift-json" % "2.4-SNAPSHOT"
-	  else
-        "net.liftweb" %% "lift-json" % "2.3"
-    }
+    val liftJson = "net.liftweb" %% "lift-json" % "2.4-M1"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2" % "test"
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7" % "test"
+    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4" % "test"
     val h2database = "com.h2database" % "h2" % "1.2.144" % "test"
   }
 
   class SquerylProject(info: ProjectInfo) extends BaseProject(info) {
     val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
     val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
-    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7"
+    val squeryl = "org.squeryl" %% "squeryl" % "0.9.4"
 
     lazy val bowlerDep = persistence
 
