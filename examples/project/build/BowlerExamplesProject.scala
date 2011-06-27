@@ -3,8 +3,8 @@ import sbt._
 
 
 class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){//} with CucumberProject{
-  val bowlerJpa = "org.bowlerframework" %% "jpa-mapper" % "0.4"
-  val bowlerSqueryl = "org.bowlerframework" %% "squeryl-mapper" % "0.4"
+  val bowlerJpa = "org.bowlerframework" %% "jpa-mapper" % "0.5-SNAPSHOT"
+  val bowlerSqueryl = "org.bowlerframework" %% "squeryl-mapper" % "0.5-SNAPSHOT"
   val scalatest = "org.scalatest" %% "scalatest" %  "1.4.1" % "test"
   val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.6.1.Final"
 
@@ -21,7 +21,7 @@ class BowlerExamplesProject(info: ProjectInfo) extends DefaultWebProject(info){/
 	
   val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"
 
-	val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
+	val jettyWebapp = "org.eclipse.jetty" % "jetty-webapp" % "7.4.1.v20110513" % "test"
 
   val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
 

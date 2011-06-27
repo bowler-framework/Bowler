@@ -90,6 +90,5 @@ class BowlerHttpSession(session: HttpSession) extends Session {
 
   def setValidationModel(model: Seq[Any]) = {
     session.setAttribute(validationModel, model)
-    println("session set: " + model)
   }
 }
