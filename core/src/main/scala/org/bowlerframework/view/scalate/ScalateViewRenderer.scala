@@ -10,6 +10,14 @@ import org.bowlerframework.view.scuery.ViewComponentRegistry
 class ScalateViewRenderer extends BrowserViewRenderer {
 
   protected def render(request: Request, response: Response, model: Map[String, Any]) = {
+    if (request.getMethod == GET){
+      try{
+        request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
+      }catch{
+        case e: IllegalStateException => println("IllegalStateException commiting lastGetPath: " + request.getPath)
+      }
+
+    }
     val viewValue: String = {
       ViewComponentRegistry(request, model) match{
         case None => {
@@ -29,8 +37,5 @@ class ScalateViewRenderer extends BrowserViewRenderer {
       case None => response.getWriter.write(viewValue)
       case Some(layout) => layout.render(request, response, model, viewValue)
     }
-
-    if (request.getMethod == GET)
-      request.getSession.setLastGetPath(HTTP.relativeUrl(request.getPath))
   }
 }

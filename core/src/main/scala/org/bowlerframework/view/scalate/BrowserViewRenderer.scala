@@ -48,9 +48,12 @@ trait BrowserViewRenderer extends ViewRenderer{
       request.getSession.getErrors.get.foreach(f => list += f._2)
       model += "validationErrors" -> list.toList
     }
-
+    try{
+      request.getSession.resetValidations
+    }catch{
+      case e: IllegalStateException => println("IllegalStateException (no session to reset): " +  e) // ignore, there is no active session, hence nothing to reset
+    }
     render(request, response, model.toMap)
-    request.getSession.resetValidations
   }
 
   protected def render(request: Request, response: Response, model: Map[String, Any])
