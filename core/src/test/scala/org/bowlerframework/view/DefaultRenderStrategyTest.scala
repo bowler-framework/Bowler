@@ -28,6 +28,14 @@ class DefaultRenderStrategyTest extends FunSuite {
     val viewRenderer = BowlerConfigurator.resolveViewRenderer(request)
     assert(viewRenderer != null)
     assert(viewRenderer.isInstanceOf[ScalateViewRenderer])
-
   }
+
+   test("get jsonp strategy") {
+    val request = new DummyRequest(GET, "/", Map("callback" -> "jscript_callback_function"), null, Map("accept" -> "application/javascript, text/javascript"))
+    val viewRenderer = BowlerConfigurator.resolveViewRenderer(request)
+    assert(viewRenderer != null)
+    assert(viewRenderer.isInstanceOf[JsonpViewRenderer])
+  }
+
+
 }
