@@ -11,6 +11,7 @@ class DefaultRenderStrategy(xmlViewRenderer: () => ViewRenderer = {() => new Sca
   def resolveViewRenderer(request: Request): ViewRenderer = {
     matchAccept(request.getHeader("accept")) match {
       case JSON => return JsonViewRenderer()
+      case JSONP => return JsonpViewRenderer()
       case HTML => return new ScalateViewRenderer
       case XML => xmlViewRenderer()
     }
@@ -26,6 +27,8 @@ class DefaultRenderStrategy(xmlViewRenderer: () => ViewRenderer = {() => new Sca
       return JSON
     else if (lowerCase.contains("application/xml") || lowerCase.contains("text/xml"))
       return XML
+    else if (lowerCase.contains("application/javascript") || lowerCase.contains("text/javascript"))
+      return JSONP
     else
       return HTML
   }

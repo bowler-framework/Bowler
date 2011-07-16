@@ -16,3 +16,5 @@ case object HTML extends Accept
 case object JSON extends Accept
 
 case object XML extends Accept
+
+case object JSONP extends Accept
