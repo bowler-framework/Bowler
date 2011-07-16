@@ -24,6 +24,8 @@ class DummyResponse(val stringWriter: StringWriter = new StringWriter) extends R
 
   def setHeader(name: String, value: String) = headers.put(name, value)
 
+  def getHeader(name: String) = headers.get(name)
+
   def getContentType = contentType
 
   def setContentType(contentType: String) = {
