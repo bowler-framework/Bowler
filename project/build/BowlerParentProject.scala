@@ -27,7 +27,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   	}
     val scalatraTest = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0-SNAPSHOT" % "test"
+	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M4" % "test"
 	      else
 	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
 	  	}
@@ -102,13 +102,13 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
 	val scalatra = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra" % "2.0.0-SNAPSHOT"
+	        "org.scalatra" %% "scalatra" % "2.0.0.M4"
 	      else
 	        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
 	  	}
 	val scalatraFileUpload = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0-SNAPSHOT"
+	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M4"
 	      else
 	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
 	  	}

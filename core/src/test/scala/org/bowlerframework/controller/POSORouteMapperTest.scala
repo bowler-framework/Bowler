@@ -183,6 +183,12 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     }
   }
 
+  test("204 for Unit or empty JSON request"){
+    delete("/poso/unit", List[Tuple2[String, String]](), Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      assert(204 == this.status)
+    }
+  }
+
 }
 
 
@@ -197,6 +203,10 @@ class StubPosoController{
   def `GET /poso/hello` = Tuple("greeting", "hello")
   def `GET /poso/page/:id`(id: Long) = Tuple("id", "sum: " + (id + 2L))
   def `GET /poso/unit`: Unit = {
+
+  }
+
+  def `DELETE /poso/unit`: Unit = {
 
   }
 
