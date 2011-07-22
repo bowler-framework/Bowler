@@ -21,7 +21,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
     val slf4jVersion = "1.6.0"
     val scalatest = {
       if(buildScalaVersion.contains("2.9"))
-        "org.scalatest" %% "scalatest" % "1.4.1" % "test"
+        "org.scalatest" % "scalatest_2.9.0" % "1.6.1" % "test"
       else
         "org.scalatest" % "scalatest" % "1.3" % "test"
   	}
