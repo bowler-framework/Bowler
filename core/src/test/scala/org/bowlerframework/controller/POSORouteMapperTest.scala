@@ -189,6 +189,20 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     }
   }
 
+  test("potential integer translation defect"){
+    val poso =  new StubPosoController
+    POSORouteMapper(new PosoController, poso)
+    val list = List[Tuple2[String, String]]()
+
+    get("/poso/integer/5", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      assert(poso.number == 5)
+    }
+
+    get("/poso/integer/-1", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")) {
+      assert(poso.number == -1)
+    }
+  }
+
 }
 
 
@@ -199,11 +213,16 @@ class PosoController extends Controller
 class StubPosoController{
   var bean : MyBean = null
   var id: Long = 1L
+  var number = -500
 
   def `GET /poso/hello` = Tuple("greeting", "hello")
   def `GET /poso/page/:id`(id: Long) = Tuple("id", "sum: " + (id + 2L))
   def `GET /poso/unit`: Unit = {
 
+  }
+
+  def `GET /poso/integer/:num`(num: Int) = {
+    number = num
   }
 
   def `DELETE /poso/unit`: Unit = {
@@ -252,6 +271,10 @@ class RenderablePoso extends Renderable{
     this.bean = bean
     this.id = beanId
     render(bean)
+  }
+
+  def `GET /v1.0/api` = {
+    render
   }
 
 }
