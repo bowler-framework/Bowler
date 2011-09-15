@@ -21,10 +21,12 @@ trait Validations {
    *
    */
   def validate(toValidate: Any*)(function: => Option[List[Tuple2[String, String]]]) {
-    request.getSession.resetValidations
+    if(request != null)
+      request.getSession.resetValidations
     val errors = function
     if (!None.equals(errors) && errors.get.size > 0) {
-      request.getSession.setValidationModel(toValidate.toSeq)
+      if(request != null)
+        request.getSession.setValidationModel(toValidate.toSeq)
       throw new ValidationException(errors.get)
     }
   }

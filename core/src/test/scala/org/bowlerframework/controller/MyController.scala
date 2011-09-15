@@ -58,7 +58,6 @@ class MyController extends Controller with Validations {
   // Doesn't actually map/transform anything
   def mapRequest[R](request: Request)(func: R => Any)(implicit m: Manifest[R]): Unit = {
 
-    println(func)
     func(Integer.parseInt("1").asInstanceOf[R])
   }
 }
