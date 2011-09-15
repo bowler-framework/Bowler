@@ -113,7 +113,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with Ch
 	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
 	  	}
 
-    val commons = "com.recursivity" %% "recursivity-commons" % "0.5.5"
+    val commons = "com.recursivity" %% "recursivity-commons" % "0.5.6"
 
     val scalate = {
 	  if(buildScalaVersion.contains("2.9"))
