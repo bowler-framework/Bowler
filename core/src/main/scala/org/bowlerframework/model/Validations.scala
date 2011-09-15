@@ -29,3 +29,5 @@ trait Validations {
     }
   }
 }
+
+object Validations extends Validations

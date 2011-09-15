@@ -1,6 +1,6 @@
 import sbt._
 
-class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//}  with ChecksumPlugin{
+class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with ChecksumPlugin{
   def toolConfigurationFile = path("config")
 
   lazy val core = project("core", "core", new CoreProject(_))
@@ -27,7 +27,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//}  wi
   	}
     val scalatraTest = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M4" % "test"
+	        "org.scalatra" % "scalatra-scalatest_2.9.0-1" % "2.0.0.RC1" % "test"
 	      else
 	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
 	  	}
@@ -102,13 +102,13 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//}  wi
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
 	val scalatra = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra" % "2.0.0.M4"
+	        "org.scalatra" % "scalatra_2.9.0-1" % "2.0.0.RC1"
 	      else
 	        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
 	  	}
 	val scalatraFileUpload = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M4"
+	        "org.scalatra" % "scalatra-fileupload_2.9.0-1" % "2.0.0.RC1"
 	      else
 	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
 	  	}
@@ -117,12 +117,12 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//}  wi
 
     val scalate = {
 	  if(buildScalaVersion.contains("2.9"))
-		"org.fusesource.scalate" % "scalate-core" % "1.5.0"
+		"org.fusesource.scalate" % "scalate-core" % "1.5.1"
 	  else
         "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     }
     
-    val liftJson = "net.liftweb" %% "lift-json" % "2.4-M1"
+    val liftJson = "net.liftweb" % "lift-json_2.9.0-1" % "2.4-M1"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
@@ -147,7 +147,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//}  wi
     val hibernateEntityManager = "org.hibernate" % "hibernate-entitymanager" % "3.6.1.Final" % "provided"
     lazy val bowlerDep = persistence
     //val c3p0 = "c3p0" % "c3p0" % "0.9.1.2"
-    val jpa = "com.recursivity" %% "recursivity-jpa" % "1.0"
+    val jpa = "com.recursivity" % "recursivity-jpa_2.9.0-1" % "1.0"
     val h2database = "hsqldb" % "hsqldb" % "1.8.0.7" % "test"
     val jbossRepo = "JBoss Repo" at "https://repository.jboss.org/nexus/content/repositories/releases/"
   }
