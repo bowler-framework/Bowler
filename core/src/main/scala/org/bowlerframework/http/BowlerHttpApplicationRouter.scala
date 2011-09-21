@@ -14,16 +14,16 @@ trait BowlerHttpApplicationRouter extends ApplicationRouter {
     val map = new HashMap[String, Any]
 
     params.foreach(f => {
-      map += f._1 -> f._2
+      map += f._1.replace("[]", "") -> f._2
     })
     val nameEnum = request.getParameterNames
     while (nameEnum.hasMoreElements) {
       val name = nameEnum.nextElement.asInstanceOf[String]
       val reqParams = request.getParameterValues(name)
       if (reqParams.length == 1) {
-        map += name -> reqParams(0)
+        map += name.replace("[]", "") -> reqParams(0)
       } else {
-        map += name -> reqParams.toList
+        map += name.replace("[]", "") -> reqParams.toList
       }
     }
 
@@ -34,7 +34,7 @@ trait BowlerHttpApplicationRouter extends ApplicationRouter {
 
     try {
       fileParams.foreach(f => {
-        map += f._1 -> f._2
+        map += f._1.replace("[]", "") -> f._2
       })
     } catch {
       case e: Exception => {}

@@ -142,19 +142,39 @@ class DefaultRequestMapper extends RequestMapper {
   private def valueList(parent: GenericTypeDefinition, typeDef: GenericTypeDefinition, request: HashMap[String, Any], nameHint: String): MutableList[Any] = {
     val values = new MutableList[Any]
     var list: List[Any] = null
-    if (nameHint != null)
-      list = request(nameHint).asInstanceOf[List[_]]
-    else {
+    if (nameHint != null){
+      try{
+        list = request(nameHint).asInstanceOf[List[_]]
+      }catch{
+        case e: ClassCastException => {
+          list = List(request(nameHint))
+        }
+      }
+    }else {
       val alias = AliasRegistry(parent)
 
       request.iterator.foreach(f => {
-        if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias))
-          list = f._2.asInstanceOf[List[_]]
+        if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass) && f._1.startsWith(alias)){
+          try{
+            list = f._2.asInstanceOf[List[_]]
+          }catch{
+            case e: ClassCastException => {
+              list = List(f._2)
+            }
+          }
+        }
       })
       if (list == null) {
         request.iterator.foreach(f => {
-          if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass))
+          if (list == null && f._2.isInstanceOf[AnyRef] && classOf[List[_ <: Any]].isAssignableFrom(f._2.asInstanceOf[AnyRef].getClass)){
+            try{
             list = f._2.asInstanceOf[List[_]]
+            }catch{
+              case e: ClassCastException => {
+                list = List(f._2)
+              }
+            }
+          }
         })
       }
     }
