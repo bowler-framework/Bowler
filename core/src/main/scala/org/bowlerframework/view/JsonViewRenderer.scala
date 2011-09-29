@@ -7,12 +7,13 @@ import net.liftweb.json.Extraction._
 import net.liftweb.json.Printer._
 import org.bowlerframework.exception.HttpException
 import net.liftweb.json.Formats
+import net.liftweb.json.ext.JodaTimeSerializers
 
 /**
  * JSON implementation of ViewRenderer - will take a Model or Models and render a JSON representation of said Model
  */
 class JsonViewRenderer(jsonFormats: Formats = (net.liftweb.json.DefaultFormats + new BigDecimalSerializer)) extends ViewRenderer {
-  implicit val formats = jsonFormats
+  implicit val formats = jsonFormats ++ JodaTimeSerializers.all
 
   def onError(request: Request, response: Response, exception: Exception) = {
     if (classOf[HttpException].isAssignableFrom(exception.getClass)) {

@@ -27,7 +27,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with Ch
   	}
     val scalatraTest = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" % "scalatra-scalatest_2.9.0-1" % "2.0.0.RC1" % "test"
+	        "org.scalatra" %% "scalatra-scalatest" % "2.0.1" % "test"
 	      else
 	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
 	  	}
@@ -102,27 +102,28 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with Ch
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
 	val scalatra = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" % "scalatra_2.9.0-1" % "2.0.0.RC1"
+	        "org.scalatra" %% "scalatra" % "2.0.1"
 	      else
-	        "org.scalatra" %% "scalatra" % "2.0.0.M3" 
+	        "org.scalatra" %% "scalatra" % "2.0.1" 
 	  	}
 	val scalatraFileUpload = {
 	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" % "scalatra-fileupload_2.9.0-1" % "2.0.0.RC1"
+	        "org.scalatra" %% "scalatra-fileupload" % "2.0.1"
 	      else
 	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
 	  	}
 
     val commons = "com.recursivity" %% "recursivity-commons" % "0.5.6"
-
+	val jodaTime = "joda-time" % "joda-time" % "1.6.2"
     val scalate = {
 	  if(buildScalaVersion.contains("2.9"))
-		"org.fusesource.scalate" % "scalate-core" % "1.5.1"
+		"org.fusesource.scalate" % "scalate-core" % "1.5.2"
 	  else
         "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     }
     
-    val liftJson = "net.liftweb" % "lift-json_2.9.0-1" % "2.4-M1"
+    val liftJson = "net.liftweb" % "lift-json_2.9.1" % "2.4-M4"
+	val liftJsonExt = "net.liftweb" % "lift-json-ext_2.9.1" % "2.4-M4"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
