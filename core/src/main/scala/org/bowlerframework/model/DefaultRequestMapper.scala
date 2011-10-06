@@ -18,6 +18,7 @@ class DefaultRequestMapper extends RequestMapper {
   def httpRequest = _requestToMap value
 
   def getValueWithTypeDefinition(typeDefinition: GenericTypeDefinition, request: Request, nameHint: String): Any = {
+    println(typeDefinition + " " +  request.getParameterMap + " " + nameHint)
     val map = new HashMap[String, Any]
     request.getParameterMap.foreach(f => map.put(f._1, f._2))
     _requestToMap.withValue(request) {
@@ -44,6 +45,7 @@ class DefaultRequestMapper extends RequestMapper {
 
 
   private def getValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
+    println(request + " " + nameHint + " " + typeDef)
     val primitive = getValueForPrimitive[T](request, nameHint, typeDef.clazz)
     if (primitive != None)
       return primitive
@@ -75,7 +77,7 @@ class DefaultRequestMapper extends RequestMapper {
         }catch{
           case e: NoSuchElementException => {
             if(hintOfName != null)
-              getValue[T](request, null, typeDef)
+              None.asInstanceOf[T]//getValue[T](request, null, typeDef)
             else throw e
           }
         }
