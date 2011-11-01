@@ -20,5 +20,11 @@ class IntKeyedDao[T <: KeyedEntity[Int]](table: Table[T])(implicit m : scala.Pre
     }
   }
 
+  override def create(entity: T) = {
+	com.recursivity.commons.bean.BeanUtils.setProperty(entity.getClass, entity, "id", 0l)
+	super.create(entity)
+	
+  }
+
   override def findAll(offset: Int = 0, results: Int = Integer.MAX_VALUE) = from(table)(a => select(a) orderBy(a.id asc)).page(offset, results).toList
 }

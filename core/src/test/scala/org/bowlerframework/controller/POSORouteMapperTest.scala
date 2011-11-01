@@ -105,6 +105,7 @@ class POSORouteMapperTest extends ScalatraFunSuite{
     val list = List(Tuple2("myBean.id","2"), Tuple2("myBean.name", "otherBean"), Tuple2("myBean.decimal", "3.14"))
 
     post("/poso/bean", list, Map("accept" -> "application/json,;q=0.9,text/plain;q=0.8,image/png,*//*;q=0.5")){
+	  println(body)
       assert("""{"id":2,"name":"otherBean","decimal":"3.14"}""" == body)
       assert(controller.bean != null)
       assert(controller.bean.decimal.toString == "3.14")

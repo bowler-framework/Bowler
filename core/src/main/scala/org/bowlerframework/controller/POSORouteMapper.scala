@@ -83,6 +83,7 @@ object POSORouteMapper extends Renderable{
         val closure = {(request: Request, response: Response) => {
           val mapper = BowlerConfigurator.getRequestMapper(request)
           val args: Array[java.lang.Object] = {
+            println(member.parameters)
             if(member.parameters == 0)
               Array[java.lang.Object]()
             else if(mapper.isInstanceOf[JsonRequestMapper] && !(request.getMethod == GET || request.getMethod == DELETE))

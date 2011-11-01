@@ -18,11 +18,11 @@ class DefaultRequestMapper extends RequestMapper {
   def httpRequest = _requestToMap value
 
   def getValueWithTypeDefinition(typeDefinition: GenericTypeDefinition, request: Request, nameHint: String): Any = {
-    println(typeDefinition + " " +  request.getParameterMap + " " + nameHint)
     val map = new HashMap[String, Any]
     request.getParameterMap.foreach(f => map.put(f._1, f._2))
     _requestToMap.withValue(request) {
-      return getValue[Any](map, nameHint, typeDefinition)
+      val result = getValue[Any](map, nameHint, typeDefinition)
+      return result
     }
   }
 
@@ -40,12 +40,11 @@ class DefaultRequestMapper extends RequestMapper {
     var typeString = m.toString.replace("[", "<")
     typeString = typeString.replace("]", ">")
     val typeDef = GenericTypeDefinition(typeString)
-    return getValue[T](request, nameHint, typeDef)
+    getValue[T](request, nameHint, typeDef)
   }
 
 
   private def getValue[T](request: HashMap[String, Any], nameHint: String, typeDef: GenericTypeDefinition): T = {
-    println(request + " " + nameHint + " " + typeDef)
     val primitive = getValueForPrimitive[T](request, nameHint, typeDef.clazz)
     if (primitive != None)
       return primitive
@@ -76,13 +75,20 @@ class DefaultRequestMapper extends RequestMapper {
           getValueForTransformer[T](dealiasedRequest, hintOfName, cls)
         }catch{
           case e: NoSuchElementException => {
-            if(hintOfName != null)
-              None.asInstanceOf[T]//getValue[T](request, null, typeDef)
+            if(hintOfName != null){
+              println(typeDef.definedClass.getName)
+              if(typeDef.definedClass.equals(classOf[java.lang.Integer]) || typeDef.definedClass.equals(classOf[java.lang.Long]) || typeDef.definedClass.equals(classOf[java.lang.String])
+                || typeDef.definedClass.equals(classOf[java.lang.Double]) || typeDef.definedClass.equals(classOf[java.lang.Float]))
+                None.asInstanceOf[T]
+              else
+                getValue[T](request, null, typeDef)
+            }
             else throw e
           }
         }
       }
       if (response == null && !TransformerRegistry(cls).equals(None) && (httpRequest.getMethod.equals(POST) || httpRequest.getMethod.equals(PUT))) {
+
         return BeanUtils.instantiate[T](cls, dealiasedRequest.toMap)
       } else if (response == null && (!httpRequest.getMethod.equals(POST) || !httpRequest.getMethod.equals(PUT))) {
         return None.asInstanceOf[T]
