@@ -1,6 +1,6 @@
 import sbt._
 
-class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with ChecksumPlugin{
+class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} with ChecksumPlugin{
   def toolConfigurationFile = path("config")
 
   lazy val core = project("core", "core", new CoreProject(_))
@@ -113,7 +113,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info) with Ch
 	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
 	  	}
 
-    val commons = "com.recursivity" %% "recursivity-commons" % "0.5.6"
+    val commons = "com.recursivity" %% "recursivity-commons" % "0.5.7"
 	val jodaTime = "joda-time" % "joda-time" % "1.6.2"
     val scalate = {
 	  if(buildScalaVersion.contains("2.9"))

@@ -14,7 +14,9 @@ import org.bowlerframework.persistence.AbstractDao
  * To change this template use File | Settings | File Templates.
  */
 
-abstract class SquerylDao[T <: KeyedEntity[K], K](table: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]) extends AbstractDao[T,K]{
+abstract class SquerylDao[T <: KeyedEntity[K], K](theTable: Table[T])(implicit m : scala.Predef.Manifest[T], k: Manifest[K]) extends AbstractDao[T,K]{
+	
+  def table = theTable
 
   def create(entity: T) = table.insert(entity)
 

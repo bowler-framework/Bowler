@@ -11,7 +11,7 @@ import org.squeryl.PrimitiveTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 
-class StringKeyedDao[T <: KeyedEntity[String]](table: Table[T])(implicit m : scala.Predef.Manifest[T]) extends SquerylDao[T, String](table){
+class StringKeyedDao[T <: KeyedEntity[String]](theTable: Table[T])(implicit m : scala.Predef.Manifest[T]) extends SquerylDao[T, String](theTable){
   def findById(id: String): Option[T] = {
     try{
       Some(table.where(f => f.id === id).single)

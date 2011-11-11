@@ -12,7 +12,7 @@ import org.squeryl.PrimitiveTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 
-class LongKeyedDao[T <: KeyedEntity[Long]](table: Table[T])(implicit m : scala.Predef.Manifest[T]) extends SquerylDao[T, Long](table){
+class LongKeyedDao[T <: KeyedEntity[Long]](theTable: Table[T])(implicit m : scala.Predef.Manifest[T]) extends SquerylDao[T, Long](theTable){
   def findById(id: Long): Option[T] = {
     try{
       Some(table.where(f => f.id === id).single)
