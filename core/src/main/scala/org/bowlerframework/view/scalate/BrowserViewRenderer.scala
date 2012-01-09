@@ -1,10 +1,10 @@
 package org.bowlerframework.view.scalate
 
 import org.bowlerframework.view.ViewRenderer
-import org.bowlerframework.{Response, Request}
 import org.bowlerframework.exception.{ValidationException, HttpException}
 import org.bowlerframework.model.ViewModelBuilder
 import collection.mutable.MutableList
+import org.bowlerframework.{BowlerConfigurator, Response, Request}
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,8 +21,15 @@ trait BrowserViewRenderer extends ViewRenderer{
       if (exception.isInstanceOf[ValidationException]) {
         val validations = exception.asInstanceOf[ValidationException]
         request.getSession.setErrors(validations.errors)
-        if (request.getSession.getLastGetPath != None)
-          response.sendRedirect(request.getSession.getLastGetPath.get)
+        
+        BowlerConfigurator.errorRenderMap.get(request.getPath) match{
+          case None => {
+            if (request.getSession.getLastGetPath != None)
+             response.sendRedirect(request.getSession.getLastGetPath.get)           
+          }case Some(path) => {
+            response.sendRedirect(path)
+          }
+        }
       } else {
         val http = exception.asInstanceOf[HttpException]
         response.sendError(http.code)

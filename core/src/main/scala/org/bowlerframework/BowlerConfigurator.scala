@@ -4,11 +4,15 @@ package org.bowlerframework
 import util.matching.Regex
 import view.{ViewRenderer, DefaultRenderStrategy, RenderStrategy}
 import reflect.BeanProperty
+import collection.mutable.HashMap
+
 /**
  * Kind of the "hub"/centre point for all things configuration within Bowler.
  */
 
 object BowlerConfigurator extends ApplicationRouter {
+
+  val errorRenderMap = new HashMap[String, String]
 
   @BeanProperty
   var isServletApp = true
