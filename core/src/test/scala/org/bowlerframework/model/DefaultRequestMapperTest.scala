@@ -350,7 +350,9 @@ class DefaultRequestMapperTest extends FunSuite {
 
 case class TransientBean(id: Long, name: String) extends Transient
 
-case class MyBean(id: Long, name: String, decimal: BigDecimal)
+case class MyBean(id: Long, name: String, decimal: BigDecimal) extends Comparable[MyBean]{
+  def compareTo(p1: MyBean) = this.id.compareTo(p1.id)
+}
 
 case class OtherMapperBean(id: Long, name: String, decimal: BigDecimal, beans: List[MyBean])
 
