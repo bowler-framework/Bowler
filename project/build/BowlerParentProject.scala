@@ -123,7 +123,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
     }
     
     val liftJson = "net.liftweb" % "lift-json_2.9.1" % "2.4"
-	val liftJsonExt = "net.liftweb" % "lift-json-ext_2.9.1" % "2.4-M4"
+	val liftJsonExt = "net.liftweb" % "lift-json-ext_2.9.1" % "2.4"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
