@@ -12,7 +12,6 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
     val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
     val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
     val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
-    val scalaToolsRepo = "Scala-Tools repo" at "http://scala-tools.org/repo-releases/"
 	val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
 	val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
@@ -38,9 +37,6 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
     val scalaCompiler = "org.scala-lang" % "scala-compiler" % buildScalaVersion
     val servletApi = "javax.servlet" % "servlet-api" % "2.5" % "provided"
     val sfl4japi = "org.slf4j" % "slf4j-api" % slf4jVersion
-    val sfl4jnop = "org.slf4j" % "slf4j-nop" % slf4jVersion % "runtime"
-
-
 
     lazy val sourceArtifact = Artifact.sources(artifactID)
     lazy val docsArtifact = Artifact.javadoc(artifactID)
@@ -72,7 +68,7 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
           <licenses>
             <license>
               <name>BSD</name>
-              <url>http://github.com/wfaler/Bowler/LICENSE</url>
+              <url>http://github.com/bowler-framework/Bowler/blob/master/LICENSE</url>
               <distribution>repo</distribution>
             </license>
           </licenses>
@@ -86,14 +82,27 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
             </mailingList>
           </mailingLists>
           <scm>
-            <connection>scm:git:git://github.com/wfaler/Bowler.git</connection>
-            <url>http://github.com/wfaler/Bowler</url>
+            <connection>scm:git:git://github.com/bowler-framework/Bowler.git</connection>
+            <url>http://github.com/bowler-framework/Bowler</url>
           </scm>
           <developers>
             <developer>
               <id>wfaler</id>
+              <roles>
+                <role>Founder</role>
+              </roles>
+              <timezone>0</timezone>
               <name>Wille Faler</name>
               <url>http://blog.recursivity.com</url>
+            </developer>
+            <developer>
+              <id>greenrd</id>
+	      <roles>
+	        <role>Maintainer</role>
+	      </roles>
+	      <timezone>0</timezone>
+	      <name>Robin Green</name>
+	      <url>http://www.greenrd.org/</url>
             </developer>
           </developers>)
     }
