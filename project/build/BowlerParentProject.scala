@@ -9,11 +9,10 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
   lazy val jpa = project("jpa-mapper", "jpa-mapper", new JpaProject(_),
     persistence)
 
-    val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-    val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
-    val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
-        val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
-        val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
+  val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
+  val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
+  val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
 
 
   class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
