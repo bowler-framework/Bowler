@@ -12,8 +12,8 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
     val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
     val sonatypeNexusReleases = "Sonatype Nexus Releases" at "https://oss.sonatype.org/content/repositories/releases"
     val scalateRepo = "scalate repo" at "http://repo.fusesource.com/nexus/content/repositories/public/"
-	val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
-	val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
+        val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
+        val scalaToolesnapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/"
 
 
   class BaseProject(info: ProjectInfo) extends DefaultProject(info){//} with ChecksumPlugin{
@@ -23,13 +23,13 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
         "org.scalatest" % "scalatest_2.9.0" % "1.6.1" % "test"
       else
         "org.scalatest" % "scalatest" % "1.3" % "test"
-  	}
+        }
     val scalatraTest = {
-	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-scalatest" % "2.0.3" % "test"
-	      else
-	        "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
-	  	}
+              if(buildScalaVersion.contains("2.9"))
+                "org.scalatra" %% "scalatra-scalatest" % "2.0.3" % "test"
+              else
+                "org.scalatra" %% "scalatra-scalatest" % "2.0.0.M3" % "test"
+                }
   
 
 
@@ -97,42 +97,42 @@ class BowlerParentProject(info: ProjectInfo) extends ParentProject(info){//} wit
             </developer>
             <developer>
               <id>greenrd</id>
-	      <roles>
-	        <role>Maintainer</role>
-	      </roles>
-	      <timezone>0</timezone>
-	      <name>Robin Green</name>
-	      <url>http://www.greenrd.org/</url>
+              <roles>
+                <role>Maintainer</role>
+              </roles>
+              <timezone>0</timezone>
+              <name>Robin Green</name>
+              <url>http://www.greenrd.org/</url>
             </developer>
           </developers>)
     }
   }
 
   class CoreProject(info: ProjectInfo) extends BaseProject(info) {
-	val scalatra = {
-	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra" % "2.0.3"
-	      else
-	        "org.scalatra" %% "scalatra" % "2.0.1" 
-	  	}
-	val scalatraFileUpload = {
-	      if(buildScalaVersion.contains("2.9"))
-	        "org.scalatra" %% "scalatra-fileupload" % "2.0.3"
-	      else
-	        "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
-	  	}
+        val scalatra = {
+              if(buildScalaVersion.contains("2.9"))
+                "org.scalatra" %% "scalatra" % "2.0.3"
+              else
+                "org.scalatra" %% "scalatra" % "2.0.1" 
+                }
+        val scalatraFileUpload = {
+              if(buildScalaVersion.contains("2.9"))
+                "org.scalatra" %% "scalatra-fileupload" % "2.0.3"
+              else
+                "org.scalatra" %% "scalatra-fileupload" % "2.0.0.M3" 
+                }
 
     val commons = "com.recursivity" %% "recursivity-commons" % "0.6"
-	val jodaTime = "joda-time" % "joda-time" % "1.6.2"
+        val jodaTime = "joda-time" % "joda-time" % "1.6.2"
     val scalate = {
-	  if(buildScalaVersion.contains("2.9"))
-		"org.fusesource.scalate" % "scalate-core" % "1.5.3"
-	  else
+          if(buildScalaVersion.contains("2.9"))
+                "org.fusesource.scalate" % "scalate-core" % "1.5.3"
+          else
         "org.fusesource.scalate" % "scalate-core" % "1.4.1"
     }
     
     val liftJson = "net.liftweb" % "lift-json_2.9.1" % "2.4"
-	val liftJsonExt = "net.liftweb" % "lift-json-ext_2.9.1" % "2.4"
+        val liftJsonExt = "net.liftweb" % "lift-json-ext_2.9.1" % "2.4"
   }
 
   class PersistenceProject(info: ProjectInfo) extends BaseProject(info) {
