@@ -46,7 +46,12 @@ class BowlerHttpRequest(path: String, val request: HttpServletRequest, params: M
 
   def getParameter(name: String) = params.get(name).asInstanceOf[Option[String]]
 
-  def getParameterValues(name: String) = params.get(name).getOrElse(List[Any]()).asInstanceOf[List[Any]]
+  protected def paramValuesToList(values: Any) = values match {
+    case (s: String) => List(s)
+    case (la: List[Any]) => la
+  }
+
+  override def getParameterValues(name: String) = params.get(name).map(paramValuesToList _).getOrElse(List[Any]())
 
   def getParameterNames = params.keys
 
