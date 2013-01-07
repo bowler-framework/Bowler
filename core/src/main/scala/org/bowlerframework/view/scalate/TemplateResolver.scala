@@ -12,6 +12,7 @@ trait TemplateResolver {
 
   def getAbsoluteResource(path: String, fileType: String, locale: String = null): Template
 
+  var includeMethod: Boolean = true
 
   /**Order of preference for view template resolution should be:<br/>
    * <ol>
@@ -25,7 +26,7 @@ trait TemplateResolver {
       TemplateRegistry.rootViewPackageOrFolder = TemplateRegistry.rootViewPackageOrFolder + "/"
     val requestPath = request.getMappedPath.path.replaceAll(":", "_")
 
-    var path = TemplateRegistry.rootViewPackageOrFolder + request.getMethod + requestPath
+    var path = TemplateRegistry.rootViewPackageOrFolder + (if(includeMethod) request.getMethod + requestPath else requestPath.substring(1))
     return resolveResourceWithSuffix(path, TemplateRegistry.templateTypePreference, TemplateRegistry.getSuffixes(request), request.getLocales)
   }
 
